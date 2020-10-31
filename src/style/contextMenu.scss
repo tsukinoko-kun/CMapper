@@ -1,0 +1,35 @@
+#contextMenu {
+  -moz-user-select: none !important;
+  -webkit-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+  min-width: 300px;
+  display: none;
+  background-color: var(--sidebar);
+  border: 1px solid #000000;
+  padding: 4px 0;
+  filter: drop-shadow(1px 1px 10px rgba(#000000, 0.1));
+  position: absolute;
+  z-index: 10;
+  li {
+    cursor: pointer;
+    list-style-type: none;
+    padding: 4px 24px;
+    .key {
+      float: right;
+      opacity: 0.5;
+    }
+  }
+  li:hover {
+    background-color: var(--accent);
+  }
+}
+#contextMenu:not(.field) > .newField {
+  display: none;
+}
+#contextMenu:not(.method) > .newMethod {
+  display: none;
+}
+#contextMenu:not(.relation) > .newRelation {
+  display: none;
+}

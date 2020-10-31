@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="img/fav64.webp" />
+    <link rel="icon" href="img/fav128.webp" />
+    <link rel="icon" href="img/fav512.webp" />
+    <title>CMapper</title>
+    <meta name="Description" content="Online UML Class Diagram Editor" />
+    <script defer src="rocket.js"></script>
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.8.0/mermaid.min.js"
+    ></script>
+    <!-- <script
+      async
+      rel="preload"
+      as="script"
+      src="https://frank-mayer.tk/cdn/jscomp.js"
+    ></script> -->
+    <link async rel="stylesheet" href="style.css" />
+    <script async rel="preload" type="text/javascript" as="script">
+      if (window.top !== window.self) {
+        window.top.location.replace(window.self.location.href);
+      }
+    </script>
+  </head>
+  <body>
+    <section id="prerendered">
+      <ul id="contextMenu">
+        <li onclick="Ui.newClass()">New Class</li>
+        <li class="newField" onclick="Ui.newField()">New Field</li>
+        <li class="newMethod" onclick="Ui.newMethod()">New Method</li>
+        <li class="newRelation" onclick="Ui.newRelation()">New Relation</li>
+        <li onclick="Ui.delete()">Delete</li>
+        <li>Duplicate<span class="key">Ctrl+D</span></li>
+      </ul>
+      <ul id="sidebar">
+        <li id="sidebar_classname_li">
+          <label class="placeholder" for="sidebar_classname">Classname</label>
+          <input
+            class="input"
+            type="text"
+            placeholder="Classname"
+            id="sidebar_classname"
+            name="sidebar_classname"
+            onchange="Ui.setClassName()"
+          />
+        </li>
+        <li>
+          <ul id="sidebar_fields">
+            <li class="head">
+              <img src="img/folder.svg" />
+              <b>Fields</b>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <ul id="sidebar_methods">
+            <li class="head">
+              <img src="img/folder.svg" />
+              <b>Methods</b>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <ul id="sidebar_relations">
+            <li class="head">
+              <img src="img/folder.svg" />
+              <b>Relations</b>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <div id="editDialog">
+        <div class="window">
+          <div class="titleBar">Edit Member</div>
+          <table id="editDialogContent" class="content"></table>
+          <div class="buttons">
+            <button class="focus" onclick="Ui.editDialog.apply()">OK</button>
+            <button onclick="Ui.editDialog.close()">Cancel</button>
+            <span
+              class="ask"
+              title='Edit the selected member.
+Press "OK" to save your changes.
+Press "Cancel" to revert your changes.'
+              >?</span
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+    <div id="graph"></div>
+    <script defer src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,200 @@
+#graph {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: calc(var(--sidebar-width) + 16px);
+  overflow: auto;
+
+  #mddSvg {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    fill: var(--foreground);
+    * {
+      font-size: 10px !important;
+    }
+    .error-icon {
+      fill: #552222;
+    }
+    .error-text {
+      fill: #552222;
+      stroke: #552222;
+    }
+    .edge-thickness-normal {
+      stroke-width: 2px;
+    }
+    .edge-thickness-thick {
+      stroke-width: 3.5px;
+    }
+    .edge-pattern-solid {
+      stroke-dasharray: 0;
+    }
+    .edge-pattern-dashed {
+      stroke-dasharray: 3;
+    }
+    .edge-pattern-dotted {
+      stroke-dasharray: 2;
+    }
+    .marker {
+      fill: var(--foreground);
+    }
+    .marker.cross {
+      stroke: var(--foreground);
+    }
+    svg {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px;
+    }
+    g.classGroup {
+      cursor: pointer;
+      text {
+        fill: var(--blue);
+        fill: var(--foreground);
+        stroke: none;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        .title {
+          font-weight: bolder;
+        }
+      }
+      rect {
+        fill: transparent;
+        stroke: var(--blue);
+      }
+      line {
+        stroke: var(--blue);
+        stroke-width: 1;
+      }
+    }
+    .node {
+      rect {
+        fill: transparent;
+        stroke: var(--blue);
+        stroke-width: 1px;
+      }
+      circle {
+        fill: transparent;
+        stroke: var(--blue);
+        stroke-width: 1px;
+      }
+      ellipse {
+        fill: transparent;
+        stroke: var(--blue);
+        stroke-width: 1px;
+      }
+      polygon {
+        fill: transparent;
+        stroke: var(--blue);
+        stroke-width: 1px;
+      }
+      path {
+        fill: transparent;
+        stroke: var(--blue);
+        stroke-width: 1px;
+      }
+    }
+    .divider {
+      stroke: var(--blue);
+      stroke: 1;
+    }
+    g.clickable {
+      cursor: pointer;
+    }
+    .classLabel {
+      .box {
+        stroke: none;
+        stroke-width: 0;
+        fill: transparent;
+        opacity: 0.5;
+      }
+      .label {
+        fill: var(--blue);
+        font-size: 10px;
+      }
+    }
+    .relation {
+      stroke: var(--foreground);
+      stroke-width: 1;
+      fill: none;
+    }
+    .dashed-line {
+      stroke-dasharray: 3;
+    }
+    #compositionStart {
+      fill: var(--foreground) !important;
+      stroke: var(--foreground) !important;
+      stroke-width: 1;
+    }
+    .composition {
+      fill: var(--foreground) !important;
+      stroke: var(--foreground) !important;
+      stroke-width: 1;
+      fill: var(--foreground) !important;
+      stroke: var(--foreground) !important;
+      stroke-width: 1;
+    }
+    #compositionEnd {
+      fill: var(--foreground) !important;
+      stroke: var(--foreground) !important;
+      stroke-width: 1;
+    }
+    #dependencyStart {
+      fill: var(--foreground) !important;
+      stroke: var(--foreground) !important;
+      stroke-width: 1;
+      fill: var(--foreground) !important;
+      stroke: var(--foreground) !important;
+      stroke-width: 1;
+    }
+    .dependency {
+      fill: var(--foreground) !important;
+      stroke: var(--foreground) !important;
+      stroke-width: 1;
+      fill: var(--foreground) !important;
+      stroke: var(--foreground) !important;
+      stroke-width: 1;
+    }
+    #extensionStart {
+      fill: var(--foreground) !important;
+      stroke: var(--foreground) !important;
+      stroke-width: 1;
+    }
+    .extension {
+      fill: var(--foreground) !important;
+      stroke: var(--foreground) !important;
+      stroke-width: 1;
+      fill: var(--foreground) !important;
+      stroke: var(--foreground) !important;
+      stroke-width: 1;
+    }
+    #extensionEnd {
+      fill: var(--foreground) !important;
+      stroke: var(--foreground) !important;
+      stroke-width: 1;
+    }
+    #aggregationStart {
+      fill: transparent !important;
+      stroke: var(--foreground) !important;
+      stroke-width: 1;
+    }
+    .aggregation {
+      fill: transparent !important;
+      stroke: var(--foreground) !important;
+      stroke-width: 1;
+      fill: transparent !important;
+      stroke: var(--foreground) !important;
+      stroke-width: 1;
+    }
+    #aggregationEnd {
+      fill: transparent !important;
+      stroke: var(--foreground) !important;
+      stroke-width: 1;
+    }
+    &:root {
+      --mermaid-font-family: "JetBrains Mono", monospace;
+    }
+    class {
+      fill: apa;
+    }
+  }
+}

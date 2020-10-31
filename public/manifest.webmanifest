@@ -1,0 +1,30 @@
+{
+  "short_name": "CMap",
+  "name": "CMapper",
+  "description": "Online UML Class Diagram Editor",
+  "icons": [
+    {
+      "src": "/img/fav64.webp",
+      "type": "image/webp",
+      "sizes": "64x64",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/img/fav128.webp",
+      "type": "image/webp",
+      "sizes": "128x128",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/img/fav512.webp",
+      "type": "image/webp",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#282a36",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#282a36"
+}

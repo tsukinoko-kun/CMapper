@@ -1,0 +1,745 @@
+/// <reference path="structureHolder.ts"/>
+
+const mddSvgId = "mddSvg";
+
+class _Ui {
+  private readonly cb: Function;
+  private focused: number = -1;
+  private focusedClass: Class | undefined = undefined;
+  private hover: string = "";
+  private saverHoverCopy: string = "";
+  public setHover(id: string, t: string) {
+    this.hover = JSON.stringify({ id, t });
+  }
+  public removeHover(id: string, t: string) {
+    if (this.hover === JSON.stringify({ id, t })) {
+      this.hover = "";
+    }
+  }
+  public copyHover(): void {
+    this.saverHoverCopy = this.hover;
+  }
+  editMember: Field | Method | Relation | undefined = undefined;
+
+  constructor() {
+    let config = {
+      theme: "default",
+      fontSize: 16,
+      logLevel: "fatal",
+      securityLevel: "strict",
+      startOnLoad: true,
+      arrowMarkerAbsolute: false,
+    };
+    mermaid.initialize(config);
+
+    document.addEventListener("click", (ev) => {
+      const t = <HTMLElement>ev.target;
+      if (
+        this.focused >= 0 &&
+        (t.id === "prerendered" || t.id === "graph" || t.id === mddSvgId)
+      ) {
+        this.focused = -1;
+        this.focusedClass = undefined;
+        this.sidebarClass();
+        this.render();
+      }
+    });
+
+    this.cb = function (svgGraph: string) {
+      (<HTMLDivElement>document.getElementById("graph")).innerHTML = svgGraph;
+    };
+  }
+
+  static escapeHtml(str: string): string {
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/\"/g, "&quot;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  private readonly sidebar = {
+    classname() {
+      return <HTMLInputElement>document.getElementById("sidebar_classname");
+    },
+    fields() {
+      return <HTMLUListElement>document.getElementById("sidebar_fields");
+    },
+    methods() {
+      return <HTMLUListElement>document.getElementById("sidebar_methods");
+    },
+    relations() {
+      return <HTMLUListElement>document.getElementById("sidebar_relations");
+    },
+  };
+  readonly editDialog = {
+    checkSelect(a: string, b: string) {
+      if (a === b) {
+        return " selected";
+      } else {
+        return "";
+      }
+    },
+    createProtectionSelector(value: Protection): string {
+      const id = "edit_protection";
+      const sel = new StringBuilder();
+      sel.append(`<tr><td><label for="${id}">Protection: </label></td>`);
+      sel.append(`<td><select name="${id}" id="${id}">`);
+
+      sel.append('<option value="');
+      sel.append(Protection.public);
+      sel.append('"');
+      sel.append(this.checkSelect(value, Protection.public));
+      sel.append(">");
+      sel.append("Public</option>");
+
+      sel.append('<option value="');
+      sel.append(Protection.protected);
+      sel.append('"');
+      sel.append(this.checkSelect(value, Protection.protected));
+      sel.append(">");
+      sel.append("Protected</option>");
+
+      sel.append('<option value="');
+      sel.append(Protection.private);
+      sel.append('"');
+      sel.append(this.checkSelect(value, Protection.private));
+      sel.append(">");
+      sel.append("Private</option>");
+
+      sel.append('<option value="');
+      sel.append(Protection.internal);
+      sel.append('"');
+      sel.append(this.checkSelect(value, Protection.internal));
+      sel.append(">");
+      sel.append("Internal</option>");
+
+      sel.append("</select></td></tr>");
+      return sel.toString();
+    },
+    createClassiferSelector(value: Classifer): string {
+      const id = "edit_classifer";
+      const sel = new StringBuilder();
+      sel.append(`<tr><td><label for="${id}">Classifer: </label></td>`);
+      sel.append(`<td><select name="${id}" id="${id}">`);
+
+      sel.append('<option value="');
+      sel.append(Classifer.default);
+      sel.append('"');
+      sel.append(this.checkSelect(value, Classifer.default));
+      sel.append(">");
+      sel.append("Default</option>");
+
+      sel.append('<option value="');
+      sel.append(Classifer.abstract);
+      sel.append('"');
+      sel.append(this.checkSelect(value, Classifer.abstract));
+      sel.append(">");
+      sel.append("Abstract</option>");
+
+      sel.append('<option value="');
+      sel.append(Classifer.static);
+      sel.append('"');
+      sel.append(this.checkSelect(value, Classifer.static));
+      sel.append(">");
+      sel.append("Static</option>");
+
+      sel.append("</select></td></tr>");
+      return sel.toString();
+    },
+    createTypeSelector(value: string, isParam: boolean = false): string {
+      const id = "edit_type";
+      const sel = new StringBuilder();
+      if (isParam) {
+        sel.append(`<select class="${id}">`);
+      } else {
+        sel.append(`<tr><td><label for="${id}">Type: </label></td>`);
+        sel.append(`<td><select name="${id}" id="${id}">`);
+      }
+
+      const types = Object.keys(Type).filter(
+        (key: any) => !isNaN(Number(Type[key]))
+      );
+      const classNames = new Array<string>();
+      for (const cl of structureHolder.namespace) {
+        classNames.push(cl.name);
+      }
+      const appendOptions = (list: Array<string>, name: string) => {
+        if (list.length === 0) {
+          return "";
+        }
+        const html = new StringBuilder();
+        html.append(`<optgroup label="${name}">`);
+        for (const t of list) {
+          html.append(`<option value="${t}"`);
+          html.append(this.checkSelect(value, t));
+          html.append(">");
+          html.append(t.charAt(0).toUpperCase() + t.slice(1));
+          html.append("</option>");
+        }
+        html.append("</optgroup>");
+        return html.toString();
+      };
+      sel.append(appendOptions(types, "Default Types"));
+      sel.append(appendOptions(classNames, "Classes"));
+      sel.append("</select>");
+      if (!isParam) {
+        sel.append("</td></tr>");
+      }
+      return sel.toString();
+    },
+    createClassSelector(value: string, excludeClass: string): string {
+      const id = "edit_class";
+      const sel = new StringBuilder();
+      sel.append(`<tr><td><label for="${id}">Class B: </label></td>`);
+      sel.append(`<td><select name="${id}" id="${id}">`);
+      const classNames = new Array<string>();
+      for (const cl of structureHolder.namespace) {
+        if (cl.name !== excludeClass) {
+          classNames.push(cl.name);
+        }
+      }
+      for (const c of classNames) {
+        sel.append(`<option value="${c}"`);
+        sel.append(this.checkSelect(value, c));
+        sel.append(">");
+        sel.append(c);
+        sel.append("</option>");
+      }
+      sel.append("</select>");
+      sel.append("</td></tr>");
+      return sel.toString();
+    },
+    createRelationSelector(value: string): string {
+      value = Relation.fromString(value);
+      const id = "edit_relation";
+      const sel = new StringBuilder();
+      sel.append(`<tr><td><label for="${id}">Relation: </label></td>`);
+      sel.append(`<td><select name="${id}" id="${id}">`);
+      for (const r of Object.keys(relationType)) {
+        sel.append(`<option value="${r}"`);
+        sel.append(this.checkSelect(value, r));
+        sel.append(">");
+        sel.append(r);
+        sel.append("</option>");
+      }
+      sel.append("</select>");
+      sel.append("</td></tr>");
+      return sel.toString();
+    },
+    addParameter() {
+      if (Ui.editMember instanceof Method) {
+        const paramList = document.getElementById("edit_param_list");
+        if (paramList) {
+          const li = new StringBuilder();
+          li.append("<li>");
+          li.append(
+            `<input type="text" value="param${Math.ceil(
+              Math.random() * 1000
+            )}" class="edit_name"/>`
+          );
+          li.append(this.createTypeSelector(Type[Type.string], true));
+          li.append("</li>");
+          paramList.innerHTML += li.toString();
+        }
+      }
+    },
+    close() {
+      Ui.editMember = undefined;
+      const editDialog = document.getElementById("editDialog");
+      if (editDialog) {
+        editDialog.style.display = "none";
+      }
+    },
+    apply() {
+      if (Ui.editMember instanceof Field) {
+        const name = <HTMLInputElement>document.getElementById("edit_name");
+        if (name) {
+          Ui.editMember.name = name.value;
+        }
+        const protection = <HTMLSelectElement>(
+          document.getElementById("edit_protection")
+        );
+        if (protection) {
+          Ui.editMember.protection = ProtectionFromString(protection.value);
+        }
+        const classifer = <HTMLSelectElement>(
+          document.getElementById("edit_classifer")
+        );
+        if (classifer) {
+          Ui.editMember.classifer = classiferFromString(classifer.value);
+        }
+        const type = <HTMLSelectElement>document.getElementById("edit_type");
+        if (type) {
+          Ui.editMember.type = type.value;
+        }
+      } else if (Ui.editMember instanceof Method) {
+        const name = <HTMLInputElement>document.getElementById("edit_name");
+        if (name) {
+          Ui.editMember.name = name.value;
+        }
+        const protection = <HTMLSelectElement>(
+          document.getElementById("edit_protection")
+        );
+        if (protection) {
+          Ui.editMember.protection = ProtectionFromString(protection.value);
+        }
+        const classifer = <HTMLSelectElement>(
+          document.getElementById("edit_classifer")
+        );
+        if (classifer) {
+          Ui.editMember.classifer = classiferFromString(classifer.value);
+        }
+        const type = <HTMLSelectElement>document.getElementById("edit_type");
+        if (type) {
+          Ui.editMember.type = type.value;
+        }
+        const paramList = <HTMLUListElement>(
+          document.getElementById("edit_param_list")
+        );
+        if (paramList) {
+          const pLiS = paramList.getElementsByTagName("li");
+          for (let i = 0; i < pLiS.length; i++) {
+            const pLi = pLiS[i];
+            const pName = (<HTMLInputElement>(
+              pLi.getElementsByClassName("edit_name")[0]
+            )).value;
+            const pType = (<HTMLInputElement>(
+              pLi.getElementsByClassName("edit_type")[0]
+            )).value;
+            Ui.editMember.setParam(pName, pType);
+          }
+        }
+      } else if (Ui.editMember instanceof Relation) {
+        const clBInp = <HTMLSelectElement>document.getElementById("edit_class");
+        if (clBInp) {
+          const clB = structureHolder.findClass(clBInp.value);
+          if (clB) {
+            Ui.editMember.classB = clB;
+          }
+        }
+        const rel = <HTMLSelectElement>document.getElementById("edit_relation");
+        if (rel) {
+          Ui.editMember.relation = Relation.typeFromString(rel.value);
+        }
+        const cardinalityA = <HTMLSelectElement>(
+          document.getElementById("edit_cardinalityA")
+        );
+        if (cardinalityA) {
+          Ui.editMember.cardinalityA = cardinalityA.value;
+        }
+        const cardinalityB = <HTMLSelectElement>(
+          document.getElementById("edit_cardinalityB")
+        );
+        if (cardinalityB) {
+          Ui.editMember.cardinalityB = cardinalityB.value;
+        }
+        const comment = <HTMLSelectElement>(
+          document.getElementById("edit_comment")
+        );
+        if (comment) {
+          Ui.editMember.comment = comment.value;
+        }
+      }
+      Ui.render();
+      this.close();
+    },
+    display(type: string, name: string) {
+      const html = new StringBuilder();
+      //Field
+      if (type === "field") {
+        let v: Field | undefined = undefined;
+        if (!Ui.focusedClass) {
+          return;
+        }
+        for (v of Ui.focusedClass.fields) {
+          if (v.name === name) {
+            break;
+          }
+        }
+        if (!v) {
+          return;
+        }
+        Ui.editMember = v;
+        html.append('<tr><td><label for="edit_name">Name: </label></td>');
+        html.append('<td><input type="text" value="');
+        html.append(v.name);
+        html.append('" id="edit_name"/></td></tr>');
+        html.append(this.createProtectionSelector(v.protection));
+        html.append(this.createTypeSelector(v.type));
+        html.append(this.createClassiferSelector(v.classifer));
+      }
+      //Method
+      else if (type === "method") {
+        let v: Method | undefined = undefined;
+        if (!Ui.focusedClass) {
+          return;
+        }
+        for (v of Ui.focusedClass.methods) {
+          if (v.name === name) {
+            break;
+          }
+        }
+        if (!v) {
+          return;
+        }
+        Ui.editMember = v;
+        html.append('<tr><td><label for="edit_name">Name: </label></td>');
+        html.append('<td><input type="text" value="');
+        html.append(v.name);
+        html.append('" id="edit_name"/></td></tr>');
+        html.append(this.createProtectionSelector(v.protection));
+        html.append(this.createTypeSelector(v.type));
+        html.append(this.createClassiferSelector(v.classifer));
+        html.append("<tr><td><label>Parameters: </label></td>");
+        html.append('<td><ul id="edit_param_list">');
+        for (const p of v.parameters) {
+          html.append(
+            `<input type="text" value="${p.name}" class="edit_name"/>`
+          );
+          html.append(this.createTypeSelector(p.type, true));
+        }
+        html.append("</ul>");
+        html.append(
+          '<p onclick="Ui.editDialog.addParameter()" style="cursor: pointer">+ Parameter</p>'
+        );
+        html.append("</td></tr>");
+      }
+      // Relation
+      else if (type === "relation") {
+        let v: Relation | undefined = undefined;
+        if (!Ui.focusedClass) {
+          return;
+        }
+        for (v of Ui.focusedClass.relations) {
+          if (v.toString() === name) {
+            break;
+          }
+        }
+        if (!v) {
+          return;
+        }
+        Ui.editMember = v;
+        html.append("<tr><td><label>Class A: </label></td><td>");
+        html.append(v.classA.name);
+        html.append("</td></tr>");
+        {
+          html.append(
+            '<tr><td><label for="edit_cardinalityA">Cardinality A: </label></td><td>'
+          );
+          html.append(
+            `<input type="text" value="${v.cardinalityA}" id="edit_cardinalityA" name="edit_cardinalityA"/>`
+          );
+          html.append("</td></tr>");
+        }
+        html.append(this.createRelationSelector(v.relation));
+        {
+          html.append(
+            '<tr><td><label for="edit_cardinalityB">Cardinality B: </label></td><td>'
+          );
+          html.append(
+            `<input type="text" value="${v.cardinalityB}" id="edit_cardinalityB" name="edit_cardinalityB"/>`
+          );
+          html.append("</td></tr>");
+        }
+        html.append(this.createClassSelector(v.classB.name, v.classA.name));
+        {
+          html.append(
+            '<tr><td><label for="edit_comment">Comment: </label></td><td>'
+          );
+          html.append(
+            `<input type="text" value="${v.comment}" id="edit_comment" name="edit_comment"/>`
+          );
+          html.append("</td></tr>");
+        }
+      } else {
+        throw new Error("Unexpectet type");
+      }
+      const editDialogContent = document.getElementById("editDialogContent");
+      if (editDialogContent) {
+        editDialogContent.innerHTML = html.toString();
+        const editDialog = document.getElementById("editDialog");
+        if (editDialog) {
+          editDialog.style.display = "block";
+        }
+      }
+    },
+  };
+
+  private sidebarClass(cl: Class | undefined = undefined) {
+    if (cl) {
+      this.focusedClass = cl;
+    } else if (!this.focusedClass) {
+      this.sidebar.classname().value = "";
+      this.sidebar.fields().innerHTML =
+        '<li class="head"><img src="img/folder.svg" />&nbsp;<b>Fields</b></li>';
+      this.sidebar.methods().innerHTML =
+        '<li class="head"><img src="img/folder.svg" />&nbsp;<b>Methods</b></li>';
+      this.sidebar.relations().innerHTML =
+        '<li class="head"><img src="img/folder.svg" />&nbsp;<b>Relations</b></li>';
+      return;
+    }
+    this.sidebar.classname().value = this.focusedClass.name; // Edit Classname
+
+    // Fields
+    const field = new StringBuilder();
+    field.append(
+      '<li class="head"><img src="img/folder.svg" />&nbsp;<b>Fields</b></li>'
+    );
+    for (const f of this.focusedClass.fields) {
+      field.append(
+        `<li ondblclick="Ui.editDialog.display('field', '${f.name}')"`
+      );
+      field.append(
+        ` onmouseover="Ui.setHover('${f.name}','field')" onmouseout="Ui.removeHover('${f.name}')">`
+      );
+      field.append(_Ui.escapeHtml(f.name));
+      field.append("</li>");
+    }
+    this.sidebar.fields().innerHTML = field.toString();
+
+    // Methods
+    const method = new StringBuilder();
+    method.append(
+      '<li class="head"><img src="img/folder.svg" />&nbsp;<b>Methods</b></li>'
+    );
+    for (const m of this.focusedClass.methods) {
+      method.append(
+        `<li ondblclick="Ui.editDialog.display('method', '${m.name}')" `
+      );
+      method.append(
+        `onmouseover="Ui.setHover('${m.name}', 'method')" onmouseout="Ui.removeHover('${m.name}')" >`
+      );
+      method.append(_Ui.escapeHtml(m.name));
+      method.append("</li>");
+    }
+    this.sidebar.methods().innerHTML = method.toString();
+
+    // Relations
+    const relation = new StringBuilder();
+    relation.append(
+      '<li class="head"><img src="img/folder.svg" />&nbsp;<b>Relations</b></li>'
+    );
+    for (const r of this.focusedClass.relations) {
+      const rString = r.toString();
+      relation.append(
+        `<li ondblclick='Ui.editDialog.display("relation", \`${rString}\`)'`
+      );
+      relation.append(
+        ` onmouseover='Ui.setHover(\`${rString}\`,"relation")' onmouseout='Ui.removeHover(\`${rString}\`,"relation")'>`
+      );
+      relation.append(_Ui.escapeHtml(rString));
+      relation.append("</li>");
+    }
+    this.sidebar.relations().innerHTML = relation.toString();
+  }
+
+  private async applyStyleRules() {
+    let mddSvg = document.getElementById("mddSvg");
+    if (mddSvg) {
+      for await (const text of <any>mddSvg.getElementsByTagName("text")) {
+        const tspans = text.getElementsByTagName("tspan");
+        if (tspans.length === 2) {
+          if (text.textContent.startsWith("«abstract»")) {
+            tspans[0].style.fontStyle = "italic";
+            tspans[1].style.fontStyle = "italic";
+          } else if (text.textContent.startsWith("«static»")) {
+            tspans[0].style.textDecoration = "underline";
+            tspans[1].style.textDecoration = "underline";
+          }
+        }
+      }
+      if (this.focused >= 0) {
+        for await (const g of <any>mddSvg.getElementsByTagName("g")) {
+          let classname = g.id.split("-")[1];
+          if (g.id.length > 0) {
+            (<HTMLElement>g).setAttribute(
+              "onclick",
+              `if(Ui.focus("${classname}")){Ui.render();}`
+            );
+          }
+          for await (const cl of structureHolder.namespace) {
+            if (cl.name === classname && cl.id === this.focused) {
+              (<HTMLElement>g).style.setProperty("--blue", "var(--accent)");
+              this.sidebarClass(cl);
+              break;
+            }
+          }
+        }
+      } else {
+        for await (const g of <any>mddSvg.getElementsByTagName("g")) {
+          if (g.id.length > 0) {
+            (<HTMLElement>g).setAttribute(
+              "onclick",
+              `Ui.focus("${g.id.split("-")[1]}");Ui.render();`
+            );
+          }
+        }
+      }
+    }
+  }
+
+  render(): void {
+    const md = structureHolder.collectMmd();
+    if (md.length > 0) {
+      mermaid.render(mddSvgId, structureHolder.collectMmd(), this.cb);
+      this.applyStyleRules();
+    } else {
+      this.cb("");
+    }
+  }
+
+  focus(id: number | string): boolean {
+    if (typeof id === "number" && id !== this.focused) {
+      this.focused = id;
+      for (const cl of structureHolder.namespace) {
+        if (cl.id === id) {
+          this.focusedClass = cl;
+        }
+      }
+      return true;
+    } else if (typeof id === "string") {
+      if (this.focusedClass && this.focusedClass.name === id) {
+        return false;
+      }
+      for (const cl of structureHolder.namespace) {
+        if (cl.name === id) {
+          this.focused = cl.id;
+          this.focusedClass = cl;
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private doesClassnameExist(name: string): boolean {
+    for (const cl of structureHolder.namespace) {
+      if (cl.name === name) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  delete(): void {
+    if (this.saverHoverCopy.length > 0 && this.focusedClass) {
+      const hover = JSON.parse(this.saverHoverCopy);
+      switch (hover.t) {
+        case "field":
+          for (let i = 0; i < this.focusedClass.fields.length; i++) {
+            if (this.focusedClass.fields[i].name === hover.id) {
+              delete this.focusedClass.fields[i];
+              this.focusedClass.fields.splice(i, 1);
+            }
+          }
+          break;
+        case "method":
+          for (let i = 0; i < this.focusedClass.methods.length; i++) {
+            if (this.focusedClass.methods[i].name === hover.id) {
+              delete this.focusedClass.methods[i];
+              this.focusedClass.methods.splice(i, 1);
+            }
+          }
+          break;
+        case "relation":
+          for (let i = 0; i < this.focusedClass.relations.length; i++) {
+            if (this.focusedClass.relations[i].toString() === hover.id) {
+              delete this.focusedClass.relations[i];
+              this.focusedClass.relations.splice(i, 1);
+            }
+          }
+          break;
+      }
+      this.sidebarClass();
+      this.render();
+    } else if (this.focusedClass) {
+      for (let i = 0; i < structureHolder.namespace.length; i++) {
+        if (structureHolder.namespace[i] === this.focusedClass) {
+          delete structureHolder.namespace[i];
+          structureHolder.namespace.splice(i, 1);
+        }
+      }
+      this.focusedClass = undefined;
+      this.focused = -1;
+      this.sidebarClass();
+      this.render();
+    }
+  }
+
+  newClass(): void {
+    let className = "Class";
+    if (this.doesClassnameExist(className)) {
+      for (let i = 1; i < 100; i++) {
+        let newClassName = `Class${i}`;
+        if (!this.doesClassnameExist(newClassName)) {
+          className = newClassName;
+          break;
+        }
+      }
+    }
+    structureHolder.addClass(new Class(className));
+    if (this.focus(className)) {
+      this.render();
+    }
+  }
+
+  newField(): void {
+    if (this.focusedClass) {
+      const newField = new Field(
+        Protection.public,
+        typeString(Type.string),
+        "NewField" + Math.floor(Math.random() * 1000).toString()
+      );
+      this.focusedClass.fields.push(newField);
+      this.sidebarClass();
+      this.render();
+      this.editDialog.display("field", newField.name);
+    }
+  }
+
+  newMethod(): void {
+    if (this.focusedClass) {
+      const newMethod = new Method(
+        Protection.public,
+        typeString(Type.string),
+        "NewMethod" + Math.floor(Math.random() * 1000).toString()
+      );
+      this.focusedClass.methods.push(newMethod);
+      this.sidebarClass();
+      this.render();
+      this.editDialog.display("method", newMethod.name);
+    }
+  }
+  newRelation(): void {
+    if (this.focusedClass) {
+      let b: Class;
+      if (structureHolder.namespace[0] === this.focusedClass) {
+        b = structureHolder.namespace[1];
+      } else {
+        b = structureHolder.namespace[0];
+      }
+      const newRel = new Relation(
+        this.focusedClass,
+        b,
+        relationType.inheritance
+      );
+      this.focusedClass.relations.push(newRel);
+      this.sidebarClass();
+      this.render();
+      this.editDialog.display("relation", newRel.toString());
+    }
+  }
+  setClassName(): void {
+    if (this.focusedClass) {
+      const newName = this.sidebar.classname().value.trim();
+      if (newName.length > 0) {
+        this.focusedClass.name = this.sidebar.classname().value;
+        this.render();
+      }
+    } else {
+      this.sidebar.classname().value = "";
+    }
+  }
+}
+const Ui = new _Ui();
