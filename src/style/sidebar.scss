@@ -8,7 +8,6 @@
   left: 0;
   border-right: 1px solid rgb(20, 20, 20);
   width: var(--sidebar-width);
-
   #sidebar_classname_li {
     margin: 8px;
   }
@@ -29,6 +28,20 @@
     }
     > li:hover {
       background-color: var(--hover);
+    }
+  }
+  ul > li.head:before {
+    content: "+ ";
+  }
+  ul.folderClosed {
+    li.head:before {
+      content: "- ";
+    }
+    > li:not(.head) {
+      display: none;
+      * {
+        display: none;
+      }
     }
   }
 }

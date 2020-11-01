@@ -48,6 +48,8 @@ class _Ui {
     this.cb = function (svgGraph: string) {
       (<HTMLDivElement>document.getElementById("graph")).innerHTML = svgGraph;
     };
+
+    this.sidebarClass();
   }
 
   static escapeHtml(str: string): string {
@@ -56,6 +58,13 @@ class _Ui {
       .replace(/\"/g, "&quot;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;");
+  }
+
+  toggleFolder(folderId: string) {
+    const folder = document.getElementById(folderId);
+    if (folder) {
+      folder.classList.toggle("folderClosed");
+    }
   }
 
   private readonly sidebar = {
@@ -232,15 +241,33 @@ class _Ui {
         const paramList = document.getElementById("edit_param_list");
         if (paramList) {
           const li = new StringBuilder();
+          const paramName = `param${Math.ceil(Math.random() * 1000)}`;
           li.append("<li>");
           li.append(
-            `<input type="text" value="param${Math.ceil(
-              Math.random() * 1000
-            )}" class="edit_name"/>`
+            `<input type="text" value="${paramName}" class="edit_name"/>`
           );
           li.append(this.createTypeSelector(Type[Type.string], true));
+          li.append(
+            `<button onclick='Ui.editDialog.removeParameter("${paramName}")'>Remove</button>`
+          );
           li.append("</li>");
           paramList.innerHTML += li.toString();
+        }
+      }
+    },
+    removeParameter(name: string) {
+      if (Ui.editMember instanceof Method) {
+        const paramUList = document.getElementById("edit_param_list");
+        if (paramUList) {
+          const paramList = paramUList.getElementsByTagName("li");
+          for (let i = 0; i < paramList.length; i++) {
+            const nameEl = <HTMLInputElement>(
+              paramList[i].querySelector("input.edit_name")
+            );
+            if (nameEl && nameEl.value === name) {
+              paramList[i].remove();
+            }
+          }
         }
       }
     },
@@ -298,6 +325,22 @@ class _Ui {
           document.getElementById("edit_param_list")
         );
         if (paramList) {
+          // check if a parameter was removed
+          const inputs = paramList.getElementsByTagName("input");
+          for (let p = 0; p < Ui.editMember.parameters.length; p++) {
+            let found = false;
+            for (let i = 0; i < inputs.length; i++) {
+              if (Ui.editMember.parameters[p].name === inputs[i].value) {
+                found = true;
+                break;
+              }
+            }
+            if (!found) {
+              delete Ui.editMember.parameters[p];
+              Ui.editMember.parameters.splice(p, 1);
+            }
+          }
+          // check if there are new parameters
           const pLiS = paramList.getElementsByTagName("li");
           for (let i = 0; i < pLiS.length; i++) {
             const pLi = pLiS[i];
@@ -394,10 +437,15 @@ class _Ui {
         html.append("<tr><td><label>Parameters: </label></td>");
         html.append('<td><ul id="edit_param_list">');
         for (const p of v.parameters) {
+          html.append("<li>");
           html.append(
             `<input type="text" value="${p.name}" class="edit_name"/>`
           );
           html.append(this.createTypeSelector(p.type, true));
+          html.append(
+            `<button onclick='Ui.editDialog.removeParameter("${p.name}")'>Remove</button>`
+          );
+          html.append("</li>");
         }
         html.append("</ul>");
         html.append(
@@ -472,11 +520,11 @@ class _Ui {
     } else if (!this.focusedClass) {
       this.sidebar.classname().value = "";
       this.sidebar.fields().innerHTML =
-        '<li class="head"><img src="img/folder.svg" />&nbsp;<b>Fields</b></li>';
+        '<li onclick="Ui.toggleFolder(\'sidebar_fields\')" class="head"><img src="img/folder.svg" />&nbsp;<b>Fields</b></li>';
       this.sidebar.methods().innerHTML =
-        '<li class="head"><img src="img/folder.svg" />&nbsp;<b>Methods</b></li>';
+        '<li onclick="Ui.toggleFolder(\'sidebar_methods\')" class="head"><img src="img/folder.svg" />&nbsp;<b>Methods</b></li>';
       this.sidebar.relations().innerHTML =
-        '<li class="head"><img src="img/folder.svg" />&nbsp;<b>Relations</b></li>';
+        '<li onclick="Ui.toggleFolder(\'sidebar_relations\')" class="head"><img src="img/folder.svg" />&nbsp;<b>Relations</b></li>';
       return;
     }
     this.sidebar.classname().value = this.focusedClass.name; // Edit Classname
@@ -484,7 +532,7 @@ class _Ui {
     // Fields
     const field = new StringBuilder();
     field.append(
-      '<li class="head"><img src="img/folder.svg" />&nbsp;<b>Fields</b></li>'
+      '<li onclick="Ui.toggleFolder(\'sidebar_fields\')" class="head"><img src="img/folder.svg" />&nbsp;<b>Fields</b></li>'
     );
     for (const f of this.focusedClass.fields) {
       field.append(
@@ -501,7 +549,7 @@ class _Ui {
     // Methods
     const method = new StringBuilder();
     method.append(
-      '<li class="head"><img src="img/folder.svg" />&nbsp;<b>Methods</b></li>'
+      '<li onclick="Ui.toggleFolder(\'sidebar_methods\')" class="head"><img src="img/folder.svg" />&nbsp;<b>Methods</b></li>'
     );
     for (const m of this.focusedClass.methods) {
       method.append(
@@ -518,7 +566,7 @@ class _Ui {
     // Relations
     const relation = new StringBuilder();
     relation.append(
-      '<li class="head"><img src="img/folder.svg" />&nbsp;<b>Relations</b></li>'
+      '<li onclick="Ui.toggleFolder(\'sidebar_relations\')" class="head"><img src="img/folder.svg" />&nbsp;<b>Relations</b></li>'
     );
     for (const r of this.focusedClass.relations) {
       const rString = r.toString();
