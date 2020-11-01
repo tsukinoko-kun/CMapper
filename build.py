@@ -10,7 +10,7 @@ from distutils.dir_util import copy_tree
 print("tsc")
 os.system("tsc -p ./tsconfig.json --pretty")
 
-if False:
+if True:
     print("closure-compiler")
     js_path = "./public/app.js"
     file_object = open(js_path, "r")
