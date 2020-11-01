@@ -30,13 +30,26 @@
   <body>
     <section id="prerendered">
       <ul id="contextMenu">
-        <li onclick="Ui.newClass()">New Class</li>
+        <li class="newClass" onclick="Ui.newClass()">New Class</li>
         <li class="newField" onclick="Ui.newField()">New Field</li>
         <li class="newMethod" onclick="Ui.newMethod()">New Method</li>
         <li class="newRelation" onclick="Ui.newRelation()">New Relation</li>
         <li onclick="Ui.delete()">Delete</li>
-        <li>Duplicate<span class="key">Ctrl+D</span></li>
+        <!-- <li>Duplicate Class<span class="key">Ctrl+D</span></li> -->
       </ul>
+      <div id="topBar">
+        <select
+          name="select_build"
+          id="select_build"
+          oninput="Build.updateMode(this.value)"
+        >
+          <option value="cm">CM File</option>
+          <optgroup label="SourceCode">
+            <option value="cs">C#</option>
+          </optgroup>
+        </select>
+        <button onclick="Build.build()">Build</button>
+      </div>
       <ul id="sidebar">
         <li id="sidebar_classname_li">
           <label class="placeholder" for="sidebar_classname">Classname</label>

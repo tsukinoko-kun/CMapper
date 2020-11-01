@@ -29,11 +29,13 @@ body {
   --foreground: #e0e2e4;
   --foreground-focus: whitesmoke;
   --sidebar-width: 350px;
+  --topbar-height: 50px;
   --orange: #ec7600;
   --yellow: #ffcd22;
   --gray: #7d8c93;
   --blue: #678cb1;
   --hover: rgb(18, 38, 58);
+  --border-color: #ffffff30;
 }
 
 *:not([type="text"]) {
@@ -50,7 +52,7 @@ input[type="text"] {
   outline: none;
   padding: 4px 8px;
   background-color: transparent;
-  border: 1px solid #ffffff30;
+  border: 1px solid var(--border-color);
   color: var(--foreground);
 }
 input[type="text"]:focus {
@@ -61,7 +63,7 @@ button {
   border: none;
   outline: none;
   padding: 4px 8px;
-  border: 1px solid #ffffff30;
+  border: 1px solid var(--border-color);
   border-radius: 0.25em;
   float: right;
   margin-left: 8px;
@@ -126,7 +128,7 @@ button:hover:not([disabled]) {
 
   font-weight: bold;
   color: var(--blue);
-  border: 1px solid #ffffff30;
+  border: 1px solid var(--border-color);
   border-radius: 50%;
   width: 24px;
   height: 24px;
@@ -143,7 +145,7 @@ select {
   border: none;
   height: 28px;
   background-color: var(--sidebar);
-  border: 1px solid #ffffff30;
+  border: 1px solid var(--border-color);
   cursor: pointer;
   *:hover {
     background-color: var(--hover);

@@ -1,8 +1,15 @@
 #contextMenu {
+  -webkit-animation-duration: 250ms;
+  animation-duration: 250ms;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
   -moz-user-select: none !important;
   -webkit-user-select: none !important;
   -ms-user-select: none !important;
   user-select: none !important;
+
   min-width: 300px;
   display: none;
   background-color: var(--sidebar);
@@ -11,7 +18,15 @@
   filter: drop-shadow(1px 1px 10px rgba(#000000, 0.1));
   position: absolute;
   z-index: 10;
+  overflow: hidden;
   li {
+    -webkit-animation-duration: 250ms;
+    animation-duration: 250ms;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-name: slideIn;
+    animation-name: slideIn;
+
     cursor: pointer;
     list-style-type: none;
     padding: 4px 24px;
@@ -22,6 +37,14 @@
   }
   li:hover {
     background-color: var(--accent);
+  }
+}
+
+#contextMenu.field,
+#contextMenu.method,
+#contextMenu.relation {
+  .newClass {
+    display: none;
   }
 }
 #contextMenu:not(.field) > .newField {

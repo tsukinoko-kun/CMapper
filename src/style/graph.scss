@@ -1,6 +1,6 @@
 #graph {
   position: fixed;
-  top: 0;
+  top: var(--topbar-height);
   right: 0;
   bottom: 0;
   left: calc(var(--sidebar-width) + 16px);
@@ -12,6 +12,9 @@
     fill: var(--foreground);
     * {
       font-size: 10px !important;
+    }
+    text {
+      fill: var(--foreground);
     }
     .error-icon {
       fill: #552222;

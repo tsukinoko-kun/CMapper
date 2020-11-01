@@ -702,6 +702,47 @@ class _Ui {
       this.sidebarClass();
       this.render();
     } else if (this.focusedClass) {
+      for (const cl of structureHolder.namespace) {
+        if (cl === this.focusedClass) {
+          continue;
+        }
+        for (const r of cl.relations) {
+          if (r.classB === this.focusedClass) {
+            alert(
+              "A class that is linked to other classes by relations can not be deleted. " +
+                `\n${r.classA.name}`
+            );
+            return;
+          }
+        }
+        for (const f of cl.fields) {
+          if (f.type === this.focusedClass.name) {
+            alert(
+              "A class that is used as a type by fields of another class can not be deleted." +
+                `\n${f.type} ${cl.name}::${f.name}`
+            );
+            return;
+          }
+        }
+        for (const m of cl.methods) {
+          if (m.type === this.focusedClass.name) {
+            alert(
+              "A class that is used as a return type by methods of another class may be deleted." +
+                `\n${m.type} ${cl.name}::${m.name}()`
+            );
+            return;
+          }
+          for (const p of m.parameters) {
+            if (p.type === this.focusedClass.name) {
+              alert(
+                "A class that is used as a parameter type by methods of another class can not be deleted." +
+                  `\n${m.type} ${cl.name}::${m.name}(${p.type} ${p.name})`
+              );
+              return;
+            }
+          }
+        }
+      }
       for (let i = 0; i < structureHolder.namespace.length; i++) {
         if (structureHolder.namespace[i] === this.focusedClass) {
           delete structureHolder.namespace[i];

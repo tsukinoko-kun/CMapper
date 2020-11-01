@@ -11,15 +11,16 @@
   backdrop-filter: blur(8px);
   .window {
     background-color: var(--sidebar);
-    border: 1px solid #ffffff30;
+    border: 1px solid var(--border-color);
     border-radius: 0.3em;
     overflow: hidden;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    min-width: 475px;
+    min-width: 565px;
     .titleBar {
+      text-align: center;
       padding: 4px;
       background: -moz-linear-gradient(
         0deg,
@@ -43,9 +44,18 @@
       td > * {
         width: 100%;
       }
+      #edit_param_list {
+        > li {
+          border: 1px solid var(--border-color);
+          select,
+          input {
+            border: none !important;
+          }
+        }
+      }
     }
     .buttons {
-      border-top: 1px solid #ffffff30;
+      border-top: 1px solid var(--border-color);
       button {
         margin: 8px;
       }
