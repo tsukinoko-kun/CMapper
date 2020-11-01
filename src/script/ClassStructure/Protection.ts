@@ -33,3 +33,16 @@ function signToProtection(sign: string): Protection {
   }
   throw new Error(`Unexpected sign ${sign}`);
 }
+
+function protectionToCode(p: Protection): string {
+  switch (p) {
+    case Protection.internal:
+      return "internal";
+    case Protection.private:
+      return "private";
+    case Protection.protected:
+      return "protected";
+    case Protection.public:
+      return "public";
+  }
+}

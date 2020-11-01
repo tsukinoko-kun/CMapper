@@ -144,5 +144,33 @@ class StructureHolder {
       alert(e);
     }
   }
+
+  deepRename(oldName: string, newName: string) {
+    for (const cl of this.namespace) {
+      for (const f of cl.fields) {
+        if (f.type === oldName) {
+          f.type = newName;
+        }
+      }
+      for (const m of cl.methods) {
+        if (m.type === oldName) {
+          m.type = newName;
+        }
+        for (const p of m.parameters) {
+          if (p.type === oldName) {
+            p.type = newName;
+          }
+        }
+      }
+      for (const r of cl.relations) {
+        if (r.classA === oldName) {
+          r.classA = newName;
+        }
+        if (r.classB === oldName) {
+          r.classB = newName;
+        }
+      }
+    }
+  }
 }
 const structureHolder = new StructureHolder();

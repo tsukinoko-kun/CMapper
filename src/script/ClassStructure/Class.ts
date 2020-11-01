@@ -74,4 +74,27 @@ class Class {
       callback(rel);
     }
   }
+
+  codeGen(lng: string): Page {
+    const code = new StringBuilder();
+    switch (lng) {
+      case "cs":
+        code.append("public ");
+        if (this.static) {
+          code.append("static ");
+        } else if (this.abstract) {
+          code.append("abstract ");
+        }
+        code.appendWithLinebreak(`class ${this.name}`);
+        code.appendWithLinebreak("{");
+        for (const f of this.fields) {
+          code.appendWithLinebreak("\t" + f.codeGen(lng));
+        }
+        for (const m of this.methods) {
+          code.appendWithLinebreak("\t" + m.codeGen(lng));
+        }
+        code.appendWithLinebreak("}");
+    }
+    return new Page(this.name, lng, code.toString());
+  }
 }

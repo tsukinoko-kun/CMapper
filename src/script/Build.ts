@@ -1,9 +1,12 @@
 /// <reference path="Page.ts"/>
 
 class Build {
-  private static mode: string = "cs";
+  private static mode: string;
   static build(mode: string = this.mode) {
     const files = new Array<Page>();
+    if (!mode) {
+      mode = (<HTMLSelectElement>document.getElementById("selectBuild"))?.value;
+    }
     switch (mode) {
       case "cm":
         files.push(
@@ -13,6 +16,11 @@ class Build {
             btoa(JSON.stringify(structureHolder.namespace))
           )
         );
+        break;
+      case "cs":
+        for (const cl of structureHolder.namespace) {
+          files.push(cl.codeGen("cs"));
+        }
         break;
     }
     for (const f of files) {

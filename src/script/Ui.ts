@@ -826,7 +826,15 @@ class _Ui {
     if (this.focusedClass) {
       const newName = this.sidebar.classname().value.trim();
       if (newName.length > 0) {
-        this.focusedClass.name = this.sidebar.classname().value;
+        const oldName = this.focusedClass.name;
+        const newName = this.sidebar.classname().value.trim();
+        if (structureHolder.findClass(newName)) {
+          alert(`class name "${newName}" already in use`);
+          this.sidebar.classname().value = oldName;
+          return;
+        }
+        this.focusedClass.name = newName;
+        structureHolder.deepRename(oldName, newName);
         this.render();
       }
     } else {
