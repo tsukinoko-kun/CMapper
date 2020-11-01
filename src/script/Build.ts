@@ -1,14 +1,14 @@
 /// <reference path="Page.ts"/>
 
 class Build {
-  private static mode: string;
-  static build() {
+  private static mode: string = "cs";
+  static build(mode: string = this.mode) {
     const files = new Array<Page>();
-    switch (this.mode) {
+    switch (mode) {
       case "cm":
         files.push(
           new Page(
-            "unknown",
+            structureHolder.name,
             "cm",
             btoa(JSON.stringify(structureHolder.namespace))
           )

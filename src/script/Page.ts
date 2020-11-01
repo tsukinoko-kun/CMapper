@@ -6,10 +6,8 @@ class Page {
     this.name = name;
     this.ext = ext;
     this.content = new Blob([content], { type: "text/plain" });
-    console.debug(content);
   }
   download() {
-    console.debug(this.content);
     window.URL = window.URL || window.webkitURL;
     const a = document.createElement("a");
     a.setAttribute("href", window.URL.createObjectURL(this.content));

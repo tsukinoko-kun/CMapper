@@ -356,10 +356,7 @@ class _Ui {
       } else if (Ui.editMember instanceof Relation) {
         const clBInp = <HTMLSelectElement>document.getElementById("edit_class");
         if (clBInp) {
-          const clB = structureHolder.findClass(clBInp.value);
-          if (clB) {
-            Ui.editMember.classB = clB;
-          }
+          Ui.editMember.classB = clBInp.value;
         }
         const rel = <HTMLSelectElement>document.getElementById("edit_relation");
         if (rel) {
@@ -469,7 +466,7 @@ class _Ui {
         }
         Ui.editMember = v;
         html.append("<tr><td><label>Class A: </label></td><td>");
-        html.append(v.classA.name);
+        html.append(v.classA);
         html.append("</td></tr>");
         {
           html.append(
@@ -490,7 +487,7 @@ class _Ui {
           );
           html.append("</td></tr>");
         }
-        html.append(this.createClassSelector(v.classB.name, v.classA.name));
+        html.append(this.createClassSelector(v.classB, v.classA));
         {
           html.append(
             '<tr><td><label for="edit_comment">Comment: </label></td><td>'
@@ -637,6 +634,12 @@ class _Ui {
     }
   }
 
+  unfocus(): void {
+    this.focused = -1;
+    this.focusedClass = undefined;
+    this.sidebarClass();
+  }
+
   focus(id: number | string): boolean {
     if (typeof id === "number" && id !== this.focused) {
       this.focused = id;
@@ -707,10 +710,10 @@ class _Ui {
           continue;
         }
         for (const r of cl.relations) {
-          if (r.classB === this.focusedClass) {
+          if (r.classB === this.focusedClass.name) {
             alert(
-              "A class that is linked to other classes by relations can not be deleted. " +
-                `\n${r.classA.name}`
+              "A class that is linked to other class by relations can not be deleted. " +
+                `\n${r.classA} → ${r.classB}`
             );
             return;
           }
@@ -829,6 +832,10 @@ class _Ui {
     } else {
       this.sidebar.classname().value = "";
     }
+  }
+  loadFile(): void {
+    const fileUpload = document.getElementById("fileUpload");
+    fileUpload?.click();
   }
 }
 const Ui = new _Ui();

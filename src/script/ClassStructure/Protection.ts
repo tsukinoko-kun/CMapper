@@ -24,3 +24,12 @@ function ProtectionFromString(str: string): Protection {
       return Protection.public;
   }
 }
+
+function signToProtection(sign: string): Protection {
+  for (const k in Protection) {
+    if (Protection[k].toString() === sign) {
+      return <Protection>Protection[k];
+    }
+  }
+  throw new Error(`Unexpected sign ${sign}`);
+}

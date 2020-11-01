@@ -3,8 +3,10 @@
   top: var(--topbar-height);
   right: 0;
   bottom: 0;
-  left: calc(var(--sidebar-width) + 16px);
+  left: var(--sidebar-width);
   overflow: auto;
+  -webkit-box-shadow: inset 0px 0px 10px 5px rgba(0, 0, 0, 0.125);
+  box-shadow: inset 0px 0px 10px 5px rgba(0, 0, 0, 0.125);
 
   #mddSvg {
     font-family: "JetBrains Mono", monospace;

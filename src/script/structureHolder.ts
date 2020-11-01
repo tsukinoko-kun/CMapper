@@ -1,6 +1,7 @@
 /// <reference path="ClassStructure/Class.ts"/>
 
 class StructureHolder {
+  name: string = "unknown";
   namespace: Array<Class>;
 
   constructor() {
@@ -39,6 +40,109 @@ class StructureHolder {
       }
     }
     return undefined;
+  }
+
+  loadFile(f: File): void {
+    try {
+      if (f.name.endsWith(".cm")) {
+        this.name = f.name.substr(0, f.name.length - 3);
+        var fr = new FileReader();
+        fr.onload = function () {
+          if (fr.result) {
+            let res: string;
+            if (typeof fr.result === "string") {
+              res = fr.result;
+            } else {
+              var arr = new Uint8Array(fr.result);
+              var array = new Array<number>();
+              for (var i = 0; i < arr.byteLength; i++) {
+                array[i] = arr[i];
+              }
+              var str = String.fromCharCode.apply(String, array);
+              if (/[\u0080-\uffff]/.test(str)) {
+                throw new Error(
+                  "this string seems to contain (still encoded) multibytes"
+                );
+              }
+              res = str;
+            }
+            structureHolder.importJson(atob(res));
+          }
+        };
+        fr.readAsText(f);
+      } else {
+        throw "Unexpected FileType";
+      }
+    } catch (e) {
+      alert(e);
+    }
+  }
+  importJson(json: string): void {
+    try {
+      const obj: Array<Class> = JSON.parse(json);
+      const tempNamespance = new Array<Class>();
+      for (const clDta of obj) {
+        const newCl = new Class(clDta.name);
+        newCl.abstract = clDta.abstract;
+        newCl.static = clDta.static;
+        newCl.id = clDta.id;
+
+        const tempFieldList = new Array<Field>();
+        for (const flDta of clDta.fields) {
+          tempFieldList.push(
+            new Field(
+              signToProtection(flDta.protection),
+              flDta.type,
+              flDta.name,
+              flDta.classifer
+            )
+          );
+        }
+        newCl.fields = tempFieldList;
+
+        const tempMethodList = new Array<Method>();
+        for (const mthDta of clDta.methods) {
+          const tempParamList = new Array<Field>();
+          for (const pDta of mthDta.parameters) {
+            tempParamList.push(
+              new Field(Protection.internal, pDta.type, pDta.name)
+            );
+          }
+          tempMethodList.push(
+            new Method(
+              signToProtection(mthDta.protection),
+              mthDta.type,
+              mthDta.name,
+              mthDta.classifer,
+              tempParamList
+            )
+          );
+        }
+        newCl.methods = tempMethodList;
+
+        const tempRelationList = new Array<Relation>();
+        for (const rDta of clDta.relations) {
+          tempRelationList.push(
+            new Relation(
+              rDta.classA,
+              rDta.classB,
+              rDta.relation,
+              rDta.cardinalityA,
+              rDta.cardinalityB,
+              rDta.comment
+            )
+          );
+        }
+        newCl.relations = tempRelationList;
+
+        tempNamespance.push(newCl);
+      }
+      this.namespace = tempNamespance;
+      Ui.unfocus();
+      Ui.render();
+    } catch (e) {
+      alert(e);
+    }
   }
 }
 const structureHolder = new StructureHolder();

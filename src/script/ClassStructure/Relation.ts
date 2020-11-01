@@ -11,23 +11,31 @@ enum relationType {
 }
 
 class Relation {
-  classA: Class;
-  classB: Class;
+  classA: string;
+  classB: string;
   relation: relationType;
   cardinalityA: string;
   cardinalityB: string;
   comment: string;
 
   constructor(
-    a: Class,
-    b: Class,
+    a: Class | string,
+    b: Class | string,
     rel: relationType,
     cardA: string = "",
     cardB: string = "",
     comment: string = ""
   ) {
-    this.classA = a;
-    this.classB = b;
+    if (typeof a === "string") {
+      this.classA = a;
+    } else {
+      this.classA = a.name;
+    }
+    if (typeof b === "string") {
+      this.classB = b;
+    } else {
+      this.classB = b.name;
+    }
     this.relation = rel;
     this.cardinalityA = cardA;
     this.cardinalityB = cardB;
@@ -36,7 +44,7 @@ class Relation {
 
   toString(): string {
     const strb = new StringBuilder();
-    strb.append(this.classA.name);
+    strb.append(this.classA);
     strb.append(" ");
     if (this.cardinalityA.length > 0) {
       strb.append(JSON.stringify(this.cardinalityA));
@@ -48,7 +56,7 @@ class Relation {
       strb.append(JSON.stringify(this.cardinalityB));
       strb.append(" ");
     }
-    strb.append(this.classB.name);
+    strb.append(this.classB);
     if (this.comment.length > 0) {
       strb.append(" : ");
       strb.append(this.comment);

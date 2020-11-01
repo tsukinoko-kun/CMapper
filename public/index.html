@@ -29,6 +29,12 @@
   </head>
   <body>
     <section id="prerendered">
+      <input
+        id="fileUpload"
+        type="file"
+        accept=".cm"
+        oninput="structureHolder.loadFile(this.files[0])"
+      />
       <ul id="contextMenu">
         <li class="newClass" onclick="Ui.newClass()">New Class</li>
         <li class="newField" onclick="Ui.newField()">New Field</li>
@@ -38,17 +44,29 @@
         <!-- <li>Duplicate Class<span class="key">Ctrl+D</span></li> -->
       </ul>
       <div id="topBar">
+        <img
+          id="load_cm"
+          title="Load"
+          src="img/folder.svg"
+          onclick="Ui.loadFile()"
+        />
+        <img
+          id="save_cm"
+          title="Save"
+          src="img/save.svg"
+          onclick="Build.build('cm')"
+        />
+        <button onclick="Build.build()">Build</button>
         <select
           name="select_build"
           id="select_build"
+          onchange="Build.updateMode(this.value)"
           oninput="Build.updateMode(this.value)"
         >
-          <option value="cm">CM File</option>
           <optgroup label="SourceCode">
             <option value="cs">C#</option>
           </optgroup>
         </select>
-        <button onclick="Build.build()">Build</button>
       </div>
       <ul id="sidebar">
         <li id="sidebar_classname_li">

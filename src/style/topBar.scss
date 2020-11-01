@@ -1,0 +1,32 @@
+#topBar {
+  position: fixed;
+  width: 100vw;
+  left: 0;
+  right: 0;
+  top: 0;
+  border-bottom: 1px solid rgb(20, 20, 20);
+  background-color: var(--sidebar);
+  z-index: 2;
+  -webkit-box-shadow: inset 0px -11px 25px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0px -11px 25px 0px rgba(0, 0, 0, 0.25);
+  #select_build,
+  #build {
+    float: right;
+    margin: 2px;
+  }
+  > * {
+    cursor: pointer;
+  }
+  img {
+    max-height: var(--topbar-height);
+    padding: 4px;
+  }
+  img#save_cm {
+    filter: contrast(0.75);
+    opacity: 0.75;
+  }
+  img#load_cm {
+    filter: brightness(0.5) sepia(1) saturate(10000%) hue-rotate(60deg)
+      brightness(2.07) saturate(0.5);
+  }
+}
