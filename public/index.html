@@ -33,6 +33,7 @@
         id="fileUpload"
         type="file"
         accept=".cm"
+        style="display: none"
         oninput="structureHolder.loadFile(this.files[0])"
       />
       <ul id="contextMenu">
@@ -65,12 +66,13 @@
         >
           <optgroup label="SourceCode">
             <option value="cs">C#</option>
+            <option value="ts">TypeScript</option>
           </optgroup>
         </select>
       </div>
       <ul id="sidebar">
         <li id="sidebar_classname_li">
-          <label class="placeholder" for="sidebar_classname">Classname</label>
+          <label class="placeholder" for="sidebar_classname">Classname:</label>
           <input
             class="input"
             type="text"
@@ -79,6 +81,18 @@
             name="sidebar_classname"
             onchange="Ui.setClassName()"
           />
+        </li>
+        <li id="sidebar_classifer_li">
+          <label for="sidebar_classifer">Classifer: </label>
+          <select
+            id="sidebar_classifer"
+            name="sidebar_classifer"
+            oninput="Ui.setClassClassifer(this.value)"
+          >
+            <option value="">Default</option>
+            <option value="*">Abstract</option>
+            <option value="$">Static</option>
+          </select>
         </li>
         <li>
           <ul id="sidebar_fields"></ul>

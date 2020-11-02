@@ -18,8 +18,9 @@ class Build {
         );
         break;
       case "cs":
+      case "ts":
         for (const cl of structureHolder.namespace) {
-          files.push(cl.codeGen("cs"));
+          files.push(cl.codeGen(mode));
         }
         break;
     }

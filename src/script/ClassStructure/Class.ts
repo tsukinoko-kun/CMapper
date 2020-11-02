@@ -5,8 +5,7 @@
 class Class {
   name: string;
   relations: Array<Relation>;
-  static: boolean;
-  abstract: boolean;
+  classifer: Classifer;
   fields: Array<Field>;
   methods: Array<Method>;
   id: number = -1;
@@ -14,19 +13,22 @@ class Class {
   constructor(name: string) {
     this.name = name;
     this.relations = new Array<Relation>();
-    this.static = false;
-    this.abstract = false;
+    this.classifer = Classifer.default;
     this.fields = new Array<Field>();
     this.methods = new Array<Method>();
   }
 
   toString(): string {
     const strb = new StringBuilder();
-    if (this.fields.length > 0 || this.methods.length > 0) {
+    if (
+      this.fields.length > 0 ||
+      this.methods.length > 0 ||
+      this.classifer !== Classifer.default
+    ) {
       strb.appendWithLinebreak(`class ${this.name}{`);
-      if (this.abstract) {
+      if (this.classifer === Classifer.abstract) {
         strb.appendWithLinebreak("<<abstract>>");
-      } else if (this.static) {
+      } else if (this.classifer === Classifer.static) {
         strb.appendWithLinebreak("<<static>>");
       }
       this.forEachField((f: Field) => {
@@ -79,21 +81,48 @@ class Class {
     const code = new StringBuilder();
     switch (lng) {
       case "cs":
-        code.append("public ");
-        if (this.static) {
+        code.append("using System;\n\n");
+        code.appendWithLinebreak(`namespace ${structureHolder.name}\n{`);
+        code.append("\tpublic ");
+        if (this.classifer === Classifer.static) {
           code.append("static ");
-        } else if (this.abstract) {
+        } else if (this.classifer === Classifer.abstract) {
+          code.append("abstract ");
+        }
+        code.appendWithLinebreak(`class ${this.name}`);
+        code.appendWithLinebreak("\t{");
+        for (const f of this.fields) {
+          code.appendWithLinebreak("\t\t" + f.codeGen(lng));
+        }
+        for (const m of this.methods) {
+          code.appendWithLinebreak("\t\t" + m.codeGen(lng));
+        }
+        code.appendWithLinebreak("\t}\n}");
+        break;
+      case "ts":
+        let stat = false;
+        let abstr = false;
+        for (const m of this.methods) {
+          if (m.classifer === Classifer.abstract) {
+            abstr = true;
+            break;
+          }
+        }
+        if (this.classifer === Classifer.static) {
+          stat = true;
+        } else if (this.classifer === Classifer.abstract || abstr) {
           code.append("abstract ");
         }
         code.appendWithLinebreak(`class ${this.name}`);
         code.appendWithLinebreak("{");
         for (const f of this.fields) {
-          code.appendWithLinebreak("\t" + f.codeGen(lng));
+          code.appendWithLinebreak("\t" + f.codeGen(lng, stat));
         }
         for (const m of this.methods) {
-          code.appendWithLinebreak("\t" + m.codeGen(lng));
+          code.appendWithLinebreak("\t" + m.codeGen(lng, stat));
         }
         code.appendWithLinebreak("}");
+        break;
     }
     return new Page(this.name, lng, code.toString());
   }

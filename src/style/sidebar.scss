@@ -9,7 +9,8 @@
   left: 0;
   border-right: 1px solid rgb(20, 20, 20);
   width: var(--sidebar-width);
-  #sidebar_classname_li {
+  #sidebar_classname_li,
+  #sidebar_classifer_li {
     margin: 8px;
   }
   li:not(#sidebar_classname_li) > ul {

@@ -83,8 +83,7 @@ class StructureHolder {
       const tempNamespance = new Array<Class>();
       for (const clDta of obj) {
         const newCl = new Class(clDta.name);
-        newCl.abstract = clDta.abstract;
-        newCl.static = clDta.static;
+        newCl.classifer = clDta.classifer;
         newCl.id = clDta.id;
 
         const tempFieldList = new Array<Field>();

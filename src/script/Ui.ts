@@ -71,6 +71,9 @@ class _Ui {
     classname() {
       return <HTMLInputElement>document.getElementById("sidebar_classname");
     },
+    classifer() {
+      return <HTMLSelectElement>document.getElementById("sidebar_classifer");
+    },
     fields() {
       return <HTMLUListElement>document.getElementById("sidebar_fields");
     },
@@ -516,6 +519,7 @@ class _Ui {
       this.focusedClass = cl;
     } else if (!this.focusedClass) {
       this.sidebar.classname().value = "";
+      this.sidebar.classifer().value = "";
       this.sidebar.fields().innerHTML =
         '<li onclick="Ui.toggleFolder(\'sidebar_fields\')" class="head"><img src="img/folder.svg" />&nbsp;<b>Fields</b></li>';
       this.sidebar.methods().innerHTML =
@@ -525,6 +529,7 @@ class _Ui {
       return;
     }
     this.sidebar.classname().value = this.focusedClass.name; // Edit Classname
+    this.sidebar.classifer().value = this.focusedClass.classifer;
 
     // Fields
     const field = new StringBuilder();
@@ -839,6 +844,26 @@ class _Ui {
       }
     } else {
       this.sidebar.classname().value = "";
+    }
+  }
+  setClassClassifer(c: string): void {
+    if (this.focusedClass) {
+      switch (c) {
+        case Classifer.default:
+          this.focusedClass.classifer = Classifer.default;
+          this.render();
+          break;
+        case Classifer.static:
+          this.focusedClass.classifer = Classifer.static;
+          this.render();
+          break;
+        case Classifer.abstract:
+          this.focusedClass.classifer = Classifer.abstract;
+          this.render();
+          break;
+      }
+    } else {
+      this.sidebar.classifer().value = "";
     }
   }
   loadFile(): void {

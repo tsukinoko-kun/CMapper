@@ -48,27 +48,59 @@ class Method {
     return strb.toString();
   }
 
-  codeGen(lng: string): string {
+  codeGen(lng: string, p1: boolean | undefined = undefined): string {
     const code = new StringBuilder();
-    code.append(protectionToCode(this.protection));
-    code.append(" ");
-    switch (this.classifer) {
-      case Classifer.abstract:
-        code.append("abstract ");
-        break;
-      case Classifer.static:
-        code.append("static ");
-        break;
-    }
-    code.append(typeMap(this.type, lng));
-    code.append(" ");
-    code.append(this.name);
     const params = new Array<string>();
-    for (const p of this.parameters) {
-      params.push(`${typeMap(p.type, lng)} ${p.name}`);
+    let abstr = false;
+    switch (lng) {
+      case "cs":
+        code.append(protectionToCode(this.protection));
+        code.append(" ");
+        if (this.classifer === Classifer.abstract) {
+          code.append("abstract ");
+          abstr = true;
+        } else if (this.classifer === Classifer.static || p1) {
+          code.append("static ");
+        }
+        code.append(typeMap(this.type, lng));
+        code.append(" ");
+        code.append(this.name);
+        for (const p of this.parameters) {
+          params.push(`${typeMap(p.type, lng)} ${p.name}`);
+        }
+        code.append(`(${params.join(", ")})`);
+
+        if (abstr) {
+          code.append(";");
+        } else {
+          code.append(
+            "\n\t\t{\n\t\t\tthrow new NotImplementedException();\n\t\t}"
+          );
+        }
+        break;
+      case "ts":
+        code.append(protectionToCode(this.protection));
+        code.append(" ");
+        if (this.classifer === Classifer.abstract) {
+          code.append("abstract ");
+          abstr = true;
+        } else if (this.classifer === Classifer.static || p1) {
+          code.append("static ");
+        }
+        code.append(this.name);
+        for (const p of this.parameters) {
+          params.push(`${p.name}: ${typeMap(p.type, lng)}`);
+        }
+        code.append(`(${params.join(", ")})`);
+        code.append(": ");
+        code.append(typeMap(this.type, lng));
+        if (abstr) {
+          code.append(";");
+        } else {
+          code.append(' {\n\t\tthrow new Error("NotImplemented");\n\t}');
+        }
+        break;
     }
-    code.append(`(${params.join(", ")})`);
-    code.append("\n\t{\n\t\tthrow new NotImplementedException();\n\t}");
     return code.toString();
   }
 }

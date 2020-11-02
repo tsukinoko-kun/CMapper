@@ -27,22 +27,32 @@ class Field {
     return strb.toString();
   }
 
-  codeGen(lng: string): string {
+  codeGen(lng: string, p1: boolean | undefined = undefined): string {
     const code = new StringBuilder();
-    code.append(protectionToCode(this.protection));
-    code.append(" ");
-    switch (this.classifer) {
-      case Classifer.abstract:
-        code.append("abstract ");
+    switch (lng) {
+      case "cs":
+        code.append(protectionToCode(this.protection));
+        code.append(" ");
+        if (this.classifer === Classifer.static) {
+          code.append("static ");
+        }
+        code.append(typeMap(this.type, lng));
+        code.append(" ");
+        code.append(this.name);
+        code.append(";");
         break;
-      case Classifer.static:
-        code.append("static ");
+      case "ts":
+        code.append(protectionToCode(this.protection));
+        code.append(" ");
+        if (this.classifer === Classifer.static || p1) {
+          code.append("static ");
+        }
+        code.append(this.name);
+        code.append(": ");
+        code.append(typeMap(this.type, lng));
+        code.append(";");
         break;
     }
-    code.append(typeMap(this.type, lng));
-    code.append(" ");
-    code.append(this.name);
-    code.append(";");
     return code.toString();
   }
 }

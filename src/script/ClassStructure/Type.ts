@@ -19,7 +19,7 @@ const TsTypes = new Map<string, string>([
   ["string", "string"],
   ["integer", "number"],
   ["float", "number"],
-  ["boolean", "bool"],
+  ["boolean", "boolean"],
 ]);
 
 const typeMap = (t: string, lng: string): string => {
