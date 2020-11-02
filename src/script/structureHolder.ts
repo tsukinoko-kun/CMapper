@@ -144,6 +144,9 @@ class StructureHolder {
     }
   }
 
+  /**
+   * Rename Class
+   */
   deepRename(oldName: string, newName: string) {
     for (const cl of this.namespace) {
       for (const f of cl.fields) {
@@ -152,6 +155,9 @@ class StructureHolder {
         }
       }
       for (const m of cl.methods) {
+        if (cl.name === oldName && m.name === oldName) {
+          m.name = newName;
+        }
         if (m.type === oldName) {
           m.type = newName;
         }
@@ -168,6 +174,9 @@ class StructureHolder {
         if (r.classB === oldName) {
           r.classB = newName;
         }
+      }
+      if (cl.name === oldName) {
+        cl.name = newName;
       }
     }
   }

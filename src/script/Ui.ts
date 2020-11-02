@@ -615,6 +615,11 @@ class _Ui {
           for await (const cl of structureHolder.namespace) {
             if (cl.name === classname && cl.id === this.focused) {
               (<HTMLElement>g).style.setProperty("--blue", "var(--accent)");
+              (<HTMLElement>g).scrollIntoView({
+                behavior: "auto",
+                inline: "center",
+                block: "center",
+              });
               this.sidebarClass(cl);
               break;
             }
@@ -842,8 +847,8 @@ class _Ui {
           this.sidebar.classname().value = oldName;
           return;
         }
-        this.focusedClass.name = newName;
         structureHolder.deepRename(oldName, newName);
+        this.focusedClass = structureHolder.findClass(newName);
         this.render();
       }
     } else {
