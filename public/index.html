@@ -57,6 +57,14 @@
           src="img/save.svg"
           onclick="Build.build('cm')"
         />
+        <span id="rename_cm">
+          <img title="Rename" src="img/rename.svg" />
+          <input
+            type="text"
+            id="projectName"
+            oninput="if(this.value.length>0){structureHolder.name=this.value;}"
+          />
+        </span>
         <button onclick="Build.build()">Build</button>
         <select
           name="selectBuild"
