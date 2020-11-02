@@ -286,7 +286,7 @@ class _Ui {
       if (Ui.editMember instanceof Field) {
         const name = <HTMLInputElement>document.getElementById("edit_name");
         if (name) {
-          Ui.editMember.name = name.value;
+          Ui.editMember.name = remSpCh(name.value);
         }
         const protection = <HTMLSelectElement>(
           document.getElementById("edit_protection")
@@ -307,7 +307,7 @@ class _Ui {
       } else if (Ui.editMember instanceof Method) {
         const name = <HTMLInputElement>document.getElementById("edit_name");
         if (name) {
-          Ui.editMember.name = name.value;
+          Ui.editMember.name = remSpCh(name.value);
         }
         const protection = <HTMLSelectElement>(
           document.getElementById("edit_protection")
@@ -334,7 +334,10 @@ class _Ui {
           for (let p = 0; p < Ui.editMember.parameters.length; p++) {
             let found = false;
             for (let i = 0; i < inputs.length; i++) {
-              if (Ui.editMember.parameters[p].name === inputs[i].value) {
+              if (
+                remSpCh(Ui.editMember.parameters[p].name) ===
+                remSpCh(inputs[i].value)
+              ) {
                 found = true;
                 break;
               }
@@ -354,7 +357,7 @@ class _Ui {
             const pType = (<HTMLInputElement>(
               pLi.getElementsByClassName("edit_type")[0]
             )).value;
-            Ui.editMember.setParam(pName, pType);
+            Ui.editMember.setParam(remSpCh(pName), pType);
           }
         }
       } else if (Ui.editMember instanceof Relation) {
@@ -370,19 +373,19 @@ class _Ui {
           document.getElementById("edit_cardinalityA")
         );
         if (cardinalityA) {
-          Ui.editMember.cardinalityA = cardinalityA.value;
+          Ui.editMember.cardinalityA = remSpChCard(cardinalityA.value);
         }
         const cardinalityB = <HTMLSelectElement>(
           document.getElementById("edit_cardinalityB")
         );
         if (cardinalityB) {
-          Ui.editMember.cardinalityB = cardinalityB.value;
+          Ui.editMember.cardinalityB = remSpChCard(cardinalityB.value);
         }
         const comment = <HTMLSelectElement>(
           document.getElementById("edit_comment")
         );
         if (comment) {
-          Ui.editMember.comment = comment.value;
+          Ui.editMember.comment = remSpChCard(comment.value);
         }
       }
       Ui.render();
@@ -833,7 +836,7 @@ class _Ui {
       const newName = this.sidebar.classname().value.trim();
       if (newName.length > 0) {
         const oldName = this.focusedClass.name;
-        const newName = this.sidebar.classname().value.trim();
+        const newName = remSpCh(this.sidebar.classname().value.trim());
         if (structureHolder.findClass(newName)) {
           alert(`class name "${newName}" already in use`);
           this.sidebar.classname().value = oldName;
