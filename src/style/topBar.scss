@@ -9,6 +9,32 @@
   z-index: 2;
   -webkit-box-shadow: inset 0px -11px 25px 0px rgba(0, 0, 0, 0.25);
   box-shadow: inset 0px -11px 25px 0px rgba(0, 0, 0, 0.25);
+  > * {
+    display: inline-block;
+  }
+  #rename_cm:not(:hover) {
+    > input {
+      display: none;
+    }
+  }
+  input:focus {
+    display: unset !important;
+  }
+  #rename_cm {
+    max-height: var(--topbar-height);
+    img {
+      max-height: var(--topbar-height);
+      padding: 4px;
+      filter: contrast(0.75);
+    }
+    input {
+      transform: translateY(-6px);
+    }
+    * {
+      padding: 0;
+      margin: 0;
+    }
+  }
   #selectBuild,
   #build {
     float: right;
