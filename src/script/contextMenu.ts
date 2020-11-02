@@ -48,10 +48,45 @@ class ContextMenu {
 
 (async () => {
   const cm = document.getElementById("contextMenu");
+  var touch = -1;
   if (cm) {
     window.addEventListener("contextmenu", (ev) => {
+      Ui.touch = false;
       ContextMenu.show(ev.pageX, ev.pageY, <HTMLElement>ev.target);
       ev.preventDefault();
+    });
+    window.addEventListener("touchstart", () => {
+      if (Ui.touch) {
+        touch = new Date().valueOf();
+      }
+    });
+    window.addEventListener("touchend", (ev) => {
+      if (Ui.touch) {
+        const time = new Date().valueOf() - touch;
+        if (time > 750) {
+          // long touch
+          console.debug(ev.target);
+          if (ev.touches.length > 0) {
+            ContextMenu.show(
+              ev.touches[0].pageX,
+              ev.touches[0].pageY,
+              <HTMLElement>ev.target
+            );
+          } else {
+            const t = <HTMLElement>ev.target;
+            const rect = t.getBoundingClientRect();
+            ContextMenu.show(
+              rect.x + rect.width / 2,
+              rect.y + rect.height / 2,
+              t
+            );
+          }
+          ev.preventDefault();
+        } else if (time > 0) {
+          // touch click
+        }
+        touch = -1;
+      }
     });
     window.addEventListener("click", () => {
       ContextMenu.hide();

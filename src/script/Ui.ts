@@ -8,6 +8,7 @@ class _Ui {
   private focusedClass: Class | undefined = undefined;
   private hover: string = "";
   private saverHoverCopy: string = "";
+  public touch = true;
   public setHover(id: string, t: string) {
     this.hover = JSON.stringify({ id, t });
   }
