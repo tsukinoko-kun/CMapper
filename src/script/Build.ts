@@ -24,9 +24,13 @@ class Build {
         }
         break;
     }
+    const zip = new JSZip();
     for (const f of files) {
-      f.download();
+      zip.file(f.fullName, f.data);
     }
+    zip.generateAsync({ type: "blob" }).then(function (blob) {
+      saveAs(<Blob>blob, structureHolder.name + ".zip");
+    });
   }
   static updateMode(mode: string) {
     this.mode = mode;
