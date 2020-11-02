@@ -248,7 +248,7 @@ class _Ui {
           const paramName = `param${Math.ceil(Math.random() * 1000)}`;
           li.append("<li>");
           li.append(
-            `<input type="text" value="${paramName}" class="edit_name"/>`
+            `<input type="text" max="100" value="${paramName}" class="edit_name"/>`
           );
           li.append(this.createTypeSelector(Type[Type.string], true));
           li.append(
@@ -409,7 +409,7 @@ class _Ui {
         }
         Ui.editMember = v;
         html.append('<tr><td><label for="edit_name">Name: </label></td>');
-        html.append('<td><input type="text" value="');
+        html.append('<td><input type="text" max="100" value="');
         html.append(v.name);
         html.append('" id="edit_name"/></td></tr>');
         html.append(this.createProtectionSelector(v.protection));
@@ -432,7 +432,7 @@ class _Ui {
         }
         Ui.editMember = v;
         html.append('<tr><td><label for="edit_name">Name: </label></td>');
-        html.append('<td><input type="text" value="');
+        html.append('<td><input type="text" max="100" value="');
         html.append(v.name);
         html.append('" id="edit_name"/></td></tr>');
         html.append(this.createProtectionSelector(v.protection));
@@ -443,7 +443,7 @@ class _Ui {
         for (const p of v.parameters) {
           html.append("<li>");
           html.append(
-            `<input type="text" value="${p.name}" class="edit_name"/>`
+            `<input type="text" max="100" value="${p.name}" class="edit_name"/>`
           );
           html.append(this.createTypeSelector(p.type, true));
           html.append(
@@ -480,7 +480,7 @@ class _Ui {
             '<tr><td><label for="edit_cardinalityA">Cardinality A: </label></td><td>'
           );
           html.append(
-            `<input type="text" value="${v.cardinalityA}" id="edit_cardinalityA" name="edit_cardinalityA"/>`
+            `<input type="text" max="100" value="${v.cardinalityA}" id="edit_cardinalityA" name="edit_cardinalityA"/>`
           );
           html.append("</td></tr>");
         }
@@ -490,7 +490,7 @@ class _Ui {
             '<tr><td><label for="edit_cardinalityB">Cardinality B: </label></td><td>'
           );
           html.append(
-            `<input type="text" value="${v.cardinalityB}" id="edit_cardinalityB" name="edit_cardinalityB"/>`
+            `<input type="text" max="100" value="${v.cardinalityB}" id="edit_cardinalityB" name="edit_cardinalityB"/>`
           );
           html.append("</td></tr>");
         }
@@ -500,7 +500,7 @@ class _Ui {
             '<tr><td><label for="edit_comment">Comment: </label></td><td>'
           );
           html.append(
-            `<input type="text" value="${v.comment}" id="edit_comment" name="edit_comment"/>`
+            `<input type="text" max="100" value="${v.comment}" id="edit_comment" name="edit_comment"/>`
           );
           html.append("</td></tr>");
         }
