@@ -45,7 +45,7 @@ class Method {
     strb.append(this.classifer);
     strb.append(" ");
     strb.append(this.type);
-    return strb.toString();
+    return vowel(strb.toString());
   }
 
   codeGen(lng: string, p1: boolean | undefined = undefined): string {

@@ -24,7 +24,7 @@ class Field {
     strb.append(" ");
     strb.append(this.name);
     strb.append(this.classifer);
-    return strb.toString();
+    return vowel(strb.toString());
   }
 
   codeGen(lng: string, p1: boolean | undefined = undefined): string {
