@@ -542,7 +542,7 @@ class _Ui {
     );
     for (const f of this.focusedClass.fields) {
       field.append(
-        `<li ondblclick="Ui.editDialog.display('field', '${f.name}')"`
+        `<li onclick="Ui.editDialog.display('field', '${f.name}')"`
       );
       field.append(
         ` onmouseover="Ui.setHover('${f.name}','field')" onmouseout="Ui.removeHover('${f.name}')">`
@@ -559,7 +559,7 @@ class _Ui {
     );
     for (const m of this.focusedClass.methods) {
       method.append(
-        `<li ondblclick="Ui.editDialog.display('method', '${m.name}')" `
+        `<li onclick="Ui.editDialog.display('method', '${m.name}')" `
       );
       method.append(
         `onmouseover="Ui.setHover('${m.name}', 'method')" onmouseout="Ui.removeHover('${m.name}')" >`
@@ -577,7 +577,7 @@ class _Ui {
     for (const r of this.focusedClass.relations) {
       const rString = r.toString();
       relation.append(
-        `<li ondblclick='Ui.editDialog.display("relation", \`${rString}\`)'`
+        `<li onclick='Ui.editDialog.display("relation", \`${rString}\`)'`
       );
       relation.append(
         ` onmouseover='Ui.setHover(\`${rString}\`,"relation")' onmouseout='Ui.removeHover(\`${rString}\`,"relation")'>`
