@@ -24,13 +24,18 @@ class Build {
         }
         break;
     }
-    const zip = new JSZip();
-    for (const f of files) {
-      zip.file(f.fullName, f.data);
+    if (mode === "cm") {
+      saveAs(files[0].content, structureHolder.name + ".cm");
     }
-    zip.generateAsync({ type: "blob" }).then(function (blob) {
-      saveAs(<Blob>blob, structureHolder.name + ".zip");
-    });
+    else {
+      const zip = new JSZip();
+      for (const f of files) {
+        zip.file(f.fullName, f.data);
+      }
+      zip.generateAsync({ type: "blob" }).then(function (blob) {
+        saveAs(<Blob>blob, structureHolder.name + ".zip");
+      });
+    }
   }
   static updateMode(mode: string) {
     this.mode = mode;
