@@ -8,10 +8,16 @@
   bottom: 0;
   left: 0;
   border-right: 1px solid rgb(20, 20, 20);
+  overflow-x: hidden;
+  overflow-y: auto;
   width: var(--sidebar-width);
   #sidebar_classname_li,
   #sidebar_classifer_li {
     margin: 8px;
+    white-space: nowrap;
+  }
+  li > ul > li {
+    white-space: nowrap;
   }
   li:not(#sidebar_classname_li) > ul {
     > li {
