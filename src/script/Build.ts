@@ -7,27 +7,19 @@ class Build {
     if (!mode) {
       mode = (<HTMLSelectElement>document.getElementById("selectBuild"))?.value;
     }
-    switch (mode) {
-      case "cm":
-        files.push(
-          new Page(
-            structureHolder.name,
-            "cm",
-            btoa(JSON.stringify(structureHolder.namespace))
-          )
-        );
-        break;
-      case "cs":
-      case "h":
-      case "ts":
-        for (const cl of structureHolder.namespace) {
-          files.push(cl.codeGen(mode));
-        }
-        break;
-    }
     if (mode === "cm") {
-      saveAs(files[0].content, structureHolder.name + ".cm");
+      saveAs(
+        new Page(
+          structureHolder.name,
+          "cm",
+          btoa(JSON.stringify(structureHolder.namespace))
+        ).content,
+        structureHolder.name + ".cm"
+      );
     } else {
+      for (const cl of structureHolder.namespace) {
+        files.push(cl.codeGen(mode));
+      }
       const zip = new JSZip();
       for (const f of files) {
         zip.file(f.fullName, f.data);
