@@ -99,6 +99,25 @@ class Class {
         }
         code.appendWithLinebreak("\t}\n}");
         break;
+      case "h":
+        code.append("#pragma once\n\n");
+        code.appendWithLinebreak(`namespace ${structureHolder.name}\n{`);
+        code.append("\t");
+        if (this.classifer === Classifer.static) {
+          code.append("static ");
+        } else if (this.classifer === Classifer.abstract) {
+          code.append("abstract ");
+        }
+        code.appendWithLinebreak(`class ${this.name}`);
+        code.appendWithLinebreak("\t{");
+        for (const f of this.fields) {
+          code.appendWithLinebreak("\t\t" + f.codeGen(lng));
+        }
+        for (const m of this.methods) {
+          code.appendWithLinebreak("\t\t" + m.codeGen(lng));
+        }
+        code.appendWithLinebreak("\t}\n}");
+        break;
       case "ts":
         let stat = false;
         let abstr = false;

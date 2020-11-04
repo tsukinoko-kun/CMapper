@@ -78,6 +78,24 @@ class Method {
           );
         }
         break;
+      case "h":
+        code.append(protectionToCode(this.protection));
+        code.append(" ");
+        if (this.classifer === Classifer.abstract) {
+          code.append("abstract ");
+          abstr = true;
+        } else if (this.classifer === Classifer.static || p1) {
+          code.append("static ");
+        }
+        code.append(typeMap(this.type, lng));
+        code.append(" ");
+        code.append(this.name);
+        for (const p of this.parameters) {
+          params.push(`${typeMap(p.type, lng)} ${p.name}`);
+        }
+        code.append(`(${params.join(", ")})`);
+        code.append(";");
+        break;
       case "ts":
         code.append(protectionToCode(this.protection));
         code.append(" ");

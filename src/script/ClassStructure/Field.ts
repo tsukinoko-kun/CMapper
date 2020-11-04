@@ -31,6 +31,7 @@ class Field {
     const code = new StringBuilder();
     switch (lng) {
       case "cs":
+      case "h":
         code.append(protectionToCode(this.protection));
         code.append(" ");
         if (this.classifer === Classifer.static) {

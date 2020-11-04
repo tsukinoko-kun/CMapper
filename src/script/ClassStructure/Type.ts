@@ -14,6 +14,14 @@ const CsTypes = new Map<string, string>([
   ["boolean", "bool"],
 ]);
 
+const CppTypes = new Map<string, string>([
+  ["void", "void"],
+  ["string", "string"],
+  ["integer", "int"],
+  ["float", "float"],
+  ["boolean", "bool"],
+]);
+
 const TsTypes = new Map<string, string>([
   ["void", "void"],
   ["string", "string"],
@@ -27,6 +35,11 @@ const typeMap = (t: string, lng: string): string => {
     case "cs":
       if (CsTypes.has(t)) {
         return <string>CsTypes.get(t);
+      }
+      break;
+    case "h":
+      if (CppTypes.has(t)) {
+        return <string>CppTypes.get(t);
       }
       break;
     case "ts":

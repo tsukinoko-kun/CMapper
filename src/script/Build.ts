@@ -18,6 +18,7 @@ class Build {
         );
         break;
       case "cs":
+      case "h":
       case "ts":
         for (const cl of structureHolder.namespace) {
           files.push(cl.codeGen(mode));
@@ -26,8 +27,7 @@ class Build {
     }
     if (mode === "cm") {
       saveAs(files[0].content, structureHolder.name + ".cm");
-    }
-    else {
+    } else {
       const zip = new JSZip();
       for (const f of files) {
         zip.file(f.fullName, f.data);
