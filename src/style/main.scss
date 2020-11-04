@@ -25,7 +25,8 @@ body {
 :root {
   --main: rgb(43, 43, 43);
   --sidebar: rgb(60, 63, 65);
-  --accent: rgb(28, 80, 157);
+  // --accent: rgb(28, 80, 157);
+  --accent: var(--orange);
   --foreground: #e0e2e4;
   --foreground-focus: whitesmoke;
   --sidebar-width: 350px;
