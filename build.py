@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 from distutils.dir_util import copy_tree
 
+tsc = False
 cc = False
 scss = False
 
@@ -23,7 +24,7 @@ for arg in sys.argv:
 if tsc:
     print("tsc")
     os.system("tsc -p ./tsconfig.json --pretty")
-    
+
 if cc:
     print("closure-compiler")
     js_path = "./public/app.js"
