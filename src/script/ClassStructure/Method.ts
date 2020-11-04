@@ -146,6 +146,39 @@ class Method {
           );
         }
         break;
+      case "py":
+        switch (this.protection) {
+          case Protection.protected:
+            code.append("_");
+            break;
+          case Protection.private:
+            code.append("__");
+            break;
+        }
+        if (this.classifer === Classifer.static || p1) {
+          code.append("@staticmethod\n\t");
+        }
+        code.append("def ");
+        constructor = false;
+        if (this.name === p2) {
+          code.append("__init__");
+          params.push("self");
+          constructor = true;
+        } else {
+          code.append(this.name);
+        }
+        for (const p of this.parameters) {
+          params.push(p.name);
+        }
+        code.appendWithLinebreak(`(${params.join(", ")}):`);
+        if (!constructor) {
+          code.append("\t\treturn ");
+          code.append(typeMap(this.type, lng));
+          code.appendWithLinebreak("()");
+        } else {
+          code.appendWithLinebreak("\t\tpass");
+        }
+        break;
     }
     return code.toString();
   }

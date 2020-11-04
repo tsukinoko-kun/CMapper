@@ -30,6 +30,14 @@ const TsTypes = new Map<string, string>([
   ["boolean", "boolean"],
 ]);
 
+const PyTypes = new Map<string, string>([
+  ["void", "void"],
+  ["string", "str"],
+  ["integer", "int"],
+  ["float", "float"],
+  ["boolean", "bool"],
+]);
+
 const typeMap = (t: string, lng: string): string => {
   switch (lng) {
     case "cs":
@@ -45,6 +53,11 @@ const typeMap = (t: string, lng: string): string => {
     case "ts":
       if (TsTypes.has(t)) {
         return <string>TsTypes.get(t);
+      }
+      break;
+    case "py":
+      if (PyTypes.has(t)) {
+        return <string>PyTypes.get(t);
       }
       break;
   }

@@ -541,9 +541,7 @@ class _Ui {
       '<li onclick="Ui.toggleFolder(\'sidebar_fields\')" class="head"><img src="img/folder.svg" />&nbsp;<b>Fields</b></li>'
     );
     for (const f of this.focusedClass.fields) {
-      field.append(
-        `<li onclick="Ui.editDialog.display('field', '${f.name}')"`
-      );
+      field.append(`<li onclick="Ui.editDialog.display('field', '${f.name}')"`);
       field.append(
         ` onmouseover="Ui.setHover('${f.name}','field')" onmouseout="Ui.removeHover('${f.name}')">`
       );

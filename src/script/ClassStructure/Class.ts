@@ -81,6 +81,7 @@ class Class {
     const code = new StringBuilder();
     let stat = false;
     let inheritance = false;
+    const imp = new Set<string>();
     switch (lng) {
       case "cs":
         code.append("using System;\n\n");
@@ -149,6 +150,57 @@ class Class {
           code.appendWithLinebreak("\t\t" + m.codeGen(lng, stat, this.name));
         }
         code.appendWithLinebreak("\t}\n}");
+        break;
+      case "py":
+        if (this.classifer === Classifer.static) {
+          stat = true;
+        }
+        let inheritanceList = new Array<string>();
+        for (const rel of this.relations) {
+          if (rel.relation === relationType.inheritance) {
+            inheritanceList.push(rel.classB);
+            imp.add(rel.classB);
+          }
+        }
+        for (const f of this.fields) {
+          if (structureHolder.findClass(f.type)) {
+          }
+        }
+        for (const m of this.methods) {
+          if (structureHolder.findClass(m.type)) {
+            imp.add(m.type);
+          }
+          for (const p of m.parameters) {
+            if (structureHolder.findClass(p.type)) {
+              imp.add(p.type);
+            }
+          }
+        }
+        imp.delete(this.name);
+        for (const module of imp) {
+          code.appendWithLinebreak(`from ${module} import ${module}`);
+        }
+        if (imp.size > 0) {
+          code.append("\n");
+        }
+        code.append(`class ${this.name}`);
+        if (inheritanceList.length > 0) {
+          code.append(` (${inheritanceList.join(", ")})`);
+        }
+        code.appendWithLinebreak(":");
+        if (this.fields.length > 0 || this.methods.length > 0) {
+          for (const f of this.fields) {
+            code.appendWithLinebreak("\t" + f.codeGen(lng));
+          }
+          if (this.fields.length > 0) {
+            code.append("\n");
+          }
+          for (const m of this.methods) {
+            code.appendWithLinebreak("\t" + m.codeGen(lng, stat, this.name));
+          }
+        } else {
+          code.appendWithLinebreak("\tpass");
+        }
         break;
       case "ts":
         let abstr = false;

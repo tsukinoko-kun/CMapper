@@ -42,6 +42,20 @@ class Field {
         code.append(this.name);
         code.append(";");
         break;
+      case "py":
+        switch (this.protection) {
+          case Protection.protected:
+            code.append("_");
+            break;
+          case Protection.private:
+            code.append("__");
+            break;
+        }
+        code.append(this.name);
+        code.append(" = ");
+        code.append(typeMap(this.type, lng));
+        code.append("()");
+        break;
       case "ts":
         code.append(protectionToCode(this.protection));
         code.append(" ");
