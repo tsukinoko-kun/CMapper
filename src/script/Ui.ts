@@ -614,7 +614,7 @@ class _Ui {
             if (cl.name === classname && cl.id === this.focused) {
               (<HTMLElement>g).style.setProperty("--blue", "var(--accent)");
               (<HTMLElement>g).scrollIntoView({
-                behavior: "auto",
+                behavior: "smooth",
                 inline: "center",
                 block: "center",
               });
@@ -639,7 +639,12 @@ class _Ui {
   render(): void {
     const md = structureHolder.collectMmd();
     if (md.length > 0) {
+      const graph = <HTMLDivElement>document.getElementById("graph");
+      const scrTop = graph.scrollTop;
+      const scrLeft = graph.scrollLeft;
       mermaid.render(mddSvgId, structureHolder.collectMmd(), this.cb);
+      graph.scrollTop = scrTop;
+      graph.scrollLeft = scrLeft;
       this.applyStyleRules();
     } else {
       this.cb("");
