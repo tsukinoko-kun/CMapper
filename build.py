@@ -10,15 +10,20 @@ from distutils.dir_util import copy_tree
 cc = False
 scss = False
 
-for arg in sys.argv:   
-    if arg == "-cc":
-        cc = True
+for arg in sys.argv:
+    if arg == "-tsc":
+        tsc = True
     else:
-        if arg == "-scss":
-            scss = True
+        if arg == "-cc":
+            cc = True
+        else:
+            if arg == "-scss":
+                scss = True
 
-print("tsc")
-os.system("tsc -p ./tsconfig.json --pretty")
+if tsc:
+    print("tsc")
+    os.system("tsc -p ./tsconfig.json --pretty")
+    
 if cc:
     print("closure-compiler")
     js_path = "./public/app.js"
