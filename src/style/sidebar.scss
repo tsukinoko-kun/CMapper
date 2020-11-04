@@ -53,3 +53,14 @@
     }
   }
 }
+
+#sidebarResize {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: var(--sidebar-width);
+  width: 10px;
+  z-index: 6;
+  cursor: ew-resize;
+  background-color: transparent;
+}

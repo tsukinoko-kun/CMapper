@@ -65,7 +65,6 @@ class ContextMenu {
         const time = new Date().valueOf() - touch;
         if (time > 750) {
           // long touch
-          console.debug(ev.target);
           if (ev.touches.length > 0) {
             ContextMenu.show(
               ev.touches[0].pageX,

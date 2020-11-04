@@ -1,0 +1,21 @@
+(() => {
+  const sidebarResize = document.getElementById("sidebarResize");
+  if (sidebarResize) {
+    let sidebarMoveMode = false;
+    sidebarResize.addEventListener("mousedown", () => {
+      sidebarMoveMode = true;
+    });
+    sidebarResize.addEventListener("mouseup", () => {
+      sidebarMoveMode = false;
+    });
+    document.addEventListener("mousemove", (ev) => {
+      if (sidebarMoveMode) {
+        const nw = Math.min(
+          window.innerWidth * 0.75,
+          Math.max(150, Math.round(ev.clientX) - 5)
+        );
+        document.body.style.setProperty("--sidebar-width", `${nw}px`);
+      }
+    });
+  }
+})();
