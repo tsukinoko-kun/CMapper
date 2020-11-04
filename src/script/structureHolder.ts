@@ -25,7 +25,7 @@ const structureHolder = (() => {
         mmd.appendWithLinebreak(cl.toString());
       });
       mmd.append("\n");
-      return mmd.toString();
+      return mmd.toString().replace(/<style>.+<\/style>/, "");
     }
 
     addClass(cl: Class): number {
