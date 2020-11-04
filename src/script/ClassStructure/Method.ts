@@ -48,10 +48,16 @@ class Method {
     return vowel(strb.toString());
   }
 
-  codeGen(lng: string, p1: boolean | undefined = undefined): string {
+  codeGen(
+    lng: string,
+    p1: boolean | undefined = undefined,
+    p2: string | undefined = undefined,
+    p3: boolean | undefined = undefined
+  ): string {
     const code = new StringBuilder();
     const params = new Array<string>();
     let abstr = false;
+    let constructor = false;
     switch (lng) {
       case "cs":
         code.append(protectionToCode(this.protection));
@@ -62,8 +68,12 @@ class Method {
         } else if (this.classifer === Classifer.static || p1) {
           code.append("static ");
         }
-        code.append(typeMap(this.type, lng));
-        code.append(" ");
+        if (this.name === p2) {
+          constructor = true;
+        } else {
+          code.append(typeMap(this.type, lng));
+          code.append(" ");
+        }
         code.append(this.name);
         for (const p of this.parameters) {
           params.push(`${typeMap(p.type, lng)} ${p.name}`);
@@ -87,8 +97,12 @@ class Method {
         } else if (this.classifer === Classifer.static || p1) {
           code.append("static ");
         }
-        code.append(typeMap(this.type, lng));
-        code.append(" ");
+        if (this.name === p2) {
+          constructor = true;
+        } else {
+          code.append(typeMap(this.type, lng));
+          code.append(" ");
+        }
         code.append(this.name);
         for (const p of this.parameters) {
           params.push(`${typeMap(p.type, lng)} ${p.name}`);
@@ -105,17 +119,31 @@ class Method {
         } else if (this.classifer === Classifer.static || p1) {
           code.append("static ");
         }
-        code.append(this.name);
         for (const p of this.parameters) {
           params.push(`${p.name}: ${typeMap(p.type, lng)}`);
         }
+        constructor = false;
+        if (this.name === p2) {
+          code.append("constructor");
+          constructor = true;
+        } else {
+          code.append(this.name);
+        }
         code.append(`(${params.join(", ")})`);
-        code.append(": ");
-        code.append(typeMap(this.type, lng));
+        if (!constructor) {
+          code.append(": ");
+          code.append(typeMap(this.type, lng));
+        }
         if (abstr) {
           code.append(";");
         } else {
-          code.append(' {\n\t\tthrow new Error("NotImplemented");\n\t}');
+          code.append(" {");
+          if (constructor && p3) {
+            code.append("\n\t\tsuper();");
+          }
+          code.append(
+            '\n\t\tthrow new Error("Method not implemented"); \n\t} '
+          );
         }
         break;
     }

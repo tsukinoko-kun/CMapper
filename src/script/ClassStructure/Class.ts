@@ -79,23 +79,40 @@ class Class {
 
   codeGen(lng: string): Page {
     const code = new StringBuilder();
+    let stat = false;
+    let inheritance = false;
     switch (lng) {
       case "cs":
         code.append("using System;\n\n");
         code.appendWithLinebreak(`namespace ${structureHolder.name}\n{`);
         code.append("\tpublic ");
         if (this.classifer === Classifer.static) {
+          stat = true;
           code.append("static ");
         } else if (this.classifer === Classifer.abstract) {
           code.append("abstract ");
         }
-        code.appendWithLinebreak(`class ${this.name}`);
-        code.appendWithLinebreak("\t{");
+        code.append(`class ${this.name}`);
+        inheritance = false;
+        for (const rel of this.relations) {
+          if (rel.relation === relationType.inheritance) {
+            if (inheritance) {
+              alert(
+                "The selected language does not support multiple inheritance!"
+              );
+              break;
+            } else {
+              inheritance = true;
+              code.append(` : ${rel.classB}`);
+            }
+          }
+        }
+        code.appendWithLinebreak("\n\t{");
         for (const f of this.fields) {
           code.appendWithLinebreak("\t\t" + f.codeGen(lng));
         }
         for (const m of this.methods) {
-          code.appendWithLinebreak("\t\t" + m.codeGen(lng));
+          code.appendWithLinebreak("\t\t" + m.codeGen(lng, stat, this.name));
         }
         code.appendWithLinebreak("\t}\n}");
         break;
@@ -104,22 +121,36 @@ class Class {
         code.appendWithLinebreak(`namespace ${structureHolder.name}\n{`);
         code.append("\t");
         if (this.classifer === Classifer.static) {
+          stat = true;
           code.append("static ");
         } else if (this.classifer === Classifer.abstract) {
           code.append("abstract ");
         }
-        code.appendWithLinebreak(`class ${this.name}`);
-        code.appendWithLinebreak("\t{");
+        code.append(`class ${this.name}`);
+        inheritance = false;
+        for (const rel of this.relations) {
+          if (rel.relation === relationType.inheritance) {
+            if (inheritance) {
+              alert(
+                "The selected language does not support multiple inheritance!"
+              );
+              break;
+            } else {
+              inheritance = true;
+              code.append(` : ${rel.classB}`);
+            }
+          }
+        }
+        code.appendWithLinebreak("\n\t{");
         for (const f of this.fields) {
           code.appendWithLinebreak("\t\t" + f.codeGen(lng));
         }
         for (const m of this.methods) {
-          code.appendWithLinebreak("\t\t" + m.codeGen(lng));
+          code.appendWithLinebreak("\t\t" + m.codeGen(lng, stat, this.name));
         }
         code.appendWithLinebreak("\t}\n}");
         break;
       case "ts":
-        let stat = false;
         let abstr = false;
         for (const m of this.methods) {
           if (m.classifer === Classifer.abstract) {
@@ -132,13 +163,29 @@ class Class {
         } else if (this.classifer === Classifer.abstract || abstr) {
           code.append("abstract ");
         }
-        code.appendWithLinebreak(`class ${this.name}`);
+        code.append(`class ${this.name} `);
+        inheritance = false;
+        for (const rel of this.relations) {
+          if (rel.relation === relationType.inheritance) {
+            if (inheritance) {
+              alert(
+                "The selected language does not support multiple inheritance!"
+              );
+              break;
+            } else {
+              inheritance = true;
+              code.append(`extends ${rel.classB} `);
+            }
+          }
+        }
         code.appendWithLinebreak("{");
         for (const f of this.fields) {
           code.appendWithLinebreak("\t" + f.codeGen(lng, stat));
         }
         for (const m of this.methods) {
-          code.appendWithLinebreak("\t" + m.codeGen(lng, stat));
+          code.appendWithLinebreak(
+            "\t" + m.codeGen(lng, stat, this.name, inheritance)
+          );
         }
         code.appendWithLinebreak("}");
         break;
