@@ -147,7 +147,11 @@ select {
   background-color: var(--sidebar);
   border: 1px solid var(--border-color);
   cursor: pointer;
-  *:hover {
+  option {
+    background-color: var(--sidebar);
+  }
+  option:hover {
+    cursor: pointer;
     background-color: var(--hover);
   }
 }
