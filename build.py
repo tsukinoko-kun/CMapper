@@ -7,10 +7,19 @@ import sys
 from pathlib import Path
 from distutils.dir_util import copy_tree
 
+cc = False
+scss = False
+
+for arg in sys.argv:   
+    if arg == "-cc":
+        cc = True
+    else:
+        if arg == "-scss":
+            scss = True
+
 print("tsc")
 os.system("tsc -p ./tsconfig.json --pretty")
-
-if True:
+if cc:
     print("closure-compiler")
     js_path = "./public/app.js"
     file_object = open(js_path, "r")
@@ -37,19 +46,20 @@ if True:
     file_object.close()
     conn.close()
 
-style = open("./public/style.css","w+")
-style.write("")
-style.close()
-style = open("./public/style.css", "a")
+if scss:
+    style = open("./public/style.css","w+")
+    style.write("")
+    style.close()
+    style = open("./public/style.css", "a")
 
-scss = list(Path(".").rglob("*.scss"))
-for file in scss:
-    print(file)
-    compiledFile = "temp/" +os.path.basename(file).replace(".scss", ".css")
-    os.system("sass "+str(file)+" " + compiledFile + " --style compressed --no-source-map --update")
-    cssTemp = open(compiledFile, "r")
-    txt = cssTemp.read()
-    style.write(txt)
-    cssTemp.close()
+    scss = list(Path(".").rglob("*.scss"))
+    for file in scss:
+        print(file)
+        compiledFile = "temp/" +os.path.basename(file).replace(".scss", ".css")
+        os.system("sass "+str(file)+" " + compiledFile + " --style compressed --no-source-map --update")
+        cssTemp = open(compiledFile, "r")
+        txt = cssTemp.read()
+        style.write(txt)
+        cssTemp.close()
 
-style.close()
+    style.close()
