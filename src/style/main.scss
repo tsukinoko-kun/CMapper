@@ -148,6 +148,7 @@ select {
   background-color: var(--sidebar);
   border: 1px solid var(--border-color);
   cursor: pointer;
+  optgroup,
   option {
     background-color: var(--sidebar);
   }
