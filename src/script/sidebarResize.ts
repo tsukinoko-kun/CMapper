@@ -5,7 +5,7 @@
     sidebarResize.addEventListener("mousedown", () => {
       sidebarMoveMode = true;
     });
-    sidebarResize.addEventListener("mouseup", () => {
+    document.addEventListener("mouseup", () => {
       sidebarMoveMode = false;
     });
     document.addEventListener("mousemove", (ev) => {
