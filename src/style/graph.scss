@@ -19,7 +19,7 @@
   box-shadow: inset 0px 0px 10px 5px rgba(0, 0, 0, 0.125);
 
   #mddSvg {
-    zoom: var(--zoom);
+    zoom: calc(var(--zoom) * var(--zoom-ui));
     font-family: "JetBrains Mono", monospace;
     font-size: 10px;
     fill: var(--foreground);
