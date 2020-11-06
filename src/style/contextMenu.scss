@@ -40,9 +40,9 @@
   }
 }
 
-#contextMenu.field,
-#contextMenu.method,
-#contextMenu.relation {
+#contextMenu.class.field,
+#contextMenu.class.method,
+#contextMenu.class.relation {
   .newClass {
     display: none;
   }
@@ -54,5 +54,14 @@
   display: none;
 }
 #contextMenu:not(.relation) > .newRelation {
+  display: none;
+}
+#contextMenu.deleteclass > .delete:after {
+  content: " Class";
+}
+#contextMenu.deletemember > .delete:after {
+  content: " Member";
+}
+#contextMenu:not(.deletemember):not(.deleteclass) {
   display: none;
 }

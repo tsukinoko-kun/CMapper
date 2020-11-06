@@ -9,6 +9,11 @@ class _Ui {
   private hover: string = "";
   private saverHoverCopy: string = "";
   public touch = true;
+
+  public hasHover(): boolean {
+    return this.saverHoverCopy.length > 0;
+  }
+
   public setHover(id: string, t: string) {
     this.hover = JSON.stringify({ id, t });
   }
@@ -51,6 +56,10 @@ class _Ui {
     };
 
     this.sidebarClass();
+  }
+
+  public hasClassInFocus(): boolean {
+    return this.focused >= 0;
   }
 
   static escapeHtml(str: string): string {
@@ -543,7 +552,7 @@ class _Ui {
     for (const f of this.focusedClass.fields) {
       field.append(`<li onclick="Ui.editDialog.display('field', '${f.name}')"`);
       field.append(
-        ` onmouseover="Ui.setHover('${f.name}','field')" onmouseout="Ui.removeHover('${f.name}')">`
+        ` onmouseover="Ui.setHover('${f.name}','field')" onmouseout="Ui.removeHover('${f.name}','field')">`
       );
       field.append(_Ui.escapeHtml(f.name));
       field.append("</li>");
@@ -560,7 +569,7 @@ class _Ui {
         `<li onclick="Ui.editDialog.display('method', '${m.name}')" `
       );
       method.append(
-        `onmouseover="Ui.setHover('${m.name}', 'method')" onmouseout="Ui.removeHover('${m.name}')" >`
+        `onmouseover="Ui.setHover('${m.name}','method')" onmouseout="Ui.removeHover('${m.name}','method')" >`
       );
       method.append(_Ui.escapeHtml(m.name));
       method.append("</li>");

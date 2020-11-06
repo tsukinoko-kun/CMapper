@@ -12,26 +12,42 @@ class ContextMenu {
             ids.push(target.parentElement.parentElement.id);
           }
         }
-        if (ids.includes("sidebar_fields")) {
-          cm.classList.add("field");
-          cm.classList.remove("relation");
-          cm.classList.remove("method");
-        } else if (ids.includes("sidebar_methods")) {
-          cm.classList.add("method");
-          cm.classList.remove("relation");
-          cm.classList.remove("field");
-        } else if (
-          ids.includes("sidebar_relations") &&
-          structureHolder.namespace.length > 1
-        ) {
-          cm.classList.add("relation");
-          cm.classList.remove("field");
-          cm.classList.remove("method");
+        cm.classList.remove("relation");
+        cm.classList.remove("field");
+        cm.classList.remove("method");
+        if (Ui.hasClassInFocus()) {
+          cm.classList.add("class");
+          if (ids.includes("sidebar_fields")) {
+            cm.classList.add("field");
+            cm.classList.remove("relation");
+            cm.classList.remove("method");
+          } else if (ids.includes("sidebar_methods")) {
+            cm.classList.add("method");
+            cm.classList.remove("relation");
+            cm.classList.remove("field");
+          } else if (
+            ids.includes("sidebar_relations") &&
+            structureHolder.namespace.length > 1
+          ) {
+            cm.classList.add("relation");
+            cm.classList.remove("field");
+            cm.classList.remove("method");
+          }
         } else {
-          cm.classList.remove("relation");
-          cm.classList.remove("field");
-          cm.classList.remove("method");
+          cm.classList.remove("class");
         }
+      }
+      if (Ui.hasClassInFocus()) {
+        if (Ui.hasHover()) {
+          cm.classList.add("deletemember");
+          cm.classList.remove("deleteclass");
+        } else {
+          cm.classList.add("deleteclass");
+          cm.classList.remove("deletemember");
+        }
+      } else {
+        cm.classList.remove("deleteclass");
+        cm.classList.remove("deletemember");
       }
       cm.style.top = `${y}px`;
       cm.style.left = `${x}px`;
