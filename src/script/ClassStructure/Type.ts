@@ -16,7 +16,7 @@ const CsTypes = new Map<string, string>([
 
 const CppTypes = new Map<string, string>([
   ["void", "void"],
-  ["string", "string"],
+  ["string", "std::string"],
   ["integer", "int"],
   ["float", "float"],
   ["boolean", "bool"],

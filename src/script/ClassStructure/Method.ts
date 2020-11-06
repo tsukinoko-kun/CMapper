@@ -89,8 +89,6 @@ class Method {
         }
         break;
       case "h":
-        code.append(protectionToCode(this.protection));
-        code.append(" ");
         if (this.classifer === Classifer.abstract) {
           code.append("abstract ");
           abstr = true;

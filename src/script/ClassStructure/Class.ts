@@ -82,9 +82,36 @@ class Class {
     let stat = false;
     let inheritance = false;
     const imp = new Set<string>();
+    const inheritanceList = new Array<string>();
+    for (const rel of this.relations) {
+      if (rel.relation === relationType.inheritance) {
+        inheritanceList.push(rel.classB);
+        imp.add(rel.classB);
+      }
+    }
+    for (const f of this.fields) {
+      if (structureHolder.findClass(f.type)) {
+        imp.add(f.type);
+      }
+    }
+    for (const m of this.methods) {
+      if (structureHolder.findClass(m.type)) {
+        imp.add(m.type);
+      }
+      for (const p of m.parameters) {
+        if (structureHolder.findClass(p.type)) {
+          imp.add(p.type);
+        }
+      }
+    }
+    imp.delete(this.name);
     switch (lng) {
       case "cs":
-        code.append("using System;\n\n");
+        code.appendWithLinebreak("using System;");
+        for (const module of imp) {
+          code.appendWithLinebreak(`using ${structureHolder.name}.${module};`);
+        }
+        code.append("\n");
         code.appendWithLinebreak(`namespace ${structureHolder.name}\n{`);
         code.append("\tpublic ");
         if (this.classifer === Classifer.static) {
@@ -119,6 +146,39 @@ class Class {
         break;
       case "h":
         code.append("#pragma once\n\n");
+        let stdString = false;
+        for (const f of this.fields) {
+          if (f.type === typeString(Type.string)) {
+            stdString = true;
+            break;
+          }
+        }
+        if (!stdString) {
+          for (const m of this.methods) {
+            if (m.type === typeString(Type.string)) {
+              stdString = true;
+              break;
+            }
+            for (const p of m.parameters) {
+              if (p.type === typeString(Type.string)) {
+                stdString = true;
+                break;
+              }
+            }
+            if (stdString) {
+              break;
+            }
+          }
+        }
+        if (stdString) {
+          code.appendWithLinebreak(`#include <string>`);
+        }
+        for (const module of imp) {
+          code.appendWithLinebreak(`#include "${module}.h"`);
+        }
+        if (imp.size > 0) {
+          code.append("\n");
+        }
         code.appendWithLinebreak(`namespace ${structureHolder.name}\n{`);
         code.append("\t");
         if (this.classifer === Classifer.static) {
@@ -143,11 +203,65 @@ class Class {
           }
         }
         code.appendWithLinebreak("\n\t{");
+        // Fields
+        const publicFields = new StringBuilder();
+        publicFields.appendWithLinebreak("\t\tpublic: ");
+        const protectedFields = new StringBuilder();
+        protectedFields.appendWithLinebreak("\t\tprotected: ");
+        const privateFields = new StringBuilder();
+        privateFields.appendWithLinebreak("\t\tprivate: ");
         for (const f of this.fields) {
-          code.appendWithLinebreak("\t\t" + f.codeGen(lng));
+          switch (f.protection) {
+            case Protection.public:
+              publicFields.appendWithLinebreak("\t\t\t" + f.codeGen(lng));
+              break;
+            case Protection.protected:
+              protectedFields.appendWithLinebreak("\t\t\t" + f.codeGen(lng));
+              break;
+            case Protection.private:
+            case Protection.internal:
+              privateFields.appendWithLinebreak("\t\t\t" + f.codeGen(lng));
+              break;
+          }
         }
+        if (publicFields.length > 11) {
+          code.appendWithLinebreak(publicFields.toString());
+        }
+        if (protectedFields.length > 14) {
+          code.appendWithLinebreak(protectedFields.toString());
+        }
+        if (privateFields.length > 12) {
+          code.appendWithLinebreak(privateFields.toString());
+        }
+        // Methods
+        const publicMethods = new StringBuilder();
+        publicMethods.appendWithLinebreak("\t\tpublic: ");
+        const protectedMethods = new StringBuilder();
+        protectedMethods.appendWithLinebreak("\t\tprotected: ");
+        const privateMethods = new StringBuilder();
+        privateMethods.appendWithLinebreak("\t\tprivate: ");
         for (const m of this.methods) {
-          code.appendWithLinebreak("\t\t" + m.codeGen(lng, stat, this.name));
+          switch (m.protection) {
+            case Protection.public:
+              publicMethods.appendWithLinebreak("\t\t\t" + m.codeGen(lng));
+              break;
+            case Protection.protected:
+              protectedMethods.appendWithLinebreak("\t\t\t" + m.codeGen(lng));
+              break;
+            case Protection.private:
+            case Protection.internal:
+              privateMethods.appendWithLinebreak("\t\t\t" + m.codeGen(lng));
+              break;
+          }
+        }
+        if (publicMethods.length > 11) {
+          code.appendWithLinebreak(publicMethods.toString());
+        }
+        if (protectedMethods.length > 14) {
+          code.appendWithLinebreak(protectedMethods.toString());
+        }
+        if (privateMethods.length > 12) {
+          code.appendWithLinebreak(privateMethods.toString());
         }
         code.appendWithLinebreak("\t}\n}");
         break;
@@ -155,28 +269,6 @@ class Class {
         if (this.classifer === Classifer.static) {
           stat = true;
         }
-        let inheritanceList = new Array<string>();
-        for (const rel of this.relations) {
-          if (rel.relation === relationType.inheritance) {
-            inheritanceList.push(rel.classB);
-            imp.add(rel.classB);
-          }
-        }
-        for (const f of this.fields) {
-          if (structureHolder.findClass(f.type)) {
-          }
-        }
-        for (const m of this.methods) {
-          if (structureHolder.findClass(m.type)) {
-            imp.add(m.type);
-          }
-          for (const p of m.parameters) {
-            if (structureHolder.findClass(p.type)) {
-              imp.add(p.type);
-            }
-          }
-        }
-        imp.delete(this.name);
         for (const module of imp) {
           code.appendWithLinebreak(`from ${module} import ${module}`);
         }
@@ -203,6 +295,12 @@ class Class {
         }
         break;
       case "ts":
+        for (const module of imp) {
+          code.appendWithLinebreak(`/// <reference path="${module}.ts"/>`);
+        }
+        if (imp.size > 0) {
+          code.append("\n");
+        }
         let abstr = false;
         for (const m of this.methods) {
           if (m.classifer === Classifer.abstract) {
@@ -242,6 +340,10 @@ class Class {
         code.appendWithLinebreak("}");
         break;
     }
-    return new Page(this.name, lng, code.toString());
+    if (lng === "h") {
+      return new Page(vowel(this.name), lng, vowel(code.toString()));
+    } else {
+      return new Page(this.name, lng, code.toString());
+    }
   }
 }
