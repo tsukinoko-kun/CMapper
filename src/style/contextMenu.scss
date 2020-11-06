@@ -62,6 +62,6 @@
 #contextMenu.deletemember > .delete:after {
   content: " Member";
 }
-#contextMenu:not(.deletemember):not(.deleteclass) {
+#contextMenu:not(.deletemember):not(.deleteclass) > .delete {
   display: none;
 }
