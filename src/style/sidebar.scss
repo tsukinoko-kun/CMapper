@@ -22,11 +22,11 @@
   li:not(#sidebar_classname_li) > ul {
     > li {
       cursor: pointer;
-      line-height: 18px;
+      line-height: var(--line-height);
       padding: 4px 8px;
       vertical-align: middle;
       img {
-        height: 18px;
+        height: var(--line-height);
         filter: brightness(0.5) sepia(1) saturate(10000%) hue-rotate(60deg)
           brightness(2.07) saturate(0.5);
       }
@@ -68,7 +68,7 @@
   #sidebar_methods,
   #sidebar_relations {
     > li:not(.head):before {
-      padding: 0 5px;
+      padding: 0 calc(5px * var(--zoom-ui));
       margin-right: 8px;
       border-radius: 50%;
     }

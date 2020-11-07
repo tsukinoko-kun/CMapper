@@ -6,8 +6,8 @@
   padding: 0;
   margin: 0;
   font-family: "JetBrains Mono", monospace !important;
-  font-size: calc(16px * var(--zoom-ui));
-  line-height: calc(18px * var(--zoom-ui));
+  font-size: var(--font-size);
+  line-height: var(--line-height);
   color: var(--foreground);
 }
 
@@ -23,6 +23,8 @@ body {
 }
 
 :root {
+  --font-size: calc(16px * var(--zoom-ui));
+  --line-height: calc(18px * var(--zoom-ui));
   --zoom-ui: 1;
   --zoom: 1;
   --main: rgb(43, 43, 43);
@@ -35,6 +37,9 @@ body {
   --topbar-height: calc(28px * var(--zoom-ui));
   --orange: #ec7600;
   --yellow: #ffcd22;
+  --green: #6a8759;
+  --purple: #454872;
+  --red: rgb(164, 111, 121);
   --gray: #7d8c93;
   --blue: #678cb1;
   --hover: rgb(18, 38, 58);
@@ -149,6 +154,7 @@ select {
   line-height: calc(28px * var(--zoom-ui));
   background-color: var(--sidebar);
   border: 1px solid var(--border-color);
+  border-radius: 0.25em;
   cursor: pointer;
   optgroup,
   option {
