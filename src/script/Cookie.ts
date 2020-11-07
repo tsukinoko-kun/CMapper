@@ -1,31 +1,46 @@
+/// <reference path="alert.ts" />
+
 const Cookie = (() => {
   class Cookie {
+    private readonly days = 14;
+    private bucket: Map<string, string>;
+    public active: boolean;
     constructor() {
-      for (const part of document.cookie.split(";")) {
-        if (part.length > 1) {
-          const partKV: string[] = part.split("=");
-          if (partKV.length === 2) {
-            this.bucket.set(partKV[0], partKV[1]);
-          } else {
-            console.error(`Could not read cookie: "${part}"`);
+      this.bucket = new Map<string, string>();
+      if (document.cookie.length > 0) {
+        const ca = document.cookie.split(";");
+        if (ca.length > 0) {
+          const ckva = ca[0].split("=");
+          if (ckva.length === 2) {
+            for (const ckvs of JSON.parse(atob(ckva[1].replace(/\$/g, "=")))) {
+              const ckv = ckvs.split("=");
+              if (ckv.length === 2) {
+                this.bucket.set(ckv[0], ckv[1]);
+              }
+            }
           }
         }
       }
+      this.active = this.get("allow-cookies") === "true";
     }
-    private bucket = new Map<string, string>();
-    private save(): void {
-      const cookie = new Array<string>();
-      this.bucket.forEach((v: string, k: string) => {
-        const part = new StringBuilder();
-        part.append(k);
-        part.append("=");
-        part.append(v);
-        cookie.push(part.toString());
-      });
-      document.cookie = cookie.join("; ");
+    public save(): void {
+      if (this.active) {
+        var date = new Date();
+        date.setTime(date.getTime() + this.days * 24 * 60 * 60 * 1000);
+        var expires = "expires=" + date.toUTCString();
+        const cookie = new Array<string>();
+        const ckva = new Array<string>();
+        this.bucket.forEach((v, k) => {
+          ckva.push(`${k}=${v}`);
+        });
+        cookie.push(`bucket=${btoa(JSON.stringify(ckva)).replace(/\=/g, "$")}`);
+        cookie.push(expires);
+        cookie.push("path=/");
+        document.cookie = cookie.join(";");
+      }
     }
     public set(key: string, value: string): void {
-      this.bucket.set(key.replace(/[=;]/g, ""), value.replace(/[=;]/g, ""));
+      this.bucket.set(key.trim(), value.trim());
       this.save();
     }
     public setNumber(key: string, value: number): void {
@@ -44,3 +59,25 @@ const Cookie = (() => {
   }
   return new Cookie();
 })();
+
+if (!Cookie.active) {
+  alert(
+    "Do you allow us to use cookies to save your settings? \nIf you decline, this app will still work, but none of your settings will be saved.",
+    true,
+    "Accept",
+    "Reject"
+  ).then((allow) => {
+    if (allow) {
+      setTimeout(() => {
+        Cookie.set("allow-cookies", "true");
+        Cookie.active = true;
+        setInterval(Cookie.save, 3000);
+      }, 1000);
+    } else {
+      document.cookie = "";
+      Cookie.active = false;
+    }
+  });
+} else {
+  setInterval(Cookie.save, 3000);
+}

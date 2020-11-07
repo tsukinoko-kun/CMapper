@@ -1,3 +1,4 @@
+/// <reference path="Cookie.ts"/>
 /// <reference path="Page.ts"/>
 
 class Build {
@@ -31,5 +32,13 @@ class Build {
   }
   static updateMode(mode: string) {
     this.mode = mode;
+    Cookie.set("build-lng", mode);
   }
 }
+(() => {
+  const mode = Cookie.get("build-lng");
+  if (mode) {
+    Build.updateMode(mode);
+    (<HTMLSelectElement>document.getElementById("selectBuild")).value = mode;
+  }
+})();
