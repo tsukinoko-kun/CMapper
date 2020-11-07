@@ -53,7 +53,15 @@
 #contextMenu:not(.method) > .newMethod {
   display: none;
 }
-#contextMenu:not(.relation) > .newRelation {
+#contextMenu:not(.relation) {
+  > .newRelation {
+    display: none;
+  }
+  > .swapRelation {
+    display: none;
+  }
+}
+#contextMenu:not(.deletemember) > .swapRelation {
   display: none;
 }
 #contextMenu.deleteclass > .delete:after {

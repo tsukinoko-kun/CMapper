@@ -20,9 +20,7 @@ const Zoom = (() => {
       });
     }
     private toggle() {
-      (<HTMLDivElement>document.getElementById("graph"))?.classList.toggle(
-        "fullscreen"
-      );
+      Ui.fullscreenGraph();
     }
     private zoom(factor: number) {
       const graph = <HTMLDivElement>document.getElementById("graph");

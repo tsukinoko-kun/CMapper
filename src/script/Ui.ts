@@ -39,6 +39,11 @@ const Ui = (() => {
       };
       mermaid.initialize(config);
 
+      const zui = Cookie.get("--zoom-ui");
+      if (zui) {
+        document.documentElement.style.setProperty("--zoom-ui", zui);
+      }
+
       document.addEventListener("click", (ev) => {
         const t = <HTMLElement>ev.target;
         if (
@@ -610,6 +615,7 @@ const Ui = (() => {
         zoomUi = 1;
       }
       zoomUi = Math.min(2.25, Math.max(0.75, zoomUi + factor / 4));
+      Cookie.setNumber("--zoom-ui", zoomUi);
       document.documentElement.style.setProperty(
         "--zoom-ui",
         zoomUi.toString()
@@ -729,6 +735,7 @@ const Ui = (() => {
               if (this.focusedClass.fields[i].name === hover.id) {
                 delete this.focusedClass.fields[i];
                 this.focusedClass.fields.splice(i, 1);
+                break;
               }
             }
             break;
@@ -737,6 +744,7 @@ const Ui = (() => {
               if (this.focusedClass.methods[i].name === hover.id) {
                 delete this.focusedClass.methods[i];
                 this.focusedClass.methods.splice(i, 1);
+                break;
               }
             }
             break;
@@ -745,6 +753,7 @@ const Ui = (() => {
               if (this.focusedClass.relations[i].toString() === hover.id) {
                 delete this.focusedClass.relations[i];
                 this.focusedClass.relations.splice(i, 1);
+                break;
               }
             }
             break;
@@ -797,6 +806,7 @@ const Ui = (() => {
           if (structureHolder.namespace[i] === this.focusedClass) {
             delete structureHolder.namespace[i];
             structureHolder.namespace.splice(i, 1);
+            break;
           }
         }
         this.focusedClass = undefined;
@@ -869,6 +879,31 @@ const Ui = (() => {
         this.editDialog.display("relation", newRel.toString());
       }
     }
+    swapRelation(): void {
+      if (this.saverHoverCopy.length > 0 && this.focusedClass) {
+        const hover = JSON.parse(this.saverHoverCopy);
+        if (hover.t === "relation") {
+          for (let i = 0; i < this.focusedClass.relations.length; i++) {
+            if (this.focusedClass.relations[i].toString() === hover.id) {
+              const editRel = this.focusedClass.relations[i];
+              const cardinalityA = editRel.cardinalityA;
+              const cardinalityB = editRel.cardinalityB;
+              const classA = editRel.classA;
+              const classB = editRel.classB;
+              editRel.cardinalityA = cardinalityB;
+              editRel.cardinalityB = cardinalityA;
+              editRel.classA = classB;
+              editRel.classB = classA;
+              structureHolder.findClass(classB)?.addRelation(editRel);
+              this.focusedClass.relations.splice(i, 1);
+              this.sidebarClass();
+              this.render();
+              break;
+            }
+          }
+        }
+      }
+    }
     setClassName(): void {
       if (this.focusedClass) {
         const newName = this.sidebar.classname().value.trim();
@@ -911,6 +946,14 @@ const Ui = (() => {
     loadFile(): void {
       const fileUpload = document.getElementById("fileUpload");
       fileUpload?.click();
+    }
+
+    fullscreenGraph() {
+      const graph = <HTMLDivElement>document.getElementById("graph");
+      graph.classList.toggle("fullscreen");
+      doOnce(() => {
+        document.body.requestFullscreen();
+      });
     }
   }
   return new _Ui();

@@ -41,6 +41,7 @@
         <li class="newField" onclick="Ui.newField()">New Field</li>
         <li class="newMethod" onclick="Ui.newMethod()">New Method</li>
         <li class="newRelation" onclick="Ui.newRelation()">New Relation</li>
+        <li class="swapRelation" onclick="Ui.swapRelation()">Swap Relation</li>
         <li class="delete" onclick="Ui.delete()">Delete</li>
         <!-- <li>Duplicate Class<span class="key">Ctrl+D</span></li> -->
       </ul>
@@ -73,6 +74,11 @@
         />
         <img title="UiZoom +" src="img/zoomin.svg" onclick="Ui.zoomUi(+1)" />
         <img title="Ui Zoom -" src="img/zoomout.svg" onclick="Ui.zoomUi(-1)" />
+        <img
+          title="Full Screen"
+          src="img/fullscreen.svg"
+          onclick="Ui.fullscreenGraph()"
+        />
         <button onclick="Build.build()">Build</button>
         <select
           name="selectBuild"

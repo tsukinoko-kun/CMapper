@@ -68,11 +68,16 @@ if cc:
         conn.close()
         exit()
     else:
-        info(code)
-        file_object = open(js_path, "w")
-        file_object.write('"use strict";\n'+code)
-        file_object.close()
-        conn.close()
+        if code.includes("com.google.javascript.jscomp"):
+            error("Compiler Error")
+            conn.close()
+            exit()
+        else:
+            info(code)
+            file_object = open(js_path, "w")
+            file_object.write('"use strict";\n'+code)
+            file_object.close()
+            conn.close()
     hr()
 
 if scss:

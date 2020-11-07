@@ -57,6 +57,10 @@ class Class {
     this.methods.push(m);
   }
 
+  addRelation(r: Relation): void {
+    this.relations.push(r);
+  }
+
   private forEachField(callback: (f: Field) => void): void {
     for (const f of this.fields) {
       callback(f);
