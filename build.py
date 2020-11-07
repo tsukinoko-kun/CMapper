@@ -63,12 +63,12 @@ if cc:
     response = conn.getresponse()
     data = response.read()
     code = data.decode("utf-8")
-    if code == "\n":
+    if code == "" or code == "\n":
         error("Compiler Error")
         conn.close()
         exit()
     else:
-        if code.includes("com.google.javascript.jscomp"):
+        if code.count("com.google.javascript.jscomp")>1:
             error("Compiler Error")
             conn.close()
             exit()
