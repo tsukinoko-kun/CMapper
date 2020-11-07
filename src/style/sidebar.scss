@@ -52,6 +52,27 @@
       }
     }
   }
+  #sidebar_fields > li:not(.head):before {
+    content: "F";
+    background: var(--red);
+  }
+  #sidebar_methods > li:not(.head):before {
+    content: "M";
+    background: var(--green);
+  }
+  #sidebar_relations > li:not(.head):before {
+    content: "R";
+    background: var(--purple);
+  }
+  #sidebar_fields,
+  #sidebar_methods,
+  #sidebar_relations {
+    > li:not(.head):before {
+      padding: 0 5px;
+      margin-right: 8px;
+      border-radius: 50%;
+    }
+  }
 }
 
 #sidebarResize {
