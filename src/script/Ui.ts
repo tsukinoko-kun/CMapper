@@ -603,7 +603,6 @@ class _Ui {
       zoomUi = 1;
     }
     zoomUi = Math.min(2.25, Math.max(0.75, zoomUi + factor / 4));
-    console.debug(zoomUi);
     document.documentElement.style.setProperty("--zoom-ui", zoomUi.toString());
   }
 

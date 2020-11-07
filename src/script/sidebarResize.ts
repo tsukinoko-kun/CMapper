@@ -26,12 +26,9 @@
         if (ow !== NaN && ow > 0) {
           const graph = <HTMLDivElement>document.getElementById("graph");
           if (graph) {
-            console.debug(graph.scrollLeft);
             graph.scrollLeft = graph.scrollLeft - (ow - nw);
-            console.debug(graph.scrollLeft);
           }
         }
-        console.warn(ow);
       }
     });
   }
