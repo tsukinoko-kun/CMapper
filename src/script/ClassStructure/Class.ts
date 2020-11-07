@@ -314,7 +314,7 @@ class Class {
           code.append("abstract ");
         }
         if (stat) {
-          code.append(`const ${this.name} = ((): object => {\n\t`);
+          code.append(`const ${this.name} = (() => {\n\t`);
         }
         code.append(`class ${this.name} `);
         inheritance = false;
