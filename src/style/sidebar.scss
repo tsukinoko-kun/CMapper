@@ -7,7 +7,7 @@
   right: calc(100% - var(--sidebar-width));
   bottom: 0;
   left: 0;
-  border-right: 1px solid rgb(20, 20, 20);
+  border-right: 1px solid var(--split-line);
   overflow-x: hidden;
   overflow-y: auto;
   width: var(--sidebar-width);
@@ -68,6 +68,8 @@
   #sidebar_methods,
   #sidebar_relations {
     > li:not(.head):before {
+      color: rgba(black, 0.5);
+      font-weight: 900;
       padding: 0 calc(5px * var(--zoom-ui));
       margin-right: 8px;
       border-radius: 50%;

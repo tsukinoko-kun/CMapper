@@ -27,8 +27,9 @@ body {
   --line-height: calc(18px * var(--zoom-ui));
   --zoom-ui: 1;
   --zoom: 1;
-  --main: rgb(43, 43, 43);
-  --sidebar: rgb(60, 63, 65);
+  --main: rgb(49, 51, 53);
+  --sidebar: rgb(61, 63, 65);
+  --split-line: rgb(20, 20, 20);
   // --accent: rgb(28, 80, 157);
   --accent: var(--orange);
   --foreground: #e0e2e4;
@@ -60,11 +61,12 @@ input[type="text"] {
   outline: none;
   padding: 4px 8px;
   background-color: transparent;
-  border: 1px solid var(--border-color);
-  color: var(--foreground);
+  border: 1px solid var(--border-color) !important;
+  color: var(--foreground) !important;
 }
 input[type="text"]:focus {
-  color: var(--foreground-focus);
+  color: var(--foreground-focus) !important;
+  border-color: var(--foreground-focus) !important;
 }
 
 button {
@@ -114,7 +116,8 @@ button[disabled] {
   background: transparent !important;
   opacity: 0.9;
 }
-button:hover:not([disabled]) {
+button:hover:not([disabled]),
+select:hover {
   -webkit-box-shadow: inset 0px -8px 8px 2px #00000020;
   box-shadow: inset 0px -8px 8px 2px #00000020;
 }
