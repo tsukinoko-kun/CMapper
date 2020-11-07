@@ -308,10 +308,13 @@ class Class {
             break;
           }
         }
-        if (this.classifer === Classifer.static) {
+        if (!abstr && this.classifer === Classifer.static) {
           stat = true;
         } else if (this.classifer === Classifer.abstract || abstr) {
           code.append("abstract ");
+        }
+        if (stat) {
+          code.append(`const ${this.name} = ((): object => {\n\t`);
         }
         code.append(`class ${this.name} `);
         inheritance = false;
@@ -330,14 +333,26 @@ class Class {
         }
         code.appendWithLinebreak("{");
         for (const f of this.fields) {
+          if (stat) {
+            code.append("\t");
+          }
           code.appendWithLinebreak("\t" + f.codeGen(lng, stat));
         }
         for (const m of this.methods) {
+          if (stat) {
+            code.append("\t");
+          }
           code.appendWithLinebreak(
             "\t" + m.codeGen(lng, stat, this.name, inheritance)
           );
         }
+        if (stat) {
+          code.append("\t");
+        }
         code.appendWithLinebreak("}");
+        if (stat) {
+          code.appendWithLinebreak(`\treturn new ${this.name}();\n})();`);
+        }
         break;
     }
     if (lng === "h") {

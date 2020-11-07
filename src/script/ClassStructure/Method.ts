@@ -114,7 +114,7 @@ class Method {
         if (this.classifer === Classifer.abstract) {
           code.append("abstract ");
           abstr = true;
-        } else if (this.classifer === Classifer.static || p1) {
+        } else if (this.classifer === Classifer.static) {
           code.append("static ");
         }
         for (const p of this.parameters) {
@@ -139,9 +139,15 @@ class Method {
           if (constructor && p3) {
             code.append("\n\t\tsuper();");
           }
-          code.append(
-            '\n\t\tthrow new Error("Method not implemented"); \n\t} '
-          );
+          if (p1) {
+            code.append(
+              '\n\t\t\tthrow new Error("Method not implemented"); \n\t\t} '
+            );
+          } else {
+            code.append(
+              '\n\t\tthrow new Error("Method not implemented"); \n\t} '
+            );
+          }
         }
         break;
       case "py":
