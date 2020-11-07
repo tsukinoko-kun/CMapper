@@ -10,6 +10,10 @@ from distutils.dir_util import copy_tree
 tsc = False
 cc = False
 scss = False
+deploy = False
+
+def hr():
+    print("================================")
 
 for arg in sys.argv:
     if arg == "-tsc":
@@ -20,10 +24,14 @@ for arg in sys.argv:
         else:
             if arg == "-scss":
                 scss = True
+            else:
+                if arg == "-deploy":
+                    deploy = True
 
 if tsc:
     print("tsc")
     os.system("tsc -p ./tsconfig.json --pretty")
+    hr()
 
 if cc:
     print("closure-compiler")
@@ -32,13 +40,13 @@ if cc:
     code = file_object.read()
     file_object.close()
     params = urllib.parse.urlencode([
-        ('js_code', code),
         # WHITESPACE_ONLY
         # SIMPLE_OPTIMIZATIONS
         # ADVANCED_OPTIMIZATIONS
         ('compilation_level', 'SIMPLE_OPTIMIZATIONS'),
         ('output_format', 'text'),
         ('output_info', 'compiled_code'),
+        ('js_code', code),
     ])
     headers = {"Content-type": "application/x-www-form-urlencoded"}
     conn = http.client.HTTPSConnection('closure-compiler.appspot.com')
@@ -46,11 +54,17 @@ if cc:
     response = conn.getresponse()
     data = response.read()
     code = data.decode("utf-8")
-    print(code)
-    file_object = open(js_path, "w")
-    file_object.write('"use strict";\n'+code)
-    file_object.close()
-    conn.close()
+    if code == "\n":
+        print("Compiler Error")
+        conn.close()
+        exit()
+    else:
+        print(code)
+        file_object = open(js_path, "w")
+        file_object.write('"use strict";\n'+code)
+        file_object.close()
+        conn.close()
+    hr()
 
 if scss:
     style = open("./public/style.css","w+")
@@ -67,5 +81,12 @@ if scss:
         txt = cssTemp.read()
         style.write(txt)
         cssTemp.close()
-
     style.close()
+    hr()
+
+if deploy:
+    print("deploy")
+    os.system("firebase deploy")
+    hr()
+
+exit()
