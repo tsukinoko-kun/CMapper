@@ -28,7 +28,7 @@
       }
     </script>
   </head>
-  <body>
+  <body class="fullscreen">
     <section id="prerendered">
       <input
         id="fileUpload"
@@ -78,7 +78,7 @@
         <img
           title="Full Screen"
           src="img/fullscreen.svg"
-          onclick="Ui.fullscreenGraph()"
+          onclick="document.body.requestFullscreen()"
         />
         <button onclick="Build.build()">Build</button>
         <select
@@ -143,8 +143,9 @@
               title='Edit the selected member.
 Press "OK" to save your changes.
 Press "Cancel" to revert your changes.'
-              >?</span
             >
+              ?
+            </span>
           </div>
         </div>
       </div>

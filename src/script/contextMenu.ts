@@ -32,6 +32,25 @@ class ContextMenu {
             cm.classList.add("relation");
             cm.classList.remove("field");
             cm.classList.remove("method");
+          } else {
+            const focusedClassName = Ui.getFocusedClassName();
+            if (
+              focusedClassName &&
+              (() => {
+                for (const id of ids) {
+                  if (id.startsWith("classid-" + focusedClassName)) {
+                    return true;
+                  }
+                }
+                return false;
+              })()
+            ) {
+              if (structureHolder.namespace.length > 1) {
+                cm.classList.add("relation");
+              }
+              cm.classList.add("field");
+              cm.classList.add("method");
+            }
           }
         } else {
           cm.classList.remove("class");

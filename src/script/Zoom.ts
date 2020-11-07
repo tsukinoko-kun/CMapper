@@ -8,7 +8,7 @@ const Zoom = (() => {
           ev.target === window
         ) {
           if (ev.key.toUpperCase() === "F") {
-            this.toggle();
+            document.body.requestFullscreen();
           } else if (ev.key === "+") {
             this.zoom(1);
             ev.preventDefault();
@@ -18,9 +18,6 @@ const Zoom = (() => {
           }
         }
       });
-    }
-    private toggle() {
-      Ui.fullscreenGraph();
     }
     private zoom(factor: number) {
       const graph = <HTMLDivElement>document.getElementById("graph");

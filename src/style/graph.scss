@@ -1,21 +1,17 @@
-#graph.fullscreen {
+.fullscreen > #graph {
   position: fixed;
-  top: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  z-index: 5 !important;
-  overflow: auto !important;
   background-color: var(--main) !important;
 }
 #graph {
-  padding: 128px;
+  z-index: 5;
+  padding: calc(var(--sidebar-width) + 32px);
+  padding-top: 32px;
   position: fixed;
   top: var(--topbar-height);
   right: 0;
   bottom: 0;
-  left: var(--sidebar-width);
-  overflow: auto;
+  left: 0;
+  overflow: auto !important;
 
   #mddSvg {
     zoom: calc(var(--zoom) * var(--zoom-ui));

@@ -15,6 +15,13 @@ const Ui = (() => {
       return this.saverHoverCopy.length > 0;
     }
 
+    public getFocusedClassName(): string | undefined {
+      if (this.focusedClass) {
+        return this.focusedClass.name;
+      }
+      return undefined;
+    }
+
     public setHover(id: string, t: string) {
       this.hover = JSON.stringify({ id, t });
     }
@@ -84,6 +91,9 @@ const Ui = (() => {
     }
 
     private readonly sidebar = {
+      sidebar() {
+        return <HTMLElement>document.getElementById("sidebar");
+      },
       classname() {
         return <HTMLInputElement>document.getElementById("sidebar_classname");
       },
@@ -675,16 +685,12 @@ const Ui = (() => {
     render(): void {
       const md = structureHolder.collectMmd();
       if (md.length > 0) {
-        const graph = <HTMLDivElement>document.getElementById("graph");
-        const scrTop = graph.scrollTop;
-        const scrLeft = graph.scrollLeft;
         mermaid.render(mddSvgId, structureHolder.collectMmd(), this.cb);
-        graph.scrollTop = scrTop;
-        graph.scrollLeft = scrLeft;
         this.applyStyleRules();
       } else {
         this.cb("");
       }
+      Ui.fullscreenGraph(!Ui.hasClassInFocus());
     }
 
     unfocus(): void {
@@ -966,12 +972,14 @@ const Ui = (() => {
       fileUpload?.click();
     }
 
-    fullscreenGraph() {
-      const graph = <HTMLDivElement>document.getElementById("graph");
-      graph.classList.toggle("fullscreen");
-      doOnce(() => {
-        document.body.requestFullscreen();
-      });
+    fullscreenGraph(fs?: boolean) {
+      if (fs === undefined) {
+        document.body.classList.toggle("fullscreen");
+      } else if (fs === true) {
+        document.body.classList.add("fullscreen");
+      } else if (fs === false) {
+        document.body.classList.remove("fullscreen");
+      }
     }
   }
   return new _Ui();

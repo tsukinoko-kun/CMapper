@@ -19,7 +19,7 @@
             .replace(/[^0-9]/g, "")
         );
         const nw = Math.min(
-          window.innerWidth * 0.75,
+          window.innerWidth * 0.45,
           Math.max(150, Math.round(ev.clientX))
         );
         document.documentElement.style.setProperty(
