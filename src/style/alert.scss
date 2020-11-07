@@ -1,5 +1,8 @@
 #editDialog {
   display: none;
+}
+#editDialog,
+.alert {
   z-index: 11;
   position: fixed;
   top: 0;
@@ -41,18 +44,6 @@
     .content {
       padding: 8px;
       width: 100%;
-      td > * {
-        width: 100%;
-      }
-      #edit_param_list {
-        > li {
-          border: 1px solid var(--border-color);
-          select,
-          input {
-            border: none !important;
-          }
-        }
-      }
     }
     .buttons {
       border-top: 1px solid var(--border-color);

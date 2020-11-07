@@ -726,9 +726,18 @@ const Ui = (() => {
       return false;
     }
 
-    delete(): void {
+    async delete(): Promise<void> {
       if (this.saverHoverCopy.length > 0 && this.focusedClass) {
         const hover = JSON.parse(this.saverHoverCopy);
+        if (
+          !(await alert(
+            `Do you really want to permanently delete the "${hover.id}" ${hover.t}?`,
+            true,
+            "Delete"
+          ))
+        ) {
+          return;
+        }
         switch (hover.t) {
           case "field":
             for (let i = 0; i < this.focusedClass.fields.length; i++) {
@@ -761,6 +770,15 @@ const Ui = (() => {
         this.sidebarClass();
         this.render();
       } else if (this.focusedClass) {
+        if (
+          !(await alert(
+            `Do you really want to permanently delete the "${this.focusedClass.name}" class?`,
+            true,
+            "Delete"
+          ))
+        ) {
+          return;
+        }
         for (const cl of structureHolder.namespace) {
           if (cl === this.focusedClass) {
             continue;
