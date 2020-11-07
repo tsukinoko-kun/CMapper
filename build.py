@@ -15,6 +15,15 @@ deploy = False
 def hr():
     print("================================")
 
+def title(t):
+    print('\033[95m'+str(t)+'\033[0m')
+
+def info(i):
+    print('\033[0m'+str(i)+'\033[0m')
+
+def error(e):
+    print('\033[91m'+str(e)+'\033[0m')
+
 for arg in sys.argv:
     if arg == "-tsc":
         tsc = True
@@ -29,12 +38,12 @@ for arg in sys.argv:
                     deploy = True
 
 if tsc:
-    print("tsc")
+    title("tsc")
     os.system("tsc -p ./tsconfig.json --pretty")
     hr()
 
 if cc:
-    print("closure-compiler")
+    title("closure-compiler")
     js_path = "./public/app.js"
     file_object = open(js_path, "r")
     code = file_object.read()
@@ -55,11 +64,11 @@ if cc:
     data = response.read()
     code = data.decode("utf-8")
     if code == "\n":
-        print("Compiler Error")
+        error("Compiler Error")
         conn.close()
         exit()
     else:
-        print(code)
+        info(code)
         file_object = open(js_path, "w")
         file_object.write('"use strict";\n'+code)
         file_object.close()
@@ -67,6 +76,7 @@ if cc:
     hr()
 
 if scss:
+    title("scss")
     style = open("./public/style.css","w+")
     style.write("")
     style.close()
@@ -74,7 +84,7 @@ if scss:
 
     scss = list(Path(".").rglob("*.scss"))
     for file in scss:
-        print(file)
+        info(file)
         compiledFile = "temp/" +os.path.basename(file).replace(".scss", ".css")
         os.system("sass "+str(file)+" " + compiledFile + " --style compressed --no-source-map --update")
         cssTemp = open(compiledFile, "r")
@@ -85,8 +95,9 @@ if scss:
     hr()
 
 if deploy:
-    print("deploy")
+    title("deploy")
     os.system("firebase deploy")
     hr()
 
+title("Done!")
 exit()
