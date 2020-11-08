@@ -9,7 +9,7 @@
   position: fixed;
   top: var(--topbar-height);
   right: 0;
-  bottom: 0;
+  bottom: var(--statusbar-height);
   left: 0;
   overflow: auto !important;
 

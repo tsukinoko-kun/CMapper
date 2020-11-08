@@ -10,16 +10,16 @@ const Zoom = (() => {
           if (ev.key.toUpperCase() === "F") {
             document.body.requestFullscreen();
           } else if (ev.key === "+") {
-            this.zoom(1);
+            Ui.zoomUi(+1);
             ev.preventDefault();
           } else if (ev.key === "-") {
-            this.zoom(-1);
+            Ui.zoomUi(-1);
             ev.preventDefault();
           }
         }
       });
     }
-    private zoom(factor: number) {
+    public zoom(factor: number) {
       const graph = <HTMLDivElement>document.getElementById("graph");
       if (graph) {
         let z = Number(graph.style.getPropertyValue("--zoom"));

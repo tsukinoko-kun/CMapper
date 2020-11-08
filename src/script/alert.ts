@@ -14,7 +14,7 @@ function alert(
     titleBar.className = "titleBar";
     titleBar.innerText = "Alert";
     window.appendChild(titleBar);
-    const content = document.createElement("content");
+    const content = document.createElement("div");
     content.className = "content";
     window.appendChild(content);
     const msg = document.createElement("p");

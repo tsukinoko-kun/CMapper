@@ -61,14 +61,24 @@ class Class {
     this.relations.push(r);
   }
 
-  private forEachField(callback: (f: Field) => void): void {
+  public forEachField(callback: (f: Field) => void): void {
     for (const f of this.fields) {
       callback(f);
     }
     return;
   }
 
-  private forEachMethod(callback: (m: Method) => void): void {
+  public forEachMethod(callback: (m: Method) => void): void {
+    for (const m of this.methods) {
+      callback(m);
+    }
+    return;
+  }
+
+  public forEachMember(callback: (m: Field | Method) => void): void {
+    for (const f of this.fields) {
+      callback(f);
+    }
     for (const m of this.methods) {
       callback(m);
     }

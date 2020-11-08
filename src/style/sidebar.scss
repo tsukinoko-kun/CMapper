@@ -8,7 +8,7 @@
   position: fixed;
   top: var(--topbar-height);
   right: calc(100% - var(--sidebar-width));
-  bottom: 0;
+  bottom: var(--statusbar-height);
   left: 0;
   border-right: 1px solid var(--split-line);
   overflow-x: hidden;
@@ -84,7 +84,7 @@
 #sidebarResize {
   position: fixed;
   top: 0;
-  bottom: 0;
+  bottom: var(--statusbar-height);
   left: calc(var(--sidebar-width) - 5px);
   width: 10px;
   z-index: 7;

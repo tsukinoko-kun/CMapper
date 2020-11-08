@@ -44,6 +44,8 @@
     .content {
       padding: 8px;
       width: 100%;
+      overflow: auto;
+      max-height: 80vh;
     }
     .buttons {
       border-top: 1px solid var(--border-color);

@@ -39,7 +39,11 @@ class Field {
         code.append(typeMap(this.type, lng));
         code.append(" ");
         code.append(this.name);
-        code.append(";");
+        if (this.protection === Protection.public) {
+          code.append(" { get; set; }");
+        } else {
+          code.append(";");
+        }
         break;
       case "h":
         if (this.classifer === Classifer.static) {

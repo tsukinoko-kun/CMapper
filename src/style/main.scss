@@ -35,11 +35,12 @@ body {
   --foreground: #e0e2e4;
   --foreground-focus: whitesmoke;
   --sidebar-width: 350px;
-  --topbar-height: calc(28px * var(--zoom-ui));
+  --topbar-height: calc(32px * var(--zoom-ui));
+  --statusbar-height: calc(24px * var(--zoom-ui));
   --orange: #ec7600;
   --yellow: #ffcd22;
   --green: #6a8759;
-  --purple: #454872;
+  --purple: #5d6182;
   --red: rgb(164, 111, 121);
   --gray: #7d8c93;
   --blue: #678cb1;

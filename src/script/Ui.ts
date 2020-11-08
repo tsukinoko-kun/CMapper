@@ -4,7 +4,7 @@ const mddSvgId = "mddSvg";
 
 const Ui = (() => {
   class _Ui {
-    private readonly cb: Function;
+    private readonly cb: (svg: string) => void;
     private focused: number = -1;
     private focusedClass: Class | undefined = undefined;
     private hover: string = "";
@@ -64,8 +64,8 @@ const Ui = (() => {
         }
       });
 
-      this.cb = function (svgGraph: string) {
-        (<HTMLDivElement>document.getElementById("graph")).innerHTML = svgGraph;
+      this.cb = function (svg: string) {
+        (<HTMLDivElement>document.getElementById("graph")).innerHTML = svg;
       };
 
       this.sidebarClass();
@@ -683,6 +683,7 @@ const Ui = (() => {
     }
 
     render(): void {
+      Smart.update();
       const md = structureHolder.collectMmd();
       if (md.length > 0) {
         let x = 0;

@@ -11,10 +11,7 @@
     <title>CMapper</title>
     <meta name="Description" content="Online UML Class Diagram Editor" />
     <script defer src="rocket.js"></script>
-    <script
-      defer
-      src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.8.0/mermaid.min.js"
-    ></script>
+    <script defer src="https://frank-mayer.tk/cdn/mermaid.js"></script>
     <script
       async
       rel="preload"
@@ -83,13 +80,13 @@
           id="zoomIn"
           title="UiZoom +"
           src="img/zoomin.svg"
-          onclick="Ui.zoomUi(+1)"
+          onclick="Zoom.zoom(+1)"
         />
         <img
           id="zoomOut"
           title="Ui Zoom -"
           src="img/zoomout.svg"
-          onclick="Ui.zoomUi(-1)"
+          onclick="Zoom.zoom(-1)"
         />
         <img
           title="Full Screen"
@@ -110,6 +107,12 @@
             <option value="py">Python3</option>
           </optgroup>
         </select>
+      </div>
+      <div id="statusBar">
+        <span onclick="Smart.showDialog()">
+          <img src="img/lightbulb.svg" />
+          <span id="smart">0</span>
+        </span>
       </div>
       <div id="sidebarResize"></div>
       <ul id="sidebar">

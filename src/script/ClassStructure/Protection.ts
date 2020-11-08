@@ -37,7 +37,6 @@ function signToProtection(sign: string): Protection {
 function protectionToCode(p: Protection): string {
   switch (p) {
     case Protection.internal:
-      return "internal";
     case Protection.private:
       return "private";
     case Protection.protected:
