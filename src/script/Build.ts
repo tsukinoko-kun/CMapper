@@ -38,8 +38,8 @@ class Build {
     const mddSvg = document.getElementById(mddSvgId);
     if (mddSvg) {
       mddSvg.classList.add("print");
-      domtoimage.toSvg(mddSvg, { quality: 1.0 }).then(function (blob) {
-        saveAs(blob, `${structureHolder.name}.svg`);
+      domtoimage.toJpeg(mddSvg, { quality: 1.0 }).then(function (blob) {
+        saveAs(blob, `${structureHolder.name}.jpeg`);
         mddSvg.classList.remove("print");
       });
     } else {
