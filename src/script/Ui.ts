@@ -685,7 +685,18 @@ const Ui = (() => {
     render(): void {
       const md = structureHolder.collectMmd();
       if (md.length > 0) {
+        let x = 0;
+        let y = 0;
+        const graph = document.getElementById("graph");
+        if (graph) {
+          x = graph.scrollLeft;
+          y = graph.scrollTop;
+        }
         mermaid.render(mddSvgId, structureHolder.collectMmd(), this.cb);
+        if (graph) {
+          graph.scrollLeft = x;
+          graph.scrollTop = y;
+        }
         this.applyStyleRules();
       } else {
         this.cb("");
