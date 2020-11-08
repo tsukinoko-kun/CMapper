@@ -1,1 +1,1 @@
-declare function saveAs(blob: Blob, filename: string);
+declare function saveAs(data: Blob | string, filename: string);

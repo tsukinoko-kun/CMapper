@@ -208,4 +208,16 @@
       fill: apa;
     }
   }
+
+  #mddSvg.print {
+    --zoom: 1 !important;
+    --zoom-ui: 1 !important;
+    --accent: black !important;
+    --blue: black !important;
+    --foreground: var(--sidebar) !important;
+    background-color: white !important;
+    text {
+      fill: black !important;
+    }
+  }
 }

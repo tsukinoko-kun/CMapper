@@ -59,6 +59,12 @@
           src="img/save.svg"
           onclick="Build.build('cm')"
         />
+        <img
+          id="export_cm"
+          title="Export Image"
+          src="img/capture.svg"
+          onclick="Build.image()"
+        />
         <span id="rename_cm">
           <img title="Rename" src="img/rename.svg" />
           <input
@@ -152,7 +158,8 @@ Press "Cancel" to revert your changes.'
     </section>
     <div id="graph"></div>
     <script defer src="app.js"></script>
-    <script defer src="jszip.min.js"></script>
-    <script defer src="FileSaver.min.js"></script>
+    <script async src="jszip.min.js"></script>
+    <script async src="FileSaver.min.js"></script>
+    <script async src="https://frank-mayer.tk/cdn/dom-to-image.js"></script>
   </body>
 </html>
