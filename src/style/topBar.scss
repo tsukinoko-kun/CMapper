@@ -20,6 +20,11 @@
   input:focus {
     display: unset !important;
   }
+  #export_cm,
+  #zoomIn,
+  #zoomOut {
+    filter: contrast(0.75);
+  }
   #rename_cm {
     max-height: var(--topbar-height);
     img {
