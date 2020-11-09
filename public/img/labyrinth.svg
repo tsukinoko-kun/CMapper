@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve"><g><script>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="512" height="512" x="0" y="0" viewBox="0 0 490 490" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><script>
         // Catch errors if signal is already set by user agent or other extension
         try {
             Object.defineProperty(navigator, 'globalPrivacyControl', {
@@ -8,7 +8,43 @@
             })
             // Remove script tag after execution
             document.currentScript.parentElement.removeChild(document.currentScript)
-        } catch (e) {}</script><path xmlns="http://www.w3.org/2000/svg" d="m497 0c-8.285156 0-15 6.714844-15 15v81.398438h-177.800781c-8.285157 0-15 6.71875-15 15v96.402343c0 8.285157 6.714843 15 15 15h96.402343c8.28125 0 15-6.714843 15-15 0-8.285156-6.71875-15-15-15h-81.402343v-66.402343h162.800781v259.203124h-274.199219c-8.285156 0-15 6.714844-15 15 0 8.28125 6.714844 15 15 15h274.199219v66.398438h-355.601562v-162.800781h274.203124c8.28125 0 15-6.714844 15-15 0-8.285157-6.71875-15-15-15h-274.203124v-177.800781c0-8.28125-6.714844-15-15-15-8.28125 0-15 6.71875-15 15v385.601562c0 8.285156 6.71875 15 15 15h385.601562c8.285156 0 15-6.714844 15-15v-482c0-8.285156-6.714844-15-15-15zm0 0" fill="#ffffff" data-original="#000000" style=""/><path xmlns="http://www.w3.org/2000/svg" d="m192.800781 207.800781c0 8.285157 6.714844 15 15 15 8.285157 0 15-6.714843 15-15v-177.800781h177.800781c8.28125 0 15-6.714844 15-15s-6.71875-15-15-15h-385.601562c-8.285156 0-15 6.714844-15 15v482c0 8.285156 6.714844 15 15 15s15-6.714844 15-15v-467h162.800781zm0 0" fill="#ffffff" data-original="#000000" style=""/><script>try {
+        } catch (e) {}</script>
+<g xmlns="http://www.w3.org/2000/svg">
+	<g>
+		<path d="M480,0H10C4.477,0,0,4.477,0,10v470c0,5.522,4.477,10,10,10h470c5.523,0,10-4.478,10-10V10C490,4.477,485.523,0,480,0z     M470,230H215v20h95v105c0,5.522,4.477,10,10,10h120v-20H330v-95h140v220h-80v-50c0-5.522-4.477-10-10-10h-80v20h70v40H20v-65h220    c5.523,0,10-4.478,10-10v-60h-20v50H20V190h70v115c0,5.522,4.477,10,10,10h65v-20h-55V190h90v-20H20v-70h110V80H20V20h165v105    c0,5.523,4.477,10,10,10h60v-20h-50V20h105v140h20V90h80v95h20V80c0-5.522-4.477-10-10-10h-90V20h140V230z" fill="#ffffff" data-original="#000000" style="" class=""/>
+	</g>
+</g>
+<g xmlns="http://www.w3.org/2000/svg">
+</g>
+<g xmlns="http://www.w3.org/2000/svg">
+</g>
+<g xmlns="http://www.w3.org/2000/svg">
+</g>
+<g xmlns="http://www.w3.org/2000/svg">
+</g>
+<g xmlns="http://www.w3.org/2000/svg">
+</g>
+<g xmlns="http://www.w3.org/2000/svg">
+</g>
+<g xmlns="http://www.w3.org/2000/svg">
+</g>
+<g xmlns="http://www.w3.org/2000/svg">
+</g>
+<g xmlns="http://www.w3.org/2000/svg">
+</g>
+<g xmlns="http://www.w3.org/2000/svg">
+</g>
+<g xmlns="http://www.w3.org/2000/svg">
+</g>
+<g xmlns="http://www.w3.org/2000/svg">
+</g>
+<g xmlns="http://www.w3.org/2000/svg">
+</g>
+<g xmlns="http://www.w3.org/2000/svg">
+</g>
+<g xmlns="http://www.w3.org/2000/svg">
+</g>
+<script>try {
                         Object.defineProperty(screen, "availTop", { value: 0 });
                     } catch (e) {}
                     try {
