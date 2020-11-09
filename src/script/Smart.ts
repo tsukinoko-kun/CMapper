@@ -49,8 +49,14 @@ class Smart {
           }
         });
         for (let i = 0; i < cl.relations.length; i++) {
+          const a = cl.relations[i];
+          const B = structureHolder.findClass(a.classB);
+          if (B && B.classifer === Classifer.static) {
+            this.errors.push(
+              `class ${a.classA} cannot derive from static class ${a.classB}`
+            );
+          }
           for (let j = i + 1; j < cl.relations.length; j++) {
-            const a = cl.relations[i];
             const b = cl.relations[j];
             if (
               a.classA === b.classA &&
@@ -61,6 +67,29 @@ class Smart {
                 `doubled relation from ${a.classA} to ${a.classB}`
               );
             }
+          }
+          for (const clB of structureHolder.namespace) {
+            clB.forEachRelation((b) => {
+              if (
+                a.classA === b.classB &&
+                a.classB === b.classA &&
+                a.relation === relationType.inheritance &&
+                b.relation === relationType.inheritance
+              ) {
+                this.errors.push(
+                  `Circular base class dependency involving '${a.classA}' and '${a.classB}'`
+                );
+              } else if (
+                a.classA === b.classB &&
+                a.classB === b.classA &&
+                a.relation === relationType.composition &&
+                b.relation === relationType.composition
+              ) {
+                this.errors.push(
+                  `'${a.classA}' cannot be contained in its own container '${a.classB}'`
+                );
+              }
+            });
           }
         }
       }

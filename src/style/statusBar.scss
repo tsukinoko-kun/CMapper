@@ -7,14 +7,19 @@
   height: var(--statusbar-height);
   background-color: var(--sidebar);
   border-top: 1px solid var(--split-line);
-  padding: 2px 16px;
+  padding: 0 16px;
+  > span:hover {
+    background-color: var(--border-color);
+  }
   > span {
-    cursor: pointer;
+    padding: 2px 4px;
+    height: var(--statusbar-height);
+    display: inline;
     * {
       display: inline;
     }
     img {
-      text-anchor: middle;
+      padding-top: 3px;
       height: calc(var(--statusbar-height) - 8px);
     }
     span {
