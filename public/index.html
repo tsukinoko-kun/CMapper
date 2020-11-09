@@ -65,9 +65,10 @@
         <span id="rename_cm">
           <img title="Rename" src="img/rename.svg" />
           <input
+            max="100"
             type="text"
             id="projectName"
-            oninput="if(this.value.length>0){structureHolder.name=this.value;}"
+            oninput="structureHolder.rename(this)"
             value="unknown"
           />
         </span>
@@ -110,8 +111,12 @@
       </div>
       <div id="statusBar">
         <span onclick="Smart.showDialog()">
-          <img src="img/lightbulb.svg" />
+          <img src="img/lightbulb.svg" alt="💡" />
           <span id="smart">0</span>
+        </span>
+        <span title="Complexity">
+          <img src="img/labyrinth.svg" alt="Complexity" />
+          <span id="complexity">0</span>
         </span>
       </div>
       <div id="sidebarResize"></div>

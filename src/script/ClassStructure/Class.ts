@@ -85,7 +85,7 @@ class Class {
     return;
   }
 
-  private forEachRelation(callback: (rel: Relation) => void): void {
+  public forEachRelation(callback: (rel: Relation) => void): void {
     for (const rel of this.relations) {
       callback(rel);
     }

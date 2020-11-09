@@ -1,7 +1,4 @@
 #statusBar {
-  > span {
-    cursor: pointer;
-  }
   position: fixed;
   bottom: 0;
   right: 0;
@@ -11,18 +8,21 @@
   background-color: var(--sidebar);
   border-top: 1px solid var(--split-line);
   padding: 2px 16px;
-  * {
-    display: inline;
-  }
-  img {
-    text-anchor: middle;
-    height: calc(var(--statusbar-height) - 8px);
-  }
-  span {
-    text-anchor: middle;
-    height: calc(var(--statusbar-height) - 8px);
-    line-height: calc(var(--statusbar-height) - 8px);
-    font-size: calc(var(--statusbar-height) - 8px);
-    color: white;
+  > span {
+    cursor: pointer;
+    * {
+      display: inline;
+    }
+    img {
+      text-anchor: middle;
+      height: calc(var(--statusbar-height) - 8px);
+    }
+    span {
+      text-anchor: middle;
+      height: calc(var(--statusbar-height) - 8px);
+      line-height: calc(var(--statusbar-height) - 8px);
+      font-size: calc(var(--statusbar-height) - 8px);
+      color: white;
+    }
   }
 }

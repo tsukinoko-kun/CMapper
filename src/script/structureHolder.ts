@@ -184,6 +184,13 @@ const structureHolder = (() => {
         }
       }
     }
+    rename(el: HTMLInputElement): void {
+      const name = remSpCh(el.value);
+      if (name.length > 0) {
+        structureHolder.name = name;
+        el.value = name;
+      }
+    }
   }
   return new StructureHolder();
 })();

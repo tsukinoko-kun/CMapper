@@ -1,8 +1,8 @@
 function remSpCh(str: string) {
-  return str.replace(/[^a-zA-Z0-9öäüÖÄÜß\ ]/g, "");
+  return str.replace(/[^a-zA-Z0-9\ö\ä\ü\Ö\Ä\Ü\ß\_\ ]/g, "");
 }
 function remSpChCard(str: string) {
-  return str.replace(/[^a-zA-Z0-9\söäüÖÄÜß\*\.\ ]/g, "");
+  return str.replace(/[^a-zA-Z0-9\s\ö\ä\ü\Ö\Ä\Ü\ß\_\*\.\ ]/g, "");
 }
 function vowel(str: string): string {
   return str

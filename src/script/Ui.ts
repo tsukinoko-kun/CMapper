@@ -685,6 +685,10 @@ const Ui = (() => {
     render(): void {
       Smart.update();
       const md = structureHolder.collectMmd();
+      const complexityIndicator = document.getElementById("complexity");
+      if (complexityIndicator) {
+        complexityIndicator.innerHTML = (md.split("\n").length - 1).toString();
+      }
       if (md.length > 0) {
         let x = 0;
         let y = 0;
