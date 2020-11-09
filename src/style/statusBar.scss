@@ -8,10 +8,15 @@
   background-color: var(--sidebar);
   border-top: 1px solid var(--split-line);
   padding: 0 16px;
-  > span:hover {
+  a {
+    text-decoration: none !important;
+  }
+  > span:hover,
+  > a:hover {
     background-color: var(--border-color);
   }
-  > span {
+  > span,
+  > a {
     padding: 2px 4px;
     height: var(--statusbar-height);
     display: inline;
