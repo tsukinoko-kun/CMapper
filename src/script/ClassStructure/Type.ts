@@ -4,6 +4,7 @@ enum Type {
   integer,
   float,
   boolean,
+  datetime,
 }
 
 const CsTypes = new Map<string, string>([
@@ -12,6 +13,7 @@ const CsTypes = new Map<string, string>([
   ["integer", "int"],
   ["float", "float"],
   ["boolean", "bool"],
+  ["datetime", "DateTime"],
 ]);
 
 const CppTypes = new Map<string, string>([
@@ -20,6 +22,7 @@ const CppTypes = new Map<string, string>([
   ["integer", "int"],
   ["float", "float"],
   ["boolean", "bool"],
+  ["datetime", "std::chrono::time_point"],
 ]);
 
 const TsTypes = new Map<string, string>([
@@ -28,6 +31,7 @@ const TsTypes = new Map<string, string>([
   ["integer", "number"],
   ["float", "number"],
   ["boolean", "boolean"],
+  ["datetime", "Date"],
 ]);
 
 const PyTypes = new Map<string, string>([
@@ -36,6 +40,7 @@ const PyTypes = new Map<string, string>([
   ["integer", "int"],
   ["float", "float"],
   ["boolean", "bool"],
+  ["datetime", "datetime"],
 ]);
 
 const typeMap = (t: string, lng: string): string => {
