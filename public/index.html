@@ -63,11 +63,14 @@
           onclick="Build.image()"
         />
         <span id="rename_cm">
-          <img title="Rename" src="img/rename.svg" />
+          <label for="projectName">
+            <img title="Rename" src="img/rename.svg" />
+          </label>
           <input
             max="100"
             type="text"
             id="projectName"
+            title="projectName"
             oninput="structureHolder.rename(this)"
             value="unknown"
           />

@@ -92,6 +92,11 @@
   background-color: transparent;
 }
 
-.fullscreen #sidebar {
-  width: 0 !important;
+.fullscreen {
+  #sidebar {
+    width: 0 !important;
+  }
+  #sidebarResize {
+    display: none !important;
+  }
 }
