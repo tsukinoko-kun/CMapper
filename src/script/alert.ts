@@ -12,7 +12,7 @@ function alert(
     alert.appendChild(window);
     const titleBar = document.createElement("div");
     titleBar.className = "titleBar";
-    titleBar.innerText = "Alert";
+    titleBar.innerText = "Message";
     window.appendChild(titleBar);
     const content = document.createElement("div");
     content.className = "content";
