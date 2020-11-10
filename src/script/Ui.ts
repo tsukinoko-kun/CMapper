@@ -1071,7 +1071,7 @@ const Ui = (() => {
       if (this.focusedClass) {
         const newMethod = new Method(
           Protection.public,
-          [typeString(Type.string)],
+          [typeString(Type.void)],
           "NewMethod" + Math.floor(Math.random() * 1000).toString()
         );
         this.focusedClass.methods.push(newMethod);

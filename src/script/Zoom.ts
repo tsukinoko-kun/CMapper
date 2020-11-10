@@ -10,10 +10,10 @@ const Zoom = (() => {
           if (ev.key.toUpperCase() === "F") {
             document.getElementById("graph")?.requestFullscreen();
           } else if (ev.key === "+") {
-            Ui.zoomUi(+1);
+            this.zoom(+1);
             ev.preventDefault();
           } else if (ev.key === "-") {
-            Ui.zoomUi(-1);
+            this.zoom(-1);
             ev.preventDefault();
           }
         }
