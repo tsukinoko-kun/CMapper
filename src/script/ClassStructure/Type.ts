@@ -5,6 +5,8 @@ enum Type {
   float,
   boolean,
   datetime,
+  List,
+  Map,
 }
 
 const CsTypes = new Map<string, string>([
@@ -14,6 +16,8 @@ const CsTypes = new Map<string, string>([
   ["float", "float"],
   ["boolean", "bool"],
   ["datetime", "DateTime"],
+  ["List", "List"],
+  ["Map", "Dictionary"],
 ]);
 
 const CppTypes = new Map<string, string>([
@@ -23,6 +27,8 @@ const CppTypes = new Map<string, string>([
   ["float", "float"],
   ["boolean", "bool"],
   ["datetime", "std::chrono::time_point"],
+  ["List", "std::vector"],
+  ["Map", "std::map"],
 ]);
 
 const TsTypes = new Map<string, string>([
@@ -32,6 +38,8 @@ const TsTypes = new Map<string, string>([
   ["float", "number"],
   ["boolean", "boolean"],
   ["datetime", "Date"],
+  ["List", "Array"],
+  ["Map", "Map"],
 ]);
 
 const PyTypes = new Map<string, string>([
@@ -41,6 +49,8 @@ const PyTypes = new Map<string, string>([
   ["float", "float"],
   ["boolean", "bool"],
   ["datetime", "datetime"],
+  ["Map", "{}"],
+  ["List", "[]"],
 ]);
 
 const typeMap = (t: string, lng: string): string => {

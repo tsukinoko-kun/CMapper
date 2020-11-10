@@ -2,7 +2,8 @@ function alert(
   message: string,
   cancel?: boolean,
   okText?: string,
-  cancelText?: string
+  cancelText?: string,
+  title: string = "Message"
 ): Promise<boolean> {
   return new Promise(function (resolve: (value: boolean) => void) {
     const alert = document.createElement("div");
@@ -12,7 +13,7 @@ function alert(
     alert.appendChild(window);
     const titleBar = document.createElement("div");
     titleBar.className = "titleBar";
-    titleBar.innerText = "Message";
+    titleBar.innerText = title;
     window.appendChild(titleBar);
     const content = document.createElement("div");
     content.className = "content";

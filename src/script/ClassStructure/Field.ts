@@ -2,12 +2,12 @@
 
 class Field {
   protection: Protection;
-  type: string;
+  type: Array<string>;
   name: string;
   classifer: Classifer;
   constructor(
     pr: Protection,
-    type: string,
+    type: Array<string>,
     name: string,
     classifer: Classifer = Classifer.default
   ) {
@@ -20,7 +20,7 @@ class Field {
   toString(): string {
     const strb = new StringBuilder();
     strb.append(this.protection);
-    strb.append(this.type);
+    strb.append(displayType(this.type));
     strb.append(" ");
     strb.append(this.name);
     strb.append(this.classifer);
@@ -36,7 +36,7 @@ class Field {
         if (this.classifer === Classifer.static) {
           code.append("static ");
         }
-        code.append(typeMap(this.type, lng));
+        code.append(displayType(this.type, lng));
         code.append(" ");
         code.append(this.name);
         if (this.protection === Protection.public) {
@@ -49,7 +49,7 @@ class Field {
         if (this.classifer === Classifer.static) {
           code.append("static ");
         }
-        code.append(typeMap(this.type, lng));
+        code.append(displayType(this.type, lng));
         code.append(" ");
         code.append(this.name);
         code.append(";");
@@ -65,8 +65,14 @@ class Field {
         }
         code.append(this.name);
         code.append(" = ");
-        code.append(typeMap(this.type, lng));
-        code.append("()");
+        if (this.type[0] === "List") {
+          code.appendWithLinebreak("[]");
+        } else if (this.type[0] === "Map") {
+          code.appendWithLinebreak("{}");
+        } else {
+          code.append(displayType(this.type, lng));
+          code.appendWithLinebreak("()");
+        }
         break;
       case "ts":
         code.append(protectionToCode(this.protection));
@@ -76,7 +82,7 @@ class Field {
         }
         code.append(this.name);
         code.append(": ");
-        code.append(typeMap(this.type, lng));
+        code.append(displayType(this.type, lng));
         code.append(";");
         break;
     }

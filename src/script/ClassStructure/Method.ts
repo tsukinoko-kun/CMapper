@@ -2,14 +2,14 @@
 
 class Method {
   protection: Protection;
-  type: string;
+  type: Array<string>;
   name: string;
   classifer: Classifer;
   parameters: Array<Field>;
 
   constructor(
     pr: Protection,
-    type: string,
+    type: string[],
     name: string,
     classifer: Classifer = Classifer.default,
     parameters: Array<Field> = new Array<Field>()
@@ -21,7 +21,7 @@ class Method {
     this.parameters = parameters;
   }
 
-  setParam(name: string, type: string) {
+  setParam(name: string, type: string[]) {
     for (const p of this.parameters) {
       if (p.name === name) {
         p.type = type;
@@ -38,13 +38,13 @@ class Method {
     strb.append("(");
     const params = new Array<string>();
     for (const p of this.parameters) {
-      params.push(`${p.name}: ${p.type}`);
+      params.push(`${p.name}: ${displayType(p.type)}`);
     }
     strb.append(params.join(", "));
     strb.append(")");
     strb.append(this.classifer);
     strb.append(" ");
-    strb.append(this.type);
+    strb.append(displayType(this.type));
     return vowel(strb.toString());
   }
 
@@ -71,12 +71,12 @@ class Method {
         if (this.name === p2) {
           constructor = true;
         } else {
-          code.append(typeMap(this.type, lng));
+          code.append(displayType(this.type, lng));
           code.append(" ");
         }
         code.append(this.name);
         for (const p of this.parameters) {
-          params.push(`${typeMap(p.type, lng)} ${p.name}`);
+          params.push(`${displayType(p.type, lng)} ${p.name}`);
         }
         code.append(`(${params.join(", ")})`);
 
@@ -98,12 +98,12 @@ class Method {
         if (this.name === p2) {
           constructor = true;
         } else {
-          code.append(typeMap(this.type, lng));
+          code.append(displayType(this.type, lng));
           code.append(" ");
         }
         code.append(this.name);
         for (const p of this.parameters) {
-          params.push(`${typeMap(p.type, lng)} ${p.name}`);
+          params.push(`${displayType(p.type, lng)} ${p.name}`);
         }
         code.append(`(${params.join(", ")})`);
         code.append(";");
@@ -118,7 +118,7 @@ class Method {
           code.append("static ");
         }
         for (const p of this.parameters) {
-          params.push(`${p.name}: ${typeMap(p.type, lng)}`);
+          params.push(`${p.name}: ${displayType(p.type, lng)}`);
         }
         constructor = false;
         if (this.name === p2) {
@@ -130,7 +130,7 @@ class Method {
         code.append(`(${params.join(", ")})`);
         if (!constructor) {
           code.append(": ");
-          code.append(typeMap(this.type, lng));
+          code.append(displayType(this.type, lng));
         }
         if (abstr) {
           code.append(";");
@@ -177,8 +177,14 @@ class Method {
         code.appendWithLinebreak(`(${params.join(", ")}):`);
         if (!constructor) {
           code.append("\t\treturn ");
-          code.append(typeMap(this.type, lng));
-          code.appendWithLinebreak("()");
+          if (this.type[0] === "List") {
+            code.appendWithLinebreak("[]");
+          } else if (this.type[0] === "Map") {
+            code.appendWithLinebreak("{}");
+          } else {
+            code.append(displayType(this.type, lng));
+            code.appendWithLinebreak("()");
+          }
         } else {
           code.appendWithLinebreak("\t\tpass");
         }

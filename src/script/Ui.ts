@@ -22,10 +22,10 @@ const Ui = (() => {
       return undefined;
     }
 
-    public setHover(id: string, t: string) {
+    public setHover(id: string, t: string): void {
       this.hover = JSON.stringify({ id, t });
     }
-    public removeHover(id: string, t: string) {
+    public removeHover(id: string, t: string): void {
       if (this.hover === JSON.stringify({ id, t })) {
         this.hover = "";
       }
@@ -51,7 +51,7 @@ const Ui = (() => {
         document.documentElement.style.setProperty("--zoom-ui", zui);
       }
 
-      document.addEventListener("click", (ev) => {
+      document.addEventListener("click", (ev): void => {
         const t = <HTMLElement>ev.target;
         if (
           this.focused >= 0 &&
@@ -64,8 +64,10 @@ const Ui = (() => {
         }
       });
 
-      this.cb = function (svg: string) {
-        (<HTMLDivElement>document.getElementById("graph")).innerHTML = svg;
+      this.cb = function (svg: string): void {
+        (<HTMLDivElement>(
+          document.getElementById("graph")
+        )).innerHTML = svg.replace(genericPlaceholder, ", ");
       };
 
       this.sidebarClass();
@@ -83,7 +85,7 @@ const Ui = (() => {
         .replace(/>/g, "&gt;");
     }
 
-    toggleFolder(folderId: string) {
+    toggleFolder(folderId: string): void {
       const folder = document.getElementById(folderId);
       if (folder) {
         folder.classList.toggle("folderClosed");
@@ -91,27 +93,27 @@ const Ui = (() => {
     }
 
     private readonly sidebar = {
-      sidebar() {
+      sidebar(): HTMLElement {
         return <HTMLElement>document.getElementById("sidebar");
       },
-      classname() {
+      classname(): HTMLInputElement {
         return <HTMLInputElement>document.getElementById("sidebar_classname");
       },
-      classifer() {
+      classifer(): HTMLSelectElement {
         return <HTMLSelectElement>document.getElementById("sidebar_classifer");
       },
-      fields() {
+      fields(): HTMLUListElement {
         return <HTMLUListElement>document.getElementById("sidebar_fields");
       },
-      methods() {
+      methods(): HTMLUListElement {
         return <HTMLUListElement>document.getElementById("sidebar_methods");
       },
-      relations() {
+      relations(): HTMLUListElement {
         return <HTMLUListElement>document.getElementById("sidebar_relations");
       },
     };
     readonly editDialog = {
-      checkSelect(a: string, b: string) {
+      checkSelect(a: string, b: string): " selected" | "" {
         if (a === b) {
           return " selected";
         } else {
@@ -122,7 +124,9 @@ const Ui = (() => {
         const id = "edit_protection";
         const sel = new StringBuilder();
         sel.append(`<tr><td><label for="${id}">Protection: </label></td>`);
-        sel.append(`<td><select name="${id}" id="${id}">`);
+        sel.append(
+          `<td><select oninput="Ui.editDialog.updateVisible()" name="${id}" id="${id}">`
+        );
 
         sel.append('<option value="');
         sel.append(Protection.public);
@@ -159,7 +163,9 @@ const Ui = (() => {
         const id = "edit_classifer";
         const sel = new StringBuilder();
         sel.append(`<tr><td><label for="${id}">Classifer: </label></td>`);
-        sel.append(`<td><select name="${id}" id="${id}">`);
+        sel.append(
+          `<td><select oninput="Ui.editDialog.updateVisible()" name="${id}" id="${id}">`
+        );
 
         sel.append('<option value="');
         sel.append(Classifer.default);
@@ -185,44 +191,55 @@ const Ui = (() => {
         sel.append("</select></td></tr>");
         return sel.toString();
       },
-      createTypeSelector(value: string, isParam: boolean = false): string {
-        const id = "edit_type";
+      createTypeSelector(value: string[], isParam: boolean = false): string {
+        const names = ["Main", "T1", "T2"];
         const sel = new StringBuilder();
-        if (isParam) {
-          sel.append(`<select class="${id}">`);
-        } else {
-          sel.append(`<tr><td><label for="${id}">Type: </label></td>`);
-          sel.append(`<td><select name="${id}" id="${id}">`);
-        }
+        for (let i = 0; i < 3; i++) {
+          const v = value[i];
+          const id = `edit_type${i}`;
+          if (isParam) {
+            sel.append(
+              `<select oninput="Ui.editDialog.updateVisible()" class="${id}">`
+            );
+          } else {
+            sel.append(
+              `<tr><td><label for="${id}">${names[i]} Type: </label></td>`
+            );
+            sel.append(
+              `<td><select oninput="Ui.editDialog.updateVisible()" name="${id}" id="${id}">`
+            );
+          }
 
-        const types = Object.keys(Type).filter(
-          (key: any) => !isNaN(Number(Type[key]))
-        );
-        const classNames = new Array<string>();
-        for (const cl of structureHolder.namespace) {
-          classNames.push(cl.name);
-        }
-        const appendOptions = (list: Array<string>, name: string) => {
-          if (list.length === 0) {
-            return "";
+          const types = Object.keys(Type).filter(
+            (key: any) =>
+              !isNaN(Number(Type[key])) && (!isParam || key !== "void")
+          );
+          const classNames = new Array<string>();
+          for (const cl of structureHolder.namespace) {
+            classNames.push(cl.name);
           }
-          const html = new StringBuilder();
-          html.append(`<optgroup label="${name}">`);
-          for (const t of list) {
-            html.append(`<option value="${t}"`);
-            html.append(this.checkSelect(value, t));
-            html.append(">");
-            html.append(t.charAt(0).toUpperCase() + t.slice(1));
-            html.append("</option>");
+          const appendOptions = (list: Array<string>, name: string) => {
+            if (list.length === 0) {
+              return "";
+            }
+            const html = new StringBuilder();
+            html.append(`<optgroup label="${name}">`);
+            for (const t of list) {
+              html.append(`<option value="${t}"`);
+              html.append(this.checkSelect(v, t));
+              html.append(">");
+              html.append(t.charAt(0).toUpperCase() + t.slice(1));
+              html.append("</option>");
+            }
+            html.append("</optgroup>");
+            return html.toString();
+          };
+          sel.append(appendOptions(types, "Default Types"));
+          sel.append(appendOptions(classNames, "Classes"));
+          sel.append("</select>");
+          if (!isParam) {
+            sel.append("</td></tr>");
           }
-          html.append("</optgroup>");
-          return html.toString();
-        };
-        sel.append(appendOptions(types, "Default Types"));
-        sel.append(appendOptions(classNames, "Classes"));
-        sel.append("</select>");
-        if (!isParam) {
-          sel.append("</td></tr>");
         }
         return sel.toString();
       },
@@ -230,7 +247,9 @@ const Ui = (() => {
         const id = "edit_class";
         const sel = new StringBuilder();
         sel.append(`<tr><td><label for="${id}">Class B: </label></td>`);
-        sel.append(`<td><select name="${id}" id="${id}">`);
+        sel.append(
+          `<td><select oninput="Ui.editDialog.updateVisible()" name="${id}" id="${id}">`
+        );
         const classNames = new Array<string>();
         for (const cl of structureHolder.namespace) {
           if (cl.name !== excludeClass) {
@@ -253,7 +272,9 @@ const Ui = (() => {
         const id = "edit_relation";
         const sel = new StringBuilder();
         sel.append(`<tr><td><label for="${id}">Relation: </label></td>`);
-        sel.append(`<td><select name="${id}" id="${id}">`);
+        sel.append(
+          `<td><select oninput="Ui.editDialog.updateVisible()" name="${id}" id="${id}">`
+        );
         for (const r of Object.keys(relationType)) {
           sel.append(`<option value="${r}"`);
           sel.append(this.checkSelect(value, r));
@@ -265,26 +286,47 @@ const Ui = (() => {
         sel.append("</td></tr>");
         return sel.toString();
       },
-      addParameter() {
+      addParameter(): void {
         if (Ui.editMember instanceof Method) {
           const paramList = document.getElementById("edit_param_list");
           if (paramList) {
+            // save state of existing params
+            let selects: HTMLCollectionOf<HTMLSelectElement> = paramList.getElementsByTagName(
+              "select"
+            );
+            const selectValues = new Array<string>();
+            {
+              for (let i = 0; i < selects.length; i++) {
+                selectValues.push(selects[i].value);
+              }
+            }
+            /////
+
             const li = new StringBuilder();
             const paramName = `param${Math.ceil(Math.random() * 1000)}`;
             li.append("<li>");
             li.append(
               `<input type="text" max="100" value="${paramName}" class="edit_name"/>`
             );
-            li.append(this.createTypeSelector(Type[Type.string], true));
+            li.append(this.createTypeSelector([Type[Type.string]], true));
             li.append(
               `<button onclick='Ui.editDialog.removeParameter("${paramName}")'>Remove</button>`
             );
             li.append("</li>");
             paramList.innerHTML += li.toString();
+
+            // reapply presaved values of select elements
+            selects = paramList.getElementsByTagName("select");
+            for (let i = 0; i < selectValues.length; i++) {
+              selects[i].value = selectValues[i];
+            }
+            /////
+
+            this.updateVisible();
           }
         }
       },
-      removeParameter(name: string) {
+      removeParameter(name: string): void {
         if (Ui.editMember instanceof Method) {
           const paramUList = document.getElementById("edit_param_list");
           if (paramUList) {
@@ -300,14 +342,70 @@ const Ui = (() => {
           }
         }
       },
-      close() {
+      close(): void {
         Ui.editMember = undefined;
         const editDialog = document.getElementById("editDialog");
         if (editDialog) {
           editDialog.style.display = "none";
         }
       },
-      apply() {
+      delete(): void {},
+      updateVisible(): void {
+        const typeEls = new Array<HTMLSelectElement>();
+        const typeParentEls = new Array<HTMLElement>();
+        const typeParamEls = new Array<Array<HTMLSelectElement>>();
+        for (let i = 0; i < 3; i++) {
+          const paramTypes = document.getElementsByClassName(`edit_type${i}`);
+          for (let j = 0; j < paramTypes.length; j++) {
+            const p = <HTMLSelectElement>paramTypes[j];
+            if (p) {
+              if (typeParamEls.length > j) {
+                typeParamEls[j].push(p);
+              } else {
+                typeParamEls.push([p]);
+              }
+            }
+          }
+          const type = <HTMLSelectElement>(
+            document.getElementById(`edit_type${i}`)
+          );
+          if (type) {
+            const td = type.parentElement;
+            if (td) {
+              const tr = td.parentElement;
+              if (tr) {
+                typeEls.push(type);
+                typeParentEls.push(<HTMLElement>tr);
+              }
+            }
+          }
+        }
+        if (typeParentEls.length > 1) {
+          if (typeEls[0].value === "List") {
+            typeParentEls[1].style.display = "table-row";
+            typeParentEls[2].style.display = "none";
+          } else if (typeEls[0].value === "Map") {
+            typeParentEls[1].style.display = "table-row";
+            typeParentEls[2].style.display = "table-row";
+          } else {
+            typeParentEls[1].style.display = "none";
+            typeParentEls[2].style.display = "none";
+          }
+        }
+        for (const inputs of typeParamEls) {
+          if (inputs[0].value === "List") {
+            inputs[1].style.display = "inline-block";
+            inputs[2].style.display = "none";
+          } else if (inputs[0].value === "Map") {
+            inputs[1].style.display = "inline-block";
+            inputs[2].style.display = "inline-block";
+          } else {
+            inputs[1].style.display = "none";
+            inputs[2].style.display = "none";
+          }
+        }
+      },
+      apply(): void {
         if (Ui.editMember instanceof Field) {
           const name = <HTMLInputElement>document.getElementById("edit_name");
           if (name) {
@@ -325,9 +423,17 @@ const Ui = (() => {
           if (classifer) {
             Ui.editMember.classifer = classiferFromString(classifer.value);
           }
-          const type = <HTMLSelectElement>document.getElementById("edit_type");
-          if (type) {
-            Ui.editMember.type = type.value;
+          for (let i = 0; i < 3; i++) {
+            const type = <HTMLSelectElement>(
+              document.getElementById(`edit_type${i}`)
+            );
+            if (type) {
+              if ((type.style.display = "inline-block")) {
+                Ui.editMember.type[i] = type.value;
+              } else {
+                Ui.editMember.type[i] = "";
+              }
+            }
           }
         } else if (Ui.editMember instanceof Method) {
           const name = <HTMLInputElement>document.getElementById("edit_name");
@@ -346,9 +452,13 @@ const Ui = (() => {
           if (classifer) {
             Ui.editMember.classifer = classiferFromString(classifer.value);
           }
-          const type = <HTMLSelectElement>document.getElementById("edit_type");
-          if (type) {
-            Ui.editMember.type = type.value;
+          for (let i = 0; i < 3; i++) {
+            const type = <HTMLSelectElement>(
+              document.getElementById(`edit_type${i}`)
+            );
+            if (type) {
+              Ui.editMember.type[i] = type.value;
+            }
           }
           const paramList = <HTMLUListElement>(
             document.getElementById("edit_param_list")
@@ -376,12 +486,17 @@ const Ui = (() => {
             const pLiS = paramList.getElementsByTagName("li");
             for (let i = 0; i < pLiS.length; i++) {
               const pLi = pLiS[i];
-              const pName = (<HTMLInputElement>(
-                pLi.getElementsByClassName("edit_name")[0]
-              )).value;
-              const pType = (<HTMLInputElement>(
-                pLi.getElementsByClassName("edit_type")[0]
-              )).value;
+              const pName = (<HTMLCollectionOf<HTMLInputElement>>(
+                pLi.getElementsByClassName("edit_name")
+              ))[0].value;
+              const pType = new Array<string>();
+              for (let j = 0; j < 3; j++) {
+                const id = `edit_type${j}`;
+                const pEl = <HTMLInputElement>pLi.getElementsByClassName(id)[0];
+                if (pEl) {
+                  pType.push(pEl.value);
+                }
+              }
               Ui.editMember.setParam(remSpCh(pName), pType);
             }
           }
@@ -543,6 +658,7 @@ const Ui = (() => {
           if (editDialog) {
             editDialog.style.display = "block";
           }
+          this.updateVisible();
         }
       },
     };
@@ -683,6 +799,7 @@ const Ui = (() => {
     }
 
     render(): void {
+      console.clear();
       Smart.update();
       const md = structureHolder.collectMmd();
       const complexityIndicator = document.getElementById("complexity");
@@ -818,27 +935,29 @@ const Ui = (() => {
             }
           }
           for (const f of cl.fields) {
-            if (f.type === this.focusedClass.name) {
+            if (f.type.includes(this.focusedClass.name)) {
               alert(
                 "A class that is used as a type by fields of another class can not be deleted." +
-                  `\n${f.type} ${cl.name}::${f.name}`
+                  `\n${displayType(f.type, "cs")} ${cl.name}::${f.name}`
               );
               return;
             }
           }
           for (const m of cl.methods) {
-            if (m.type === this.focusedClass.name) {
+            if (m.type.includes(this.focusedClass.name)) {
               alert(
                 "A class that is used as a return type by methods of another class may be deleted." +
-                  `\n${m.type} ${cl.name}::${m.name}()`
+                  `\n${displayType(m.type, "cs")} ${cl.name}::${m.name}()`
               );
               return;
             }
             for (const p of m.parameters) {
-              if (p.type === this.focusedClass.name) {
+              if (p.type.includes(this.focusedClass.name)) {
                 alert(
                   "A class that is used as a parameter type by methods of another class can not be deleted." +
-                    `\n${m.type} ${cl.name}::${m.name}(${p.type} ${p.name})`
+                    `\n${displayType(m.type, "cs")} ${cl.name}::${m.name}(${
+                      p.type
+                    } ${p.name})`
                 );
                 return;
               }
@@ -880,7 +999,7 @@ const Ui = (() => {
       if (this.focusedClass) {
         const newField = new Field(
           Protection.public,
-          typeString(Type.string),
+          [typeString(Type.string)],
           "NewField" + Math.floor(Math.random() * 1000).toString()
         );
         this.focusedClass.fields.push(newField);
@@ -894,7 +1013,7 @@ const Ui = (() => {
       if (this.focusedClass) {
         const newMethod = new Method(
           Protection.public,
-          typeString(Type.string),
+          [typeString(Type.string)],
           "NewMethod" + Math.floor(Math.random() * 1000).toString()
         );
         this.focusedClass.methods.push(newMethod);

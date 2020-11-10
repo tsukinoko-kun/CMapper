@@ -1,10 +1,38 @@
 class Smart {
   private static errors = new Array<string>();
+  private static title = "Smart Spot";
   static showDialog(): void {
     if (this.errors.length > 0) {
-      alert(this.errors.join("\n\n"));
+      alert(
+        this.errors.join("\n\n"),
+        undefined,
+        undefined,
+        undefined,
+        this.title
+      );
     } else {
-      alert("No problems have been detected in the workspace so far");
+      alert(
+        "No problems have been detected in the workspace so far",
+        undefined,
+        undefined,
+        undefined,
+        this.title
+      );
+    }
+  }
+  public static checkBeforeBuild(): Promise<boolean> {
+    if (Smart.errors.length > 0) {
+      return alert(
+        Smart.errors.join("\n\n"),
+        true,
+        "Build Anyway",
+        "Cancel",
+        Smart.title
+      );
+    } else {
+      return new Promise((resolve: (value: boolean) => void) => {
+        resolve(true);
+      });
     }
   }
   static update(): void {
@@ -90,6 +118,52 @@ class Smart {
                 );
               }
             });
+          }
+          if (
+            a.relation === relationType.composition ||
+            a.relation === relationType.aggregation
+          ) {
+            if (B) {
+              let fieldFound = false;
+              for (const f of B.fields) {
+                if (f.type.includes(a.classA)) {
+                  fieldFound = true;
+                  break;
+                }
+              }
+              if (!fieldFound) {
+                this.errors.push(
+                  `According to relation '${a.toString()}', class '${
+                    a.classB
+                  }' should have a Field of type '${a.classA}'`
+                );
+              }
+            }
+          }
+        }
+        for (const f of cl.fields) {
+          for (const t of f.type) {
+            if (t !== cl.name) {
+              const typeClass = structureHolder.findClass(t);
+              if (typeClass) {
+                let relationFound = false;
+                for (const r of typeClass.relations) {
+                  if (
+                    r.classA === t &&
+                    (r.relation === relationType.composition ||
+                      r.relation === relationType.aggregation)
+                  ) {
+                    relationFound = true;
+                    break;
+                  }
+                }
+                if (!relationFound) {
+                  this.errors.push(
+                    `missing relation from '${t}' to '${cl.name}' of type composition or aggregation`
+                  );
+                }
+              }
+            }
           }
         }
       }

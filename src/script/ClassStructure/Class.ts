@@ -75,12 +75,26 @@ class Class {
     return;
   }
 
-  public forEachMember(callback: (m: Field | Method) => void): void {
+  public forEachMember(
+    callback: (m: Field | Method, $break: () => void) => void
+  ): void {
+    let ex = true;
+    const _break = () => {
+      ex = false;
+    };
     for (const f of this.fields) {
-      callback(f);
+      if (ex) {
+        callback(f, _break);
+      } else {
+        return;
+      }
     }
     for (const m of this.methods) {
-      callback(m);
+      if (ex) {
+        callback(m, _break);
+      } else {
+        return;
+      }
     }
     return;
   }
@@ -104,24 +118,32 @@ class Class {
       }
     }
     for (const f of this.fields) {
-      if (structureHolder.findClass(f.type)) {
-        imp.add(f.type);
+      for (const t of f.type) {
+        if (structureHolder.findClass(t)) {
+          imp.add(t);
+        }
       }
     }
     for (const m of this.methods) {
-      if (structureHolder.findClass(m.type)) {
-        imp.add(m.type);
+      for (const t of m.type) {
+        if (structureHolder.findClass(t)) {
+          imp.add(t);
+        }
       }
       for (const p of m.parameters) {
-        if (structureHolder.findClass(p.type)) {
-          imp.add(p.type);
+        for (const t of p.type) {
+          if (structureHolder.findClass(t)) {
+            imp.add(t);
+          }
         }
       }
     }
     imp.delete(this.name);
     switch (lng) {
       case "cs":
-        code.appendWithLinebreak("using System;");
+        code.appendWithLinebreak(
+          "using System;\nusing System.Collections.Generic;"
+        );
         for (const module of imp) {
           code.appendWithLinebreak(`using ${structureHolder.name}.${module};`);
         }
@@ -159,34 +181,6 @@ class Class {
         code.appendWithLinebreak("\t}\n}");
         break;
       case "h":
-        code.append("#pragma once\n\n");
-        let stdString = false;
-        for (const f of this.fields) {
-          if (f.type === typeString(Type.string)) {
-            stdString = true;
-            break;
-          }
-        }
-        if (!stdString) {
-          for (const m of this.methods) {
-            if (m.type === typeString(Type.string)) {
-              stdString = true;
-              break;
-            }
-            for (const p of m.parameters) {
-              if (p.type === typeString(Type.string)) {
-                stdString = true;
-                break;
-              }
-            }
-            if (stdString) {
-              break;
-            }
-          }
-        }
-        if (stdString) {
-          code.appendWithLinebreak(`#include <string>`);
-        }
         for (const module of imp) {
           code.appendWithLinebreak(`#include "${module}.h"`);
         }
@@ -370,7 +364,18 @@ class Class {
         break;
     }
     if (lng === "h") {
-      return new Page(vowel(this.name), lng, vowel(code.toString()));
+      let codeStr = code.toString();
+      if (codeStr.includes("std::vector")) {
+        codeStr = "#include <vector>\n" + codeStr;
+      }
+      if (codeStr.includes("std::string")) {
+        codeStr = "#include <string>\n" + codeStr;
+      }
+      if (codeStr.includes("std::map")) {
+        codeStr = "#include <map>\n" + codeStr;
+      }
+      codeStr = "#pragma once\n" + codeStr;
+      return new Page(vowel(this.name), lng, vowel(codeStr));
     } else {
       return new Page(this.name, lng, code.toString());
     }

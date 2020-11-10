@@ -154,20 +154,26 @@ const structureHolder = (() => {
     deepRename(oldName: string, newName: string) {
       for (const cl of this.namespace) {
         for (const f of cl.fields) {
-          if (f.type === oldName) {
-            f.type = newName;
+          for (let i = 0; i < f.type.length; i++) {
+            if (f.type[i] === oldName) {
+              f.type[i] = newName;
+            }
           }
         }
         for (const m of cl.methods) {
           if (cl.name === oldName && m.name === oldName) {
             m.name = newName;
           }
-          if (m.type === oldName) {
-            m.type = newName;
+          for (let i = 0; i < m.type.length; i++) {
+            if (m.type[i] === oldName) {
+              m.type[i] = newName;
+            }
           }
           for (const p of m.parameters) {
-            if (p.type === oldName) {
-              p.type = newName;
+            for (let i = 0; i < p.type.length; i++) {
+              if (p.type[i] === oldName) {
+                p.type[i] = newName;
+              }
             }
           }
         }

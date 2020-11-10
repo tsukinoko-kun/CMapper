@@ -46,6 +46,18 @@
       width: 100%;
       overflow: auto;
       max-height: 80vh;
+      #edit_param_list {
+        li {
+          display: block;
+          height: 75px;
+        }
+        li:hover {
+          * {
+            --border-color: var(--blue) !important;
+            border-color: var(--blue) !important;
+          }
+        }
+      }
     }
     .buttons {
       border-top: 1px solid var(--border-color);

@@ -18,15 +18,19 @@ class Build {
         structureHolder.name + ".cm"
       );
     } else {
-      for (const cl of structureHolder.namespace) {
-        files.push(cl.codeGen(mode));
-      }
-      const zip = new JSZip();
-      for (const f of files) {
-        zip.file(f.fullName, f.data);
-      }
-      zip.generateAsync({ type: "blob" }).then(function (blob) {
-        saveAs(<Blob>blob, structureHolder.name + "." + mode + ".zip");
+      Smart.checkBeforeBuild().then((rv) => {
+        if (rv) {
+          for (const cl of structureHolder.namespace) {
+            files.push(cl.codeGen(mode));
+          }
+          const zip = new JSZip();
+          for (const f of files) {
+            zip.file(f.fullName, f.data);
+          }
+          zip.generateAsync({ type: "blob" }).then(function (blob) {
+            saveAs(<Blob>blob, structureHolder.name + "." + mode + ".zip");
+          });
+        }
       });
     }
   }
