@@ -22,7 +22,10 @@ function displayType(type: Array<string>, lng?: string): string {
   } else {
     strb.append(type[0]);
   }
-  if (type.length > 1 && (type[0] === "List" || type[0] === "Map")) {
+  if (
+    type.length > 1 &&
+    (type[0] === "List" || type[0] === "Set" || type[0] === "Map")
+  ) {
     if (lng) {
       strb.append("<");
       strb.append(typeMap(type[1], lng));
@@ -46,4 +49,7 @@ function displayType(type: Array<string>, lng?: string): string {
     }
   }
   return strb.toString();
+}
+function capitalizeFirstLetter(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }

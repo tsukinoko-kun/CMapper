@@ -55,18 +55,82 @@
       }
     }
   }
+
+  .type0_single:before {
+    content: "D";
+    border: 1px solid rgba(black, 0.5);
+    margin-right: 5px;
+    border-radius: 50%;
+  }
+  .type0_set:before {
+    content: "S";
+    border: 1px solid rgba(black, 0.5);
+    margin-right: 5px;
+  }
+  .type0_list:before {
+    content: "L";
+    border: 1px solid rgba(black, 0.5);
+    margin-right: 5px;
+  }
+  .type0_map:before {
+    content: "M";
+    border: 2px solid rgba(black, 0.5);
+    border-left-width: 4px;
+    border-right-width: 4px;
+  }
+
   #sidebar_fields > li:not(.head):before {
-    content: "F";
-    background: var(--red);
+    background-color: var(--blue);
+    border-color: hsl(210, 22%, 55%);
   }
   #sidebar_methods > li:not(.head):before {
-    content: "M";
-    background: var(--green);
+    background-color: var(--blue);
+    border-color: hsl(210, 22%, 55%);
   }
   #sidebar_relations > li:not(.head):before {
     content: "R";
-    background: var(--purple);
+    background-color: #bebebf;
+    border-color: hsl(240, 1%, 65%);
   }
+
+  .type1_void:before {
+    background-color: hsl(240, 1%, 75%) !important;
+  }
+  .type1_boolean:before {
+    background-color: hsl(0, 30%, 54%) !important;
+  }
+  .type1_integer:before {
+    background-color: hsl(165, 30%, 49%) !important;
+  }
+  .type1_float:before {
+    background-color: hsl(90, 35%, 46%) !important;
+  }
+  .type1_string:before {
+    background-color: hsl(310, 30%, 52%) !important;
+  }
+  .type1_vector:before {
+    background-color: hsl(46, 75%, 57%) !important;
+  }
+
+  .type2_void:before {
+    border-color: hsl(240, 1%, 65%) !important;
+  }
+  .type2_boolean:before {
+    border-color: hsl(0, 30%, 44%) !important;
+  }
+  .type2_integer:before {
+    border-color: hsl(165, 30%, 39%) !important;
+  }
+  .type2_float:before {
+    border-color: hsl(90, 35%, 36%) !important;
+  }
+  .type2_string:before {
+    border-color: hsl(310, 30%, 42%) !important;
+  }
+  .type2_vector:before {
+    border-color: hsl(46, 75%, 47%) !important;
+  }
+
   #sidebar_fields,
   #sidebar_methods,
   #sidebar_relations {
@@ -75,8 +139,6 @@
       font-weight: 900;
       padding: 0 calc(5px * var(--zoom-ui));
       margin-right: 8px;
-      border: 1px solid rgba(black, 0.5);
-      border-radius: 50%;
     }
   }
 }

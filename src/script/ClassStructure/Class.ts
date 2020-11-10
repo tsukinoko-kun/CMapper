@@ -368,6 +368,9 @@ class Class {
       if (codeStr.includes("std::vector")) {
         codeStr = "#include <vector>\n" + codeStr;
       }
+      if (codeStr.includes("std::set")) {
+        codeStr = "#include <set>\n" + codeStr;
+      }
       if (codeStr.includes("std::string")) {
         codeStr = "#include <string>\n" + codeStr;
       }

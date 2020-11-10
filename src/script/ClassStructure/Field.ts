@@ -67,6 +67,8 @@ class Field {
         code.append(" = ");
         if (this.type[0] === "List") {
           code.appendWithLinebreak("[]");
+        } else if (this.type[0] === "Set") {
+          code.appendWithLinebreak("[]");
         } else if (this.type[0] === "Map") {
           code.appendWithLinebreak("{}");
         } else {

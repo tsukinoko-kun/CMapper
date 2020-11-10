@@ -402,7 +402,7 @@ const Ui = (() => {
           }
         }
         if (typeParentEls.length > 1) {
-          if (typeEls[0].value === "List") {
+          if (typeEls[0].value === "List" || typeEls[0].value === "Set") {
             typeParentEls[1].style.display = "table-row";
             typeParentEls[2].style.display = "none";
           } else if (typeEls[0].value === "Map") {
@@ -414,7 +414,7 @@ const Ui = (() => {
           }
         }
         for (const inputs of typeParamEls) {
-          if (inputs[0].value === "List") {
+          if (inputs[0].value === "List" || inputs[0].value === "Set") {
             inputs[1].style.display = "inline-block";
             inputs[2].style.display = "none";
           } else if (inputs[0].value === "Map") {
@@ -710,6 +710,23 @@ const Ui = (() => {
         field.append(
           `<li onclick="Ui.editDialog.display('field', '${f.name}')"`
         );
+        if (f.type[0] === "List") {
+          field.append(
+            ` class="type1_${f.type[1]} type2_${f.type[1]} type0_list"`
+          );
+        } else if (f.type[0] === "Set") {
+          field.append(
+            ` class="type1_${f.type[1]} type2_${f.type[1]} type0_set"`
+          );
+        } else if (f.type[0] === "Map") {
+          field.append(
+            ` class="type1_${f.type[1]} type2_${f.type[2]} type0_map"`
+          );
+        } else {
+          field.append(
+            ` class="type1_${f.type[0]} type2_${f.type[0]} type0_single"`
+          );
+        }
         field.append(
           ` onmouseover="Ui.setHover('${f.name}','field')" onmouseout="Ui.removeHover('${f.name}','field')">`
         );
@@ -727,6 +744,23 @@ const Ui = (() => {
         method.append(
           `<li onclick="Ui.editDialog.display('method', '${m.name}')" `
         );
+        if (m.type[0] === "List") {
+          method.append(
+            ` class="type1_${m.type[1]} type2_${m.type[1]} type0_list"`
+          );
+        } else if (m.type[0] === "Set") {
+          method.append(
+            ` class="type1_${m.type[1]} type2_${m.type[1]} type0_set"`
+          );
+        } else if (m.type[0] === "Map") {
+          method.append(
+            ` class="type1_${m.type[1]} type2_${m.type[2]} type0_map"`
+          );
+        } else {
+          method.append(
+            ` class="type1_${m.type[0]} type2_${m.type[0]} type0_single"`
+          );
+        }
         method.append(
           `onmouseover="Ui.setHover('${m.name}','method')" onmouseout="Ui.removeHover('${m.name}','method')" >`
         );
@@ -1092,10 +1126,17 @@ const Ui = (() => {
     }
     setClassName(): void {
       if (this.focusedClass) {
-        const newName = this.sidebar.classname().value.trim();
-        if (newName.length > 0) {
+        const newName = capitalizeFirstLetter(
+          remSpCh(this.sidebar.classname().value.trim())
+        );
+        if (
+          newName.length > 0 &&
+          !Object.keys(Type)
+            .filter((key: any) => !isNaN(Number(Type[key])))
+            .includes(newName) &&
+          !structureHolder.findClass(newName)
+        ) {
           const oldName = this.focusedClass.name;
-          const newName = remSpCh(this.sidebar.classname().value.trim());
           if (structureHolder.findClass(newName)) {
             alert(`class name "${newName}" already in use`);
             this.sidebar.classname().value = oldName;
