@@ -8,7 +8,7 @@ const Zoom = (() => {
           ev.target === window
         ) {
           if (ev.key.toUpperCase() === "F") {
-            document.body.requestFullscreen();
+            document.getElementById("graph")?.requestFullscreen();
           } else if (ev.key === "+") {
             Ui.zoomUi(+1);
             ev.preventDefault();

@@ -366,8 +366,9 @@ const Ui = (() => {
         }
         Ui.setHover(id, t);
         Ui.copyHover();
-        await Ui.delete();
-        this.close();
+        if (await Ui.delete()) {
+          this.close();
+        }
         Ui.removeHover(id, t);
       },
       updateVisible(): void {
@@ -888,7 +889,7 @@ const Ui = (() => {
       return false;
     }
 
-    async delete(): Promise<void> {
+    async delete(): Promise<boolean> {
       if (this.saverHoverCopy.length > 0 && this.focusedClass) {
         const hover = JSON.parse(this.saverHoverCopy);
         if (
@@ -898,7 +899,7 @@ const Ui = (() => {
             "Delete"
           ))
         ) {
-          return;
+          return false;
         }
         switch (hover.t) {
           case "field":
@@ -931,6 +932,7 @@ const Ui = (() => {
         }
         this.sidebarClass();
         this.render();
+        return true;
       } else if (this.focusedClass) {
         if (
           !(await alert(
@@ -939,7 +941,7 @@ const Ui = (() => {
             "Delete"
           ))
         ) {
-          return;
+          return false;
         }
         for (const cl of structureHolder.namespace) {
           if (cl === this.focusedClass) {
@@ -951,7 +953,7 @@ const Ui = (() => {
                 "A class that is linked to other class by relations can not be deleted. " +
                   `\n${r.classA} → ${r.classB}`
               );
-              return;
+              return false;
             }
           }
           for (const f of cl.fields) {
@@ -960,7 +962,7 @@ const Ui = (() => {
                 "A class that is used as a type by fields of another class can not be deleted." +
                   `\n${displayType(f.type, "cs")} ${cl.name}::${f.name}`
               );
-              return;
+              return false;
             }
           }
           for (const m of cl.methods) {
@@ -969,7 +971,7 @@ const Ui = (() => {
                 "A class that is used as a return type by methods of another class may be deleted." +
                   `\n${displayType(m.type, "cs")} ${cl.name}::${m.name}()`
               );
-              return;
+              return false;
             }
             for (const p of m.parameters) {
               if (p.type.includes(this.focusedClass.name)) {
@@ -979,7 +981,7 @@ const Ui = (() => {
                       p.type
                     } ${p.name})`
                 );
-                return;
+                return false;
               }
             }
           }
@@ -995,7 +997,9 @@ const Ui = (() => {
         this.focused = -1;
         this.sidebarClass();
         this.render();
+        return true;
       }
+      return false;
     }
 
     newClass(): void {
