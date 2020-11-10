@@ -52,29 +52,10 @@ class Field {
         code.append(displayType(this.type, lng));
         code.append(" ");
         code.append(this.name);
+        if (this.type[0] === "vector") {
+          code.append("[3]");
+        }
         code.append(";");
-        break;
-      case "py":
-        switch (this.protection) {
-          case Protection.protected:
-            code.append("_");
-            break;
-          case Protection.private:
-            code.append("__");
-            break;
-        }
-        code.append(this.name);
-        code.append(" = ");
-        if (this.type[0] === "List") {
-          code.appendWithLinebreak("[]");
-        } else if (this.type[0] === "Set") {
-          code.appendWithLinebreak("[]");
-        } else if (this.type[0] === "Map") {
-          code.appendWithLinebreak("{}");
-        } else {
-          code.append(displayType(this.type, lng));
-          code.appendWithLinebreak("()");
-        }
         break;
       case "ts":
         code.append(protectionToCode(this.protection));

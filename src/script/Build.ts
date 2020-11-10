@@ -28,7 +28,7 @@ class Build {
             zip.file(f.fullName, f.data);
           }
           zip.generateAsync({ type: "blob" }).then(function (blob) {
-            saveAs(<Blob>blob, structureHolder.name + "." + mode + ".zip");
+            saveAs(<Blob>blob, structureHolder.name + ".zip");
           });
         }
       });

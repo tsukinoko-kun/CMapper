@@ -102,8 +102,15 @@ class Method {
           code.append(" ");
         }
         code.append(this.name);
+        if (this.type[0] === "vector") {
+          code.append("[3]");
+        }
         for (const p of this.parameters) {
-          params.push(`${displayType(p.type, lng)} ${p.name}`);
+          if (p.type[0] === "vector") {
+            params.push(`${displayType(p.type, lng)} ${p.name}[3]`);
+          } else {
+            params.push(`${displayType(p.type, lng)} ${p.name}`);
+          }
         }
         code.append(`(${params.join(", ")})`);
         code.append(";");
@@ -148,45 +155,6 @@ class Method {
               '\n\t\tthrow new Error("Method not implemented"); \n\t} '
             );
           }
-        }
-        break;
-      case "py":
-        switch (this.protection) {
-          case Protection.protected:
-            code.append("_");
-            break;
-          case Protection.private:
-            code.append("__");
-            break;
-        }
-        if (this.classifer === Classifer.static || p1) {
-          code.append("@staticmethod\n\t");
-        }
-        code.append("def ");
-        constructor = false;
-        if (this.name === p2) {
-          code.append("__init__");
-          params.push("self");
-          constructor = true;
-        } else {
-          code.append(this.name);
-        }
-        for (const p of this.parameters) {
-          params.push(p.name);
-        }
-        code.appendWithLinebreak(`(${params.join(", ")}):`);
-        if (!constructor) {
-          code.append("\t\treturn ");
-          if (this.type[0] === "List") {
-            code.appendWithLinebreak("[]");
-          } else if (this.type[0] === "Map") {
-            code.appendWithLinebreak("{}");
-          } else {
-            code.append(displayType(this.type, lng));
-            code.appendWithLinebreak("()");
-          }
-        } else {
-          code.appendWithLinebreak("\t\tpass");
         }
         break;
     }

@@ -18,6 +18,7 @@ const CsTypes = new Map<string, string>([
   ["float", "float"],
   ["boolean", "bool"],
   ["datetime", "DateTime"],
+  ["vector", "Vector3"],
   ["List", "List"],
   ["Set", "HashSet"],
   ["Map", "Dictionary"],
@@ -30,6 +31,7 @@ const CppTypes = new Map<string, string>([
   ["float", "float"],
   ["boolean", "bool"],
   ["datetime", "std::chrono::time_point"],
+  ["vector", "float"],
   ["List", "std::vector"],
   ["Set", "std::set"],
   ["Map", "std::map"],
@@ -42,21 +44,29 @@ const TsTypes = new Map<string, string>([
   ["float", "number"],
   ["boolean", "boolean"],
   ["datetime", "Date"],
+  ["vector", "Array<number>"],
   ["List", "Array"],
   ["Set", "Set"],
   ["Map", "Map"],
 ]);
 
-const PyTypes = new Map<string, string>([
-  ["void", "void"],
-  ["string", "str"],
-  ["integer", "int"],
-  ["float", "float"],
-  ["boolean", "bool"],
-  ["datetime", "datetime"],
-  ["Map", "{}"],
-  ["List", "[]"],
-  ["Set", "[]"],
+const importCs = new Map<string, string>([
+  ["boolean", "System"],
+  ["float", "System"],
+  ["integer", "System"],
+  ["string", "System"],
+  ["vector", "System.Numerics"],
+  ["List", "System.Collection.Generic"],
+  ["Set", "System.Collection.Generic"],
+  ["Map", "System.Collection.Generic"],
+  ["datetime", "System"],
+]);
+
+const importCpp = new Map<string, string>([
+  ["List", "vector"],
+  ["Set", "set"],
+  ["Map", "map"],
+  ["datetime", "System"],
 ]);
 
 const typeMap = (t: string, lng: string): string => {
@@ -76,15 +86,27 @@ const typeMap = (t: string, lng: string): string => {
         return <string>TsTypes.get(t);
       }
       break;
-    case "py":
-      if (PyTypes.has(t)) {
-        return <string>PyTypes.get(t);
-      }
-      break;
   }
   return t;
 };
 
 const typeString = (t: Type) => {
   return Type[t];
+};
+
+const getTypeImport = (t: string, lng: string): string => {
+  switch (lng) {
+    case "cs":
+    case "qs":
+      if (importCs.has(t)) {
+        return <string>importCs.get(t);
+      }
+      break;
+    case "h":
+      if (importCpp.has(t)) {
+        return <string>importCpp.get(t);
+      }
+      break;
+  }
+  return "";
 };

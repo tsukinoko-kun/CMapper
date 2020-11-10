@@ -110,6 +110,7 @@ class Class {
     let stat = false;
     let inheritance = false;
     const imp = new Set<string>();
+    const libImp = new Set<string>();
     const inheritanceList = new Array<string>();
     for (const rel of this.relations) {
       if (rel.relation === relationType.inheritance) {
@@ -121,6 +122,8 @@ class Class {
       for (const t of f.type) {
         if (structureHolder.findClass(t)) {
           imp.add(t);
+        } else {
+          libImp.add(getTypeImport(t, lng));
         }
       }
     }
@@ -128,27 +131,40 @@ class Class {
       for (const t of m.type) {
         if (structureHolder.findClass(t)) {
           imp.add(t);
+        } else {
+          libImp.add(getTypeImport(t, lng));
         }
       }
       for (const p of m.parameters) {
         for (const t of p.type) {
           if (structureHolder.findClass(t)) {
             imp.add(t);
+          } else {
+            libImp.add(getTypeImport(t, lng));
           }
         }
       }
     }
+    libImp.delete("");
     imp.delete(this.name);
     switch (lng) {
+      case "qs":
+        libImp.add("Microsoft.Quantum.Simulation.Core");
+        libImp.add("Microsoft.Quantum.Simulation.Simulators");
       case "cs":
-        code.appendWithLinebreak(
-          "using System;\nusing System.Collections.Generic;"
-        );
-        for (const module of imp) {
-          code.appendWithLinebreak(`using ${structureHolder.name}.${module};`);
+        for (const using of libImp) {
+          code.appendWithLinebreak(`using ${using};`);
         }
-        code.append("\n");
-        code.appendWithLinebreak(`namespace ${structureHolder.name}\n{`);
+        if (libImp.size > 0) {
+          code.append("\n");
+        }
+        if (lng === "qs") {
+          code.appendWithLinebreak(
+            `namespace Quantum.${structureHolder.name}\n{`
+          );
+        } else {
+          code.appendWithLinebreak(`namespace ${structureHolder.name}\n{`);
+        }
         code.append("\tpublic ");
         if (this.classifer === Classifer.static) {
           stat = true;
@@ -273,35 +289,6 @@ class Class {
         }
         code.appendWithLinebreak("\t}\n}");
         break;
-      case "py":
-        if (this.classifer === Classifer.static) {
-          stat = true;
-        }
-        for (const module of imp) {
-          code.appendWithLinebreak(`from ${module} import ${module}`);
-        }
-        if (imp.size > 0) {
-          code.append("\n");
-        }
-        code.append(`class ${this.name}`);
-        if (inheritanceList.length > 0) {
-          code.append(` (${inheritanceList.join(", ")})`);
-        }
-        code.appendWithLinebreak(":");
-        if (this.fields.length > 0 || this.methods.length > 0) {
-          for (const f of this.fields) {
-            code.appendWithLinebreak("\t" + f.codeGen(lng));
-          }
-          if (this.fields.length > 0) {
-            code.append("\n");
-          }
-          for (const m of this.methods) {
-            code.appendWithLinebreak("\t" + m.codeGen(lng, stat, this.name));
-          }
-        } else {
-          code.appendWithLinebreak("\tpass");
-        }
-        break;
       case "ts":
         for (const module of imp) {
           code.appendWithLinebreak(`/// <reference path="${module}.ts"/>`);
@@ -363,22 +350,8 @@ class Class {
         }
         break;
     }
-    if (lng === "h") {
-      let codeStr = code.toString();
-      if (codeStr.includes("std::vector")) {
-        codeStr = "#include <vector>\n" + codeStr;
-      }
-      if (codeStr.includes("std::set")) {
-        codeStr = "#include <set>\n" + codeStr;
-      }
-      if (codeStr.includes("std::string")) {
-        codeStr = "#include <string>\n" + codeStr;
-      }
-      if (codeStr.includes("std::map")) {
-        codeStr = "#include <map>\n" + codeStr;
-      }
-      codeStr = "#pragma once\n" + codeStr;
-      return new Page(vowel(this.name), lng, vowel(codeStr));
+    if (lng === "qs") {
+      return new Page(this.name, "cs", code.toString());
     } else {
       return new Page(this.name, lng, code.toString());
     }
