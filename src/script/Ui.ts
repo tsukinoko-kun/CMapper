@@ -349,7 +349,27 @@ const Ui = (() => {
           editDialog.style.display = "none";
         }
       },
-      delete(): void {},
+      async delete(): Promise<void> {
+        let id: string;
+        let t: string;
+        if (Ui.editMember instanceof Field) {
+          id = Ui.editMember.name;
+          t = "field";
+        } else if (Ui.editMember instanceof Method) {
+          id = Ui.editMember.name;
+          t = "method";
+        } else if (Ui.editMember instanceof Relation) {
+          id = Ui.editMember.toString();
+          t = "relation";
+        } else {
+          return;
+        }
+        Ui.setHover(id, t);
+        Ui.copyHover();
+        await Ui.delete();
+        this.close();
+        Ui.removeHover(id, t);
+      },
       updateVisible(): void {
         const typeEls = new Array<HTMLSelectElement>();
         const typeParentEls = new Array<HTMLElement>();
