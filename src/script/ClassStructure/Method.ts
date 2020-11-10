@@ -157,6 +157,19 @@ class Method {
           }
         }
         break;
+      case "qs":
+        for (const p of this.parameters) {
+          params.push(`${p.name} : ${displayType(p.type, lng)}`);
+        }
+
+        code.append("operation ");
+        code.append(this.name);
+        code.append(` (${params.join(", ")}) : `);
+        code.append(displayType(this.type, lng));
+        code.appendWithLinebreak(
+          ` {\n\t\treturn ${defaultQs(this.type)};\n\t}`
+        );
+        break;
     }
     return code.toString();
   }

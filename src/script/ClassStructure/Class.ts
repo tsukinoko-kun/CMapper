@@ -148,9 +148,6 @@ class Class {
     libImp.delete("");
     imp.delete(this.name);
     switch (lng) {
-      case "qs":
-        libImp.add("Microsoft.Quantum.Simulation.Core");
-        libImp.add("Microsoft.Quantum.Simulation.Simulators");
       case "cs":
         for (const using of libImp) {
           code.appendWithLinebreak(`using ${using};`);
@@ -158,13 +155,7 @@ class Class {
         if (libImp.size > 0) {
           code.append("\n");
         }
-        if (lng === "qs") {
-          code.appendWithLinebreak(
-            `namespace Quantum.${structureHolder.name}\n{`
-          );
-        } else {
-          code.appendWithLinebreak(`namespace ${structureHolder.name}\n{`);
-        }
+        code.appendWithLinebreak(`namespace ${structureHolder.name}\n{`);
         code.append("\tpublic ");
         if (this.classifer === Classifer.static) {
           stat = true;
@@ -349,11 +340,23 @@ class Class {
           code.appendWithLinebreak(`\treturn new ${this.name}();\n})();`);
         }
         break;
+      case "qs":
+        code.append(`namespace Quantum.${structureHolder.name} {\n\n`);
+        libImp.add("Microsoft.Quantum.Canon");
+        libImp.add("Microsoft.Quantum.Intrinsic");
+        for (const using of libImp) {
+          code.appendWithLinebreak(`\topen ${using};`);
+        }
+        for (const using of imp) {
+          code.appendWithLinebreak(`\topen Quantum.${using};`);
+        }
+        code.append("\n");
+        for (const m of this.methods) {
+          code.appendWithLinebreak("\t" + m.codeGen(lng, undefined, this.name));
+        }
+        code.appendWithLinebreak("}");
+        break;
     }
-    if (lng === "qs") {
-      return new Page(this.name, "cs", code.toString());
-    } else {
-      return new Page(this.name, lng, code.toString());
-    }
+    return new Page(this.name, lng, code.toString());
   }
 }

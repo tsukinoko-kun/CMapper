@@ -68,6 +68,15 @@ class Field {
         code.append(displayType(this.type, lng));
         code.append(";");
         break;
+      case "qs":
+        code.append("operation ");
+        code.append(this.name);
+        code.append(` () : `);
+        code.append(displayType(this.type, lng));
+        code.appendWithLinebreak(
+          ` {\n\t\treturn ${defaultQs(this.type)};\n\t}`
+        );
+        break;
     }
     return code.toString();
   }
