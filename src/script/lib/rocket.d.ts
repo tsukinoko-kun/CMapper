@@ -1,6 +1,3 @@
-interface String {
-  hash: () => number;
-}
 declare class HashMap {
   private bucket;
   length: number;
@@ -15,21 +12,6 @@ declare class HashMap {
   toString(): string;
   forEach(callback: (el: any[2], map: any[][][]) => void): void;
 }
-declare class Pointer<T> {
-  private value;
-  address: number;
-  constructor(address?: number);
-  getValue(): T | null;
-  setValue(objectRef: T): void;
-  toString(): string;
-  static reference<T>(objectRef: T): Pointer<T>;
-  dereference(): T | null;
-  delete(): void;
-}
-declare const Heap: {
-  stack: any[];
-  getFreeSpace(): number;
-};
 declare class Queue<T> {
   private storage;
   length: number;
@@ -70,13 +52,10 @@ declare class StringBuilder {
   replace(searchValue: string | RegExp, replaceValue: string): void;
   private countLength;
 }
-declare const __onceDoneList: Set<string>;
 declare function doOnce(callback: Function): any;
 declare function tsx(html: string): HTMLElement | null;
-declare const httpGetCache: HashMap;
 declare function httpGet(url: string, cached?: boolean): Promise<string>;
 declare function delay(ms: number): Promise<unknown>;
-declare const retriggerableDelayCache: Map<string, number>;
 declare function retriggerableDelay(
   delayId: string,
   ms: number,

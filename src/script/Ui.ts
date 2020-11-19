@@ -1,4 +1,5 @@
 /// <reference path="structureHolder.ts"/>
+/// <reference path="DB.ts"/>
 
 const mddSvgId = "mddSvg";
 
@@ -46,10 +47,16 @@ const Ui = (() => {
       };
       mermaid.initialize(config);
 
-      const zui = Cookie.get("--zoom-ui");
-      if (zui) {
-        document.documentElement.style.setProperty("--zoom-ui", zui);
-      }
+      loadFromIndexedDB<string>("--zoom-ui")
+        .then((zui) => {
+          if (zui) {
+            console.log(zui);
+            document.documentElement.style.setProperty("--zoom-ui", zui);
+          }
+        })
+        .catch((e) => {
+          console.debug(e);
+        });
 
       document.addEventListener("click", (ev): void => {
         const t = <HTMLElement>ev.target;
@@ -796,7 +803,9 @@ const Ui = (() => {
         zoomUi = 1;
       }
       zoomUi = Math.min(2.25, Math.max(0.75, zoomUi + factor / 4));
-      Cookie.setNumber("--zoom-ui", zoomUi);
+      saveToIndexedDB("--zoom-ui", zoomUi).catch((e) => {
+        console.debug(e);
+      });
       document.documentElement.style.setProperty(
         "--zoom-ui",
         zoomUi.toString()

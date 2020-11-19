@@ -1,4 +1,4 @@
-/// <reference path="Cookie.ts"/>
+/// <reference path="DB.ts"/>
 /// <reference path="Page.ts"/>
 
 class Build {
@@ -36,7 +36,9 @@ class Build {
   }
   static updateMode(mode: string) {
     this.mode = mode;
-    Cookie.set("build-lng", mode);
+    saveToIndexedDB("build-lng", mode).catch((e) => {
+      console.debug(e);
+    });
   }
   static image(): void {
     const mddSvg = document.getElementById(mddSvgId);
@@ -51,8 +53,10 @@ class Build {
     }
   }
 }
-(() => {
-  const mode = Cookie.get("build-lng");
+(async () => {
+  const mode = await loadFromIndexedDB<string>("build-lng").catch((e) => {
+    console.debug(e);
+  });
   if (mode) {
     Build.updateMode(mode);
     (<HTMLSelectElement>document.getElementById("selectBuild")).value = mode;

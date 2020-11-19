@@ -35,4 +35,16 @@
       color: white;
     }
   }
+
+  #speachBubble {
+    display: none;
+    position: fixed;
+    bottom: calc(var(--statusbar-height) + 4px);
+    left: var(--statusbar-height);
+    padding: 4px 8px;
+    background-color: var(--sidebar);
+    border: 1px solid var(--split-line);
+    -webkit-box-shadow: 0px 0px 8px 2px hsl(0, 60%, 54%);
+    box-shadow: 0px 0px 8px 2px hsl(0, 60%, 54%);
+  }
 }
