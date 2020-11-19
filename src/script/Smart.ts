@@ -170,6 +170,11 @@ class Smart {
       indicator.innerHTML = this.errors.length.toString();
       const speachBubble = document.getElementById("speachBubble");
       if (this.errors.length > 0) {
+        if (this.errors.length > 5) {
+          indicator.style.color = "red";
+        } else {
+          indicator.style.color = "var(--orange)";
+        }
         if (speachBubble) {
           speachBubble.style.display = "block";
           retriggerableDelay("ErrorDetectedSpeachBubble", 10000, () => {
@@ -180,16 +185,11 @@ class Smart {
           });
         }
       } else {
+        indicator.style.color = "whitesmoke";
         if (speachBubble) {
           speachBubble.style.display = "none";
         }
       }
-      indicator.style.color =
-        this.errors.length > 0
-          ? this.errors.length > 5
-            ? "red"
-            : "var(--orange)"
-          : "white";
     }
   }
 }
