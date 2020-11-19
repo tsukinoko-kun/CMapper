@@ -1,6 +1,6 @@
 class Smart {
   private static errors = new Array<string>();
-  private static title = "Smart Spot";
+  private static title = "SmartBulb";
   static showDialog(): void {
     if (this.errors.length > 0) {
       alert(
@@ -168,6 +168,22 @@ class Smart {
         }
       }
       indicator.innerHTML = this.errors.length.toString();
+      const speachBubble = document.getElementById("speachBubble");
+      if (this.errors.length > 0) {
+        if (speachBubble) {
+          speachBubble.style.display = "block";
+          retriggerableDelay("ErrorDetectedSpeachBubble", 10000, () => {
+            const speachBubble = document.getElementById("speachBubble");
+            if (speachBubble) {
+              speachBubble.style.display = "none";
+            }
+          });
+        }
+      } else {
+        if (speachBubble) {
+          speachBubble.style.display = "none";
+        }
+      }
       indicator.style.color =
         this.errors.length > 0
           ? this.errors.length > 5
