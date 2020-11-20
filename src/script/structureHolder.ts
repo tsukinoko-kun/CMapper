@@ -29,9 +29,12 @@ const structureHolder = (() => {
     }
 
     addClass(cl: Class): number {
-      const i = this.namespace.push(cl);
-      cl.id = i - 1;
-      return i;
+      for (let index = 0; index < this.namespace.length; index++) {
+        this.namespace[index].id = index;
+      }
+      let id = this.namespace.push(cl);
+      cl.id = id - 1;
+      return id;
     }
 
     findClass(name: string): Class | undefined {
