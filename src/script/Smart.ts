@@ -25,8 +25,8 @@ class Smart {
       return alert(
         Smart.errors.join("\n\n"),
         true,
-        "Build Anyway",
         "Cancel",
+        "Build Anyway",
         Smart.title
       );
     } else {
@@ -194,9 +194,9 @@ class Smart {
         } else {
           indicator.style.color = "var(--orange)";
         }
-        if (speachBubble) {
+        if (speachBubble && !Ui.hasClassInFocus()) {
           speachBubble.style.display = "block";
-          retriggerableDelay("ErrorDetectedSpeachBubble", 10000, () => {
+          retriggerableDelay("ErrorDetectedSpeachBubble", 2500, () => {
             const speachBubble = document.getElementById("speachBubble");
             if (speachBubble) {
               speachBubble.style.display = "none";

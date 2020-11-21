@@ -19,7 +19,7 @@ class Build {
       );
     } else {
       Smart.checkBeforeBuild().then((rv) => {
-        if (rv) {
+        if (!rv) {
           for (const cl of structureHolder.namespace) {
             files.push(cl.codeGen(mode));
           }
