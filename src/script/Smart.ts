@@ -108,7 +108,6 @@ class Smart {
           while (relatedClassed.length > 0) {
             const B = relatedClassed.shift();
             if (B) {
-              console.debug(B.name + " : " + cl.name);
               if (B === cl) {
                 this.errors.push(
                   `Circular base class dependency involving '${cl.name}'`

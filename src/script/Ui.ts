@@ -50,7 +50,6 @@ const Ui = (() => {
       loadFromIndexedDB<string>("--zoom-ui")
         .then((zui) => {
           if (zui) {
-            console.log(zui);
             document.documentElement.style.setProperty("--zoom-ui", zui);
           }
         })
