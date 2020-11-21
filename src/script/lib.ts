@@ -1,3 +1,5 @@
+/// <reference path="../../../rocket.ts/out/reference.ts"/>
+
 function remSpCh(str: string) {
   return str.replace(/[^a-zA-Z0-9\ö\ä\ü\Ö\Ä\Ü\ß\_]/g, "");
 }
