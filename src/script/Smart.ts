@@ -105,7 +105,11 @@ class Smart {
               }
             }
           });
-          while (relatedClassed.length > 0) {
+          for (
+            let secCount = 0;
+            secCount < 100 && relatedClassed.length > 0;
+            secCount++
+          ) {
             const B = relatedClassed.shift();
             if (B) {
               if (B === cl) {

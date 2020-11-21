@@ -221,3 +221,12 @@
     }
   }
 }
+
+#graph.waterMark {
+  background-image: url("img/back.svg");
+  background-position-x: center;
+  background-position-y: center;
+  background-attachment: fixed;
+  background-size: 25vh;
+  background-repeat: no-repeat;
+}

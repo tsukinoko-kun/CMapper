@@ -879,6 +879,7 @@ const Ui = (() => {
         if (graph) {
           x = graph.scrollLeft;
           y = graph.scrollTop;
+          graph.classList.remove("waterMark");
         }
         mermaid.render(mddSvgId, structureHolder.collectMmd(), this.cb);
         if (graph) {
@@ -888,6 +889,10 @@ const Ui = (() => {
         this.applyStyleRules();
       } else {
         this.cb("");
+        const graph = document.getElementById("graph");
+        if (graph) {
+          graph.classList.add("waterMark");
+        }
       }
       Ui.fullscreenGraph(!Ui.hasClassInFocus());
     }
