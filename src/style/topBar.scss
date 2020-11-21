@@ -6,6 +6,7 @@
   right: 0;
   top: 0;
   height: var(--topbar-height);
+  overflow: hidden;
   padding: 4px;
   border-bottom: 1px solid var(--split-line);
   background-color: var(--sidebar);

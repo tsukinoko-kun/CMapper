@@ -96,18 +96,38 @@ class Smart {
               );
             }
           }
+          const relatedClassed = new Array<Class>();
+          cl.forEachRelation((r) => {
+            if (r.relation === relationType.inheritance) {
+              const B = structureHolder.findClass(r.classB);
+              if (B) {
+                relatedClassed.push(B);
+              }
+            }
+          });
+          while (relatedClassed.length > 0) {
+            const B = relatedClassed.shift();
+            if (B) {
+              console.debug(B.name + " : " + cl.name);
+              if (B === cl) {
+                this.errors.push(
+                  `Circular base class dependency involving '${cl.name}'`
+                );
+                break;
+              }
+              B.forEachRelation((r) => {
+                if (r.relation === relationType.inheritance) {
+                  const C = structureHolder.findClass(r.classB);
+                  if (C) {
+                    relatedClassed.push(C);
+                  }
+                }
+              });
+            }
+          }
           for (const clB of structureHolder.namespace) {
             clB.forEachRelation((b) => {
               if (
-                a.classA === b.classB &&
-                a.classB === b.classA &&
-                a.relation === relationType.inheritance &&
-                b.relation === relationType.inheritance
-              ) {
-                this.errors.push(
-                  `Circular base class dependency involving '${a.classA}' and '${a.classB}'`
-                );
-              } else if (
                 a.classA === b.classB &&
                 a.classB === b.classA &&
                 a.relation === relationType.composition &&

@@ -1,6 +1,4 @@
 #sidebar {
-  -webkit-transition: all 200ms ease-in-out;
-  transition: all 200ms ease-in-out;
   z-index: 6;
   background-color: var(--sidebar);
   height: calc(100% - var(--topbar-height));
@@ -153,10 +151,14 @@
   cursor: ew-resize;
   background-color: transparent;
 }
+#sidebarResize:hover {
+  background-color: var(--border-color) !important;
+}
 
 .fullscreen {
   #sidebar {
     width: 0 !important;
+    display: none !important;
   }
   #sidebarResize {
     display: none !important;
