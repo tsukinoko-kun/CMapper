@@ -31,7 +31,7 @@ class Smart {
       );
     } else {
       return new Promise((resolve: (value: boolean) => void) => {
-        resolve(true);
+        resolve(false);
       });
     }
   }
