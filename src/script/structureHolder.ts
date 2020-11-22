@@ -87,7 +87,7 @@ const structureHolder = (() => {
     importJson(json: string): void {
       try {
         const obj: Array<Class> = JSON.parse(
-          json.replace(/\bfields\b/g, "attributes")
+          json //.replace(/\bfields\b/g, "attributes")
         );
         const tempNamespance = new Array<Class>();
         for (const clDta of obj) {
