@@ -5,24 +5,29 @@ import urllib.parse
 import urllib.error
 import sys
 from pathlib import Path
-from distutils.dir_util import copy_tree
+from datetime import datetime
 
 tsc = False
 cc = False
 scss = False
 deploy = False
 
+
 def hr():
     print("================================")
+
 
 def title(t):
     print('\033[95m'+str(t)+'\033[0m')
 
+
 def info(i):
     print('\033[0m'+str(i)+'\033[0m')
 
+
 def error(e):
     print('\033[91m'+str(e)+'\033[0m')
+
 
 for arg in sys.argv:
     if arg == "-tsc":
@@ -39,6 +44,11 @@ for arg in sys.argv:
 
 if tsc:
     title("tsc")
+    versionNum = str(datetime.today().strftime('%Y%m%d%H%M'))
+    version = open("./src/script/version.ts", "w+")
+    version.write("(async () => {\n  const statusBar = document.getElementById(\"statusBar\");\n  const version = document.createElement(\"span\");\n  version.innerText = \"V 1." +
+                  versionNum+"\";\n  statusBar?.appendChild(version);\n})();\n")
+    version.close()
     os.system("tsc -p ./tsconfig.json --pretty")
     hr()
 
@@ -68,7 +78,7 @@ if cc:
         conn.close()
         exit()
     else:
-        if code.count("com.google.javascript.jscomp")>1:
+        if code.count("com.google.javascript.jscomp") > 1:
             error("Compiler Error")
             conn.close()
             exit()
@@ -82,7 +92,7 @@ if cc:
 
 if scss:
     title("scss")
-    style = open("./public/style.css","w+")
+    style = open("./public/style.css", "w+")
     style.write("")
     style.close()
     style = open("./public/style.css", "a")
@@ -90,8 +100,10 @@ if scss:
     scss = list(Path(".").rglob("*.scss"))
     for file in scss:
         info(file)
-        compiledFile = "temp/" +os.path.basename(file).replace(".scss", ".css")
-        os.system("sass "+str(file)+" " + compiledFile + " --style compressed --no-source-map --update")
+        compiledFile = "temp/" + \
+            os.path.basename(file).replace(".scss", ".css")
+        os.system("sass "+str(file)+" " + compiledFile +
+                  " --style compressed --no-source-map --update")
         cssTemp = open(compiledFile, "r")
         txt = cssTemp.read()
         style.write(txt)

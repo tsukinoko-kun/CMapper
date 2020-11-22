@@ -1,3 +1,5 @@
+version.ts
+
 # Code
 *.js
 !version.js
