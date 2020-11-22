@@ -20,9 +20,9 @@ const structureHolder = (() => {
         return "";
       }
       const mmd = new StringBuilder();
-      mmd.appendWithLinebreak("classDiagram");
+      mmd.appendLine("classDiagram");
       this.forEachClass((cl: Class) => {
-        mmd.appendWithLinebreak(cl.toString());
+        mmd.appendLine(cl.toString());
       });
       mmd.append("\n");
       return mmd.toString().replace(/<style>.+<\/style>/, "");
@@ -87,7 +87,7 @@ const structureHolder = (() => {
     importJson(json: string): void {
       try {
         const obj: Array<Class> = JSON.parse(
-          json //.replace(/\bfields\b/g, "attributes")
+          json.replace(/\bfields\b/g, "attributes")
         );
         const tempNamespance = new Array<Class>();
         for (const clDta of obj) {

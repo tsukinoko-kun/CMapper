@@ -1,4 +1,4 @@
-/// <reference path="DB.ts"/>
+/// <reference path="lib.ts"/>
 /// <reference path="Page.ts"/>
 
 class Build {
@@ -36,7 +36,7 @@ class Build {
   }
   static updateMode(mode: string) {
     this.mode = mode;
-    saveToIndexedDB("build-lng", mode).catch((e) => {
+    IDB.set("build-lng", mode).catch((e) => {
       console.debug(e);
     });
   }
@@ -54,7 +54,7 @@ class Build {
   }
 }
 (async () => {
-  const mode = await loadFromIndexedDB<string>("build-lng").catch((e) => {
+  const mode = await IDB.get<string>("build-lng").catch((e) => {
     console.debug(e);
   });
   if (mode) {

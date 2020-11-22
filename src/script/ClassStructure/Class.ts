@@ -25,26 +25,26 @@ class Class {
       this.methods.length > 0 ||
       this.classifer !== Classifer.default
     ) {
-      strb.appendWithLinebreak(`class ${this.name}{`);
+      strb.appendLine(`class ${this.name}{`);
       if (this.classifer === Classifer.abstract) {
-        strb.appendWithLinebreak("<<abstract>>");
+        strb.appendLine("<<abstract>>");
       } else if (this.classifer === Classifer.static) {
-        strb.appendWithLinebreak("<<static>>");
+        strb.appendLine("<<static>>");
       }
       this.forEachAttribute((f: Attribute) => {
         strb.append("\t");
-        strb.appendWithLinebreak(f.toString());
+        strb.appendLine(f.toString());
       });
       this.forEachMethod((m: Method) => {
         strb.append("\t");
-        strb.appendWithLinebreak(m.toString());
+        strb.appendLine(m.toString());
       });
-      strb.appendWithLinebreak("}");
+      strb.appendLine("}");
     } else {
-      strb.appendWithLinebreak(`class ${this.name}`);
+      strb.appendLine(`class ${this.name}`);
     }
     this.forEachRelation((rel: Relation) => {
-      strb.appendWithLinebreak(rel.toString());
+      strb.appendLine(rel.toString());
     });
     return strb.toString();
   }
@@ -150,12 +150,12 @@ class Class {
     switch (lng) {
       case "cs":
         for (const using of libImp) {
-          code.appendWithLinebreak(`using ${using};`);
+          code.appendLine(`using ${using};`);
         }
         if (libImp.size > 0) {
           code.append("\n");
         }
-        code.appendWithLinebreak(`namespace ${structureHolder.name}\n{`);
+        code.appendLine(`namespace ${structureHolder.name}\n{`);
         code.append("\tpublic ");
         if (this.classifer === Classifer.static) {
           stat = true;
@@ -178,23 +178,23 @@ class Class {
             }
           }
         }
-        code.appendWithLinebreak("\n\t{");
+        code.appendLine("\n\t{");
         for (const f of this.attributes) {
-          code.appendWithLinebreak("\t\t" + f.codeGen(lng));
+          code.appendLine("\t\t" + f.codeGen(lng));
         }
         for (const m of this.methods) {
-          code.appendWithLinebreak("\t\t" + m.codeGen(lng, stat, this.name));
+          code.appendLine("\t\t" + m.codeGen(lng, stat, this.name));
         }
-        code.appendWithLinebreak("\t}\n}");
+        code.appendLine("\t}\n}");
         break;
       case "h":
         for (const module of imp) {
-          code.appendWithLinebreak(`#include "${module}.h"`);
+          code.appendLine(`#include "${module}.h"`);
         }
         if (imp.size > 0) {
           code.append("\n");
         }
-        code.appendWithLinebreak(`namespace ${structureHolder.name}\n{`);
+        code.appendLine(`namespace ${structureHolder.name}\n{`);
         code.append("\t");
         if (this.classifer === Classifer.static) {
           stat = true;
@@ -217,74 +217,72 @@ class Class {
             }
           }
         }
-        code.appendWithLinebreak("\n\t{");
+        code.appendLine("\n\t{");
         // Attributes
         const publicAttributes = new StringBuilder();
-        publicAttributes.appendWithLinebreak("\t\tpublic: ");
+        publicAttributes.appendLine("\t\tpublic: ");
         const protectedAttributes = new StringBuilder();
-        protectedAttributes.appendWithLinebreak("\t\tprotected: ");
+        protectedAttributes.appendLine("\t\tprotected: ");
         const privateAttributes = new StringBuilder();
-        privateAttributes.appendWithLinebreak("\t\tprivate: ");
+        privateAttributes.appendLine("\t\tprivate: ");
         for (const f of this.attributes) {
           switch (f.protection) {
             case Protection.public:
-              publicAttributes.appendWithLinebreak("\t\t\t" + f.codeGen(lng));
+              publicAttributes.appendLine("\t\t\t" + f.codeGen(lng));
               break;
             case Protection.protected:
-              protectedAttributes.appendWithLinebreak(
-                "\t\t\t" + f.codeGen(lng)
-              );
+              protectedAttributes.appendLine("\t\t\t" + f.codeGen(lng));
               break;
             case Protection.private:
             case Protection.internal:
-              privateAttributes.appendWithLinebreak("\t\t\t" + f.codeGen(lng));
+              privateAttributes.appendLine("\t\t\t" + f.codeGen(lng));
               break;
           }
         }
         if (publicAttributes.length > 11) {
-          code.appendWithLinebreak(publicAttributes.toString());
+          code.appendLine(publicAttributes.toString());
         }
         if (protectedAttributes.length > 14) {
-          code.appendWithLinebreak(protectedAttributes.toString());
+          code.appendLine(protectedAttributes.toString());
         }
         if (privateAttributes.length > 12) {
-          code.appendWithLinebreak(privateAttributes.toString());
+          code.appendLine(privateAttributes.toString());
         }
         // Methods
         const publicMethods = new StringBuilder();
-        publicMethods.appendWithLinebreak("\t\tpublic: ");
+        publicMethods.appendLine("\t\tpublic: ");
         const protectedMethods = new StringBuilder();
-        protectedMethods.appendWithLinebreak("\t\tprotected: ");
+        protectedMethods.appendLine("\t\tprotected: ");
         const privateMethods = new StringBuilder();
-        privateMethods.appendWithLinebreak("\t\tprivate: ");
+        privateMethods.appendLine("\t\tprivate: ");
         for (const m of this.methods) {
           switch (m.protection) {
             case Protection.public:
-              publicMethods.appendWithLinebreak("\t\t\t" + m.codeGen(lng));
+              publicMethods.appendLine("\t\t\t" + m.codeGen(lng));
               break;
             case Protection.protected:
-              protectedMethods.appendWithLinebreak("\t\t\t" + m.codeGen(lng));
+              protectedMethods.appendLine("\t\t\t" + m.codeGen(lng));
               break;
             case Protection.private:
             case Protection.internal:
-              privateMethods.appendWithLinebreak("\t\t\t" + m.codeGen(lng));
+              privateMethods.appendLine("\t\t\t" + m.codeGen(lng));
               break;
           }
         }
         if (publicMethods.length > 11) {
-          code.appendWithLinebreak(publicMethods.toString());
+          code.appendLine(publicMethods.toString());
         }
         if (protectedMethods.length > 14) {
-          code.appendWithLinebreak(protectedMethods.toString());
+          code.appendLine(protectedMethods.toString());
         }
         if (privateMethods.length > 12) {
-          code.appendWithLinebreak(privateMethods.toString());
+          code.appendLine(privateMethods.toString());
         }
-        code.appendWithLinebreak("\t}\n}");
+        code.appendLine("\t}\n}");
         break;
       case "ts":
         for (const module of imp) {
-          code.appendWithLinebreak(`/// <reference path="${module}.ts"/>`);
+          code.appendLine(`/// <reference path="${module}.ts"/>`);
         }
         if (imp.size > 0) {
           code.append("\n");
@@ -319,27 +317,25 @@ class Class {
             }
           }
         }
-        code.appendWithLinebreak("{");
+        code.appendLine("{");
         for (const f of this.attributes) {
           if (stat) {
             code.append("\t");
           }
-          code.appendWithLinebreak("\t" + f.codeGen(lng, stat));
+          code.appendLine("\t" + f.codeGen(lng, stat));
         }
         for (const m of this.methods) {
           if (stat) {
             code.append("\t");
           }
-          code.appendWithLinebreak(
-            "\t" + m.codeGen(lng, stat, this.name, inheritance)
-          );
+          code.appendLine("\t" + m.codeGen(lng, stat, this.name, inheritance));
         }
         if (stat) {
           code.append("\t");
         }
-        code.appendWithLinebreak("}");
+        code.appendLine("}");
         if (stat) {
-          code.appendWithLinebreak(`\treturn new ${this.name}();\n})();`);
+          code.appendLine(`\treturn new ${this.name}();\n})();`);
         }
         break;
       case "qs":
@@ -347,23 +343,23 @@ class Class {
         libImp.add("Microsoft.Quantum.Canon");
         libImp.add("Microsoft.Quantum.Intrinsic");
         for (const using of libImp) {
-          code.appendWithLinebreak(`\topen ${using};`);
+          code.appendLine(`\topen ${using};`);
         }
         for (const using of imp) {
-          code.appendWithLinebreak(`\topen Quantum.${using};`);
+          code.appendLine(`\topen Quantum.${using};`);
         }
         code.append("\n");
         for (const m of this.methods) {
-          code.appendWithLinebreak("\t" + m.codeGen(lng, undefined, this.name));
+          code.appendLine("\t" + m.codeGen(lng, undefined, this.name));
         }
-        code.appendWithLinebreak("}");
+        code.appendLine("}");
         break;
       case "py":
         for (const using of libImp) {
-          code.appendWithLinebreak(`import ${using}`);
+          code.appendLine(`import ${using}`);
         }
         for (const using of imp) {
-          code.appendWithLinebreak(`from ${using} import ${using}`);
+          code.appendLine(`from ${using} import ${using}`);
         }
         if (libImp.size > 0 || imp.size > 0) {
           code.append("\n");
@@ -374,10 +370,10 @@ class Class {
         }
         code.append(":\n");
         for (const m of this.methods) {
-          code.appendWithLinebreak("\t" + m.codeGen(lng, undefined, this.name));
+          code.appendLine("\t" + m.codeGen(lng, undefined, this.name));
         }
         for (const f of this.attributes) {
-          code.appendWithLinebreak("\t" + f.codeGen(lng));
+          code.appendLine("\t" + f.codeGen(lng));
         }
         break;
     }

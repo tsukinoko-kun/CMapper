@@ -166,9 +166,7 @@ class Method {
         code.append(this.name);
         code.append(` (${params.join(", ")}) : `);
         code.append(displayType(this.type, lng));
-        code.appendWithLinebreak(
-          ` {\n\t\treturn ${defaultQs(this.type)};\n\t}`
-        );
+        code.appendLine(` {\n\t\treturn ${defaultQs(this.type)};\n\t}`);
         break;
       case "py":
         let abstract = false;

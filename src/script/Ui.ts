@@ -1,5 +1,5 @@
 /// <reference path="structureHolder.ts"/>
-/// <reference path="DB.ts"/>
+/// <reference path="lib.ts"/>
 
 const mddSvgId = "mddSvg";
 
@@ -47,7 +47,7 @@ const Ui = (() => {
       };
       mermaid.initialize(config);
 
-      loadFromIndexedDB<string>("--zoom-ui")
+      IDB.get<string>("--zoom-ui")
         .then((zui) => {
           if (zui) {
             document.documentElement.style.setProperty("--zoom-ui", zui);
@@ -802,7 +802,7 @@ const Ui = (() => {
         zoomUi = 1;
       }
       zoomUi = Math.min(2.25, Math.max(0.75, zoomUi + factor / 4));
-      saveToIndexedDB("--zoom-ui", zoomUi).catch((e) => {
+      IDB.set("--zoom-ui", zoomUi).catch((e) => {
         console.debug(e);
       });
       document.documentElement.style.setProperty(
