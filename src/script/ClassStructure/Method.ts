@@ -170,6 +170,27 @@ class Method {
           ` {\n\t\treturn ${defaultQs(this.type)};\n\t}`
         );
         break;
+      case "py":
+        let abstract = false;
+        if (this.classifer === Classifer.abstract) {
+          code.append("@abstractmethod\n\t");
+          abstract = true;
+        } else if (this.classifer === Classifer.static) {
+          code.append("@staticmethod\n\t");
+        }
+        code.append("def ");
+        code.append(this.name);
+        const prm = new Array<string>();
+        for (const p of this.parameters) {
+          prm.push(p.name);
+        }
+        code.append(` (${prm.join(", ")}): \n`);
+        if (abstract) {
+          code.append("\t\tpass\n");
+        } else {
+          code.append("\t\traise NotImplementedError\n");
+        }
+        break;
     }
     return code.toString();
   }

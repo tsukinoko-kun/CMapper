@@ -356,6 +356,28 @@ class Class {
         }
         code.appendWithLinebreak("}");
         break;
+      case "py":
+        for (const using of libImp) {
+          code.appendWithLinebreak(`import ${using}`);
+        }
+        for (const using of imp) {
+          code.appendWithLinebreak(`from ${using} import ${using}`);
+        }
+        if (libImp.size > 0 || imp.size > 0) {
+          code.append("\n");
+        }
+        code.append(`class ${this.name}`);
+        if (inheritanceList.length > 0) {
+          code.append(`(${inheritanceList.join(", ")})`);
+        }
+        code.append(":\n");
+        for (const m of this.methods) {
+          code.appendWithLinebreak("\t" + m.codeGen(lng, undefined, this.name));
+        }
+        for (const f of this.fields) {
+          code.appendWithLinebreak("\t" + f.codeGen(lng));
+        }
+        break;
     }
     return new Page(this.name, lng, code.toString());
   }

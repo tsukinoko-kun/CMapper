@@ -39,11 +39,11 @@ class Field {
         code.append(displayType(this.type, lng));
         code.append(" ");
         code.append(this.name);
-        if (this.protection === Protection.public) {
-          code.append(" { get; set; }");
-        } else {
-          code.append(";");
-        }
+        // if (this.protection === Protection.public) {
+        code.append(" { get; set; }");
+        // } else {
+        //   code.append(";");
+        // }
         break;
       case "h":
         if (this.classifer === Classifer.static) {
@@ -76,6 +76,11 @@ class Field {
         code.appendWithLinebreak(
           ` {\n\t\treturn ${defaultQs(this.type)};\n\t}`
         );
+        break;
+      case "py":
+        code.append(this.name);
+        code.append(" = ");
+        code.append(defaultPy(this.type));
         break;
     }
     return code.toString();
