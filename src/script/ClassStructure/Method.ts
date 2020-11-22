@@ -5,14 +5,14 @@ class Method {
   type: Array<string>;
   name: string;
   classifer: Classifer;
-  parameters: Array<Field>;
+  parameters: Array<Attribute>;
 
   constructor(
     pr: Protection,
     type: string[],
     name: string,
     classifer: Classifer = Classifer.default,
-    parameters: Array<Field> = new Array<Field>()
+    parameters: Array<Attribute> = new Array<Attribute>()
   ) {
     this.protection = pr;
     this.type = type;
@@ -28,7 +28,7 @@ class Method {
         return;
       }
     }
-    this.parameters.push(new Field(Protection.internal, type, name));
+    this.parameters.push(new Attribute(Protection.internal, type, name));
   }
 
   toString(): string {

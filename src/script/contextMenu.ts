@@ -13,24 +13,24 @@ class ContextMenu {
           }
         }
         cm.classList.remove("relation");
-        cm.classList.remove("field");
+        cm.classList.remove("attribute");
         cm.classList.remove("method");
         if (Ui.hasClassInFocus()) {
           cm.classList.add("class");
-          if (ids.includes("sidebar_fields")) {
-            cm.classList.add("field");
+          if (ids.includes("sidebar_attributes")) {
+            cm.classList.add("attribute");
             cm.classList.remove("relation");
             cm.classList.remove("method");
           } else if (ids.includes("sidebar_methods")) {
             cm.classList.add("method");
             cm.classList.remove("relation");
-            cm.classList.remove("field");
+            cm.classList.remove("attribute");
           } else if (
             ids.includes("sidebar_relations") &&
             structureHolder.namespace.length > 1
           ) {
             cm.classList.add("relation");
-            cm.classList.remove("field");
+            cm.classList.remove("attribute");
             cm.classList.remove("method");
           } else {
             const focusedClassName = Ui.getFocusedClassName();
@@ -48,7 +48,7 @@ class ContextMenu {
               if (structureHolder.namespace.length > 1) {
                 cm.classList.add("relation");
               }
-              cm.classList.add("field");
+              cm.classList.add("attribute");
               cm.classList.add("method");
             }
           }

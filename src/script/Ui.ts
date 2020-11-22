@@ -34,7 +34,7 @@ const Ui = (() => {
     public copyHover(): void {
       this.saverHoverCopy = this.hover;
     }
-    editMember: Field | Method | Relation | undefined = undefined;
+    editMember: Attribute | Method | Relation | undefined = undefined;
 
     constructor() {
       let config = {
@@ -108,8 +108,8 @@ const Ui = (() => {
       classifer(): HTMLSelectElement {
         return <HTMLSelectElement>document.getElementById("sidebar_classifer");
       },
-      fields(): HTMLUListElement {
-        return <HTMLUListElement>document.getElementById("sidebar_fields");
+      attributes(): HTMLUListElement {
+        return <HTMLUListElement>document.getElementById("sidebar_attributes");
       },
       methods(): HTMLUListElement {
         return <HTMLUListElement>document.getElementById("sidebar_methods");
@@ -358,9 +358,9 @@ const Ui = (() => {
       async delete(): Promise<void> {
         let id: string;
         let t: string;
-        if (Ui.editMember instanceof Field) {
+        if (Ui.editMember instanceof Attribute) {
           id = Ui.editMember.name;
-          t = "field";
+          t = "attribute";
         } else if (Ui.editMember instanceof Method) {
           id = Ui.editMember.name;
           t = "method";
@@ -433,7 +433,7 @@ const Ui = (() => {
         }
       },
       apply(): void {
-        if (Ui.editMember instanceof Field) {
+        if (Ui.editMember instanceof Attribute) {
           const name = <HTMLInputElement>document.getElementById("edit_name");
           if (name) {
             Ui.editMember.name = remSpCh(name.value);
@@ -564,13 +564,13 @@ const Ui = (() => {
       },
       display(type: string, name: string) {
         const html = new StringBuilder();
-        //Field
-        if (type === "field") {
-          let v: Field | undefined = undefined;
+        //Attribute
+        if (type === "attribute") {
+          let v: Attribute | undefined = undefined;
           if (!Ui.focusedClass) {
             return;
           }
-          for (v of Ui.focusedClass.fields) {
+          for (v of Ui.focusedClass.attributes) {
             if (v.name === name) {
               break;
             }
@@ -696,8 +696,8 @@ const Ui = (() => {
       } else if (!this.focusedClass) {
         this.sidebar.classname().value = "";
         this.sidebar.classifer().value = "";
-        this.sidebar.fields().innerHTML =
-          '<li onclick="Ui.toggleFolder(\'sidebar_fields\')" class="head"><img src="img/folder.svg" />&nbsp;<b>Fields</b></li>';
+        this.sidebar.attributes().innerHTML =
+          '<li onclick="Ui.toggleFolder(\'sidebar_attributes\')" class="head"><img src="img/folder.svg" />&nbsp;<b>Attributes</b></li>';
         this.sidebar.methods().innerHTML =
           '<li onclick="Ui.toggleFolder(\'sidebar_methods\')" class="head"><img src="img/folder.svg" />&nbsp;<b>Methods</b></li>';
         this.sidebar.relations().innerHTML =
@@ -707,39 +707,39 @@ const Ui = (() => {
       this.sidebar.classname().value = this.focusedClass.name; // Edit Classname
       this.sidebar.classifer().value = this.focusedClass.classifer;
 
-      // Fields
-      const field = new StringBuilder();
-      field.append(
-        '<li onclick="Ui.toggleFolder(\'sidebar_fields\')" class="head"><img src="img/folder.svg" />&nbsp;<b>Fields</b></li>'
+      // Attributes
+      const attribute = new StringBuilder();
+      attribute.append(
+        '<li onclick="Ui.toggleFolder(\'sidebar_attributes\')" class="head"><img src="img/folder.svg" />&nbsp;<b>Attributes</b></li>'
       );
-      for (const f of this.focusedClass.fields) {
-        field.append(
-          `<li onclick="Ui.editDialog.display('field', '${f.name}')"`
+      for (const f of this.focusedClass.attributes) {
+        attribute.append(
+          `<li onclick="Ui.editDialog.display('attribute', '${f.name}')"`
         );
         if (f.type[0] === "List") {
-          field.append(
+          attribute.append(
             ` class="type1_${f.type[1]} type2_${f.type[1]} type0_list"`
           );
         } else if (f.type[0] === "Set") {
-          field.append(
+          attribute.append(
             ` class="type1_${f.type[1]} type2_${f.type[1]} type0_set"`
           );
         } else if (f.type[0] === "Map") {
-          field.append(
+          attribute.append(
             ` class="type1_${f.type[1]} type2_${f.type[2]} type0_map"`
           );
         } else {
-          field.append(
+          attribute.append(
             ` class="type1_${f.type[0]} type2_${f.type[0]} type0_single"`
           );
         }
-        field.append(
-          ` onmouseover="Ui.setHover('${f.name}','field')" onmouseout="Ui.removeHover('${f.name}','field')">`
+        attribute.append(
+          ` onmouseover="Ui.setHover('${f.name}','attribute')" onmouseout="Ui.removeHover('${f.name}','attribute')">`
         );
-        field.append(_Ui.escapeHtml(f.name));
-        field.append("</li>");
+        attribute.append(_Ui.escapeHtml(f.name));
+        attribute.append("</li>");
       }
-      this.sidebar.fields().innerHTML = field.toString();
+      this.sidebar.attributes().innerHTML = attribute.toString();
 
       // Methods
       const method = new StringBuilder();
@@ -949,11 +949,11 @@ const Ui = (() => {
           return false;
         }
         switch (hover.t) {
-          case "field":
-            for (let i = 0; i < this.focusedClass.fields.length; i++) {
-              if (this.focusedClass.fields[i].name === hover.id) {
-                delete this.focusedClass.fields[i];
-                this.focusedClass.fields.splice(i, 1);
+          case "attribute":
+            for (let i = 0; i < this.focusedClass.attributes.length; i++) {
+              if (this.focusedClass.attributes[i].name === hover.id) {
+                delete this.focusedClass.attributes[i];
+                this.focusedClass.attributes.splice(i, 1);
                 break;
               }
             }
@@ -1003,10 +1003,10 @@ const Ui = (() => {
               return false;
             }
           }
-          for (const f of cl.fields) {
+          for (const f of cl.attributes) {
             if (f.type.includes(this.focusedClass.name)) {
               alert(
-                "A class that is used as a type by fields of another class can not be deleted." +
+                "A class that is used as a type by attributes of another class can not be deleted." +
                   `\n${displayType(f.type, "cs")} ${cl.name}::${f.name}`
               );
               return false;
@@ -1066,17 +1066,17 @@ const Ui = (() => {
       }
     }
 
-    newField(): void {
+    newAttribute(): void {
       if (this.focusedClass) {
-        const newField = new Field(
+        const newAttribute = new Attribute(
           Protection.public,
           [typeString(Type.string)],
-          "NewField" + Math.floor(Math.random() * 1000).toString()
+          "NewAttribute" + Math.floor(Math.random() * 1000).toString()
         );
-        this.focusedClass.fields.push(newField);
+        this.focusedClass.attributes.push(newAttribute);
         this.sidebarClass();
         this.render();
-        this.editDialog.display("field", newField.name);
+        this.editDialog.display("attribute", newAttribute.name);
       }
     }
 

@@ -77,7 +77,7 @@
     border-right-width: 4px;
   }
 
-  #sidebar_fields > li:not(.head):before {
+  #sidebar_attributes > li:not(.head):before {
     background-color: var(--blue);
     border-color: hsl(210, 22%, 55%);
   }
@@ -129,7 +129,7 @@
     border-color: hsl(46, 75%, 47%) !important;
   }
 
-  #sidebar_fields,
+  #sidebar_attributes,
   #sidebar_methods,
   #sidebar_relations {
     > li:not(.head):before {

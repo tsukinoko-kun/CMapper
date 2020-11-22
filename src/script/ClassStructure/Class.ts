@@ -1,12 +1,12 @@
 /// <reference path="Protection.ts"/>
-/// <reference path="Field.ts"/>
+/// <reference path="Attribute.ts"/>
 /// <reference path="Method.ts"/>
 
 class Class {
   name: string;
   relations: Array<Relation>;
   classifer: Classifer;
-  fields: Array<Field>;
+  attributes: Array<Attribute>;
   methods: Array<Method>;
   id: number = -1;
 
@@ -14,14 +14,14 @@ class Class {
     this.name = name;
     this.relations = new Array<Relation>();
     this.classifer = Classifer.default;
-    this.fields = new Array<Field>();
+    this.attributes = new Array<Attribute>();
     this.methods = new Array<Method>();
   }
 
   toString(): string {
     const strb = new StringBuilder();
     if (
-      this.fields.length > 0 ||
+      this.attributes.length > 0 ||
       this.methods.length > 0 ||
       this.classifer !== Classifer.default
     ) {
@@ -31,7 +31,7 @@ class Class {
       } else if (this.classifer === Classifer.static) {
         strb.appendWithLinebreak("<<static>>");
       }
-      this.forEachField((f: Field) => {
+      this.forEachAttribute((f: Attribute) => {
         strb.append("\t");
         strb.appendWithLinebreak(f.toString());
       });
@@ -49,8 +49,8 @@ class Class {
     return strb.toString();
   }
 
-  addField(f: Field): void {
-    this.fields.push(f);
+  addAttribute(f: Attribute): void {
+    this.attributes.push(f);
   }
 
   addMethod(m: Method): void {
@@ -61,8 +61,8 @@ class Class {
     this.relations.push(r);
   }
 
-  public forEachField(callback: (f: Field) => void): void {
-    for (const f of this.fields) {
+  public forEachAttribute(callback: (f: Attribute) => void): void {
+    for (const f of this.attributes) {
       callback(f);
     }
     return;
@@ -76,13 +76,13 @@ class Class {
   }
 
   public forEachMember(
-    callback: (m: Field | Method, $break: () => void) => void
+    callback: (m: Attribute | Method, $break: () => void) => void
   ): void {
     let ex = true;
     const _break = () => {
       ex = false;
     };
-    for (const f of this.fields) {
+    for (const f of this.attributes) {
       if (ex) {
         callback(f, _break);
       } else {
@@ -118,7 +118,7 @@ class Class {
         imp.add(rel.classB);
       }
     }
-    for (const f of this.fields) {
+    for (const f of this.attributes) {
       for (const t of f.type) {
         if (structureHolder.findClass(t)) {
           imp.add(t);
@@ -179,7 +179,7 @@ class Class {
           }
         }
         code.appendWithLinebreak("\n\t{");
-        for (const f of this.fields) {
+        for (const f of this.attributes) {
           code.appendWithLinebreak("\t\t" + f.codeGen(lng));
         }
         for (const m of this.methods) {
@@ -218,35 +218,37 @@ class Class {
           }
         }
         code.appendWithLinebreak("\n\t{");
-        // Fields
-        const publicFields = new StringBuilder();
-        publicFields.appendWithLinebreak("\t\tpublic: ");
-        const protectedFields = new StringBuilder();
-        protectedFields.appendWithLinebreak("\t\tprotected: ");
-        const privateFields = new StringBuilder();
-        privateFields.appendWithLinebreak("\t\tprivate: ");
-        for (const f of this.fields) {
+        // Attributes
+        const publicAttributes = new StringBuilder();
+        publicAttributes.appendWithLinebreak("\t\tpublic: ");
+        const protectedAttributes = new StringBuilder();
+        protectedAttributes.appendWithLinebreak("\t\tprotected: ");
+        const privateAttributes = new StringBuilder();
+        privateAttributes.appendWithLinebreak("\t\tprivate: ");
+        for (const f of this.attributes) {
           switch (f.protection) {
             case Protection.public:
-              publicFields.appendWithLinebreak("\t\t\t" + f.codeGen(lng));
+              publicAttributes.appendWithLinebreak("\t\t\t" + f.codeGen(lng));
               break;
             case Protection.protected:
-              protectedFields.appendWithLinebreak("\t\t\t" + f.codeGen(lng));
+              protectedAttributes.appendWithLinebreak(
+                "\t\t\t" + f.codeGen(lng)
+              );
               break;
             case Protection.private:
             case Protection.internal:
-              privateFields.appendWithLinebreak("\t\t\t" + f.codeGen(lng));
+              privateAttributes.appendWithLinebreak("\t\t\t" + f.codeGen(lng));
               break;
           }
         }
-        if (publicFields.length > 11) {
-          code.appendWithLinebreak(publicFields.toString());
+        if (publicAttributes.length > 11) {
+          code.appendWithLinebreak(publicAttributes.toString());
         }
-        if (protectedFields.length > 14) {
-          code.appendWithLinebreak(protectedFields.toString());
+        if (protectedAttributes.length > 14) {
+          code.appendWithLinebreak(protectedAttributes.toString());
         }
-        if (privateFields.length > 12) {
-          code.appendWithLinebreak(privateFields.toString());
+        if (privateAttributes.length > 12) {
+          code.appendWithLinebreak(privateAttributes.toString());
         }
         // Methods
         const publicMethods = new StringBuilder();
@@ -318,7 +320,7 @@ class Class {
           }
         }
         code.appendWithLinebreak("{");
-        for (const f of this.fields) {
+        for (const f of this.attributes) {
           if (stat) {
             code.append("\t");
           }
@@ -374,7 +376,7 @@ class Class {
         for (const m of this.methods) {
           code.appendWithLinebreak("\t" + m.codeGen(lng, undefined, this.name));
         }
-        for (const f of this.fields) {
+        for (const f of this.attributes) {
           code.appendWithLinebreak("\t" + f.codeGen(lng));
         }
         break;

@@ -38,7 +38,7 @@ class Smart {
   static update(): void {
     const indicator = document.getElementById("smart");
     if (indicator) {
-      const memberId = (member: Field | Method): string => {
+      const memberId = (member: Attribute | Method): string => {
         return member.name + (member instanceof Method ? "()" : "");
       };
       this.errors = new Array<string>();
@@ -147,24 +147,24 @@ class Smart {
             a.relation === relationType.aggregation
           ) {
             if (B) {
-              let fieldFound = false;
-              for (const f of B.fields) {
+              let attributeFound = false;
+              for (const f of B.attributes) {
                 if (f.type.includes(a.classA)) {
-                  fieldFound = true;
+                  attributeFound = true;
                   break;
                 }
               }
-              if (!fieldFound) {
+              if (!attributeFound) {
                 this.errors.push(
                   `According to relation '${a.toString()}', class '${
                     a.classB
-                  }' should have a Field of type '${a.classA}'`
+                  }' should have a Attribute of type '${a.classA}'`
                 );
               }
             }
           }
         }
-        for (const f of cl.fields) {
+        for (const f of cl.attributes) {
           for (const t of f.type) {
             if (t !== cl.name) {
               const typeClass = structureHolder.findClass(t);

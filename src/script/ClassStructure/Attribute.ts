@@ -1,6 +1,6 @@
 /// <reference path="Classifer.ts"/>
 
-class Field {
+class Attribute {
   protection: Protection;
   type: Array<string>;
   name: string;

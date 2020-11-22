@@ -86,17 +86,19 @@ const structureHolder = (() => {
     }
     importJson(json: string): void {
       try {
-        const obj: Array<Class> = JSON.parse(json);
+        const obj: Array<Class> = JSON.parse(
+          json.replace(/\bfields\b/g, "attributes")
+        );
         const tempNamespance = new Array<Class>();
         for (const clDta of obj) {
           const newCl = new Class(clDta.name);
           newCl.classifer = clDta.classifer;
           newCl.id = clDta.id;
 
-          const tempFieldList = new Array<Field>();
-          for (const flDta of clDta.fields) {
-            tempFieldList.push(
-              new Field(
+          const tempAttributeList = new Array<Attribute>();
+          for (const flDta of clDta.attributes) {
+            tempAttributeList.push(
+              new Attribute(
                 signToProtection(flDta.protection),
                 flDta.type,
                 flDta.name,
@@ -104,14 +106,14 @@ const structureHolder = (() => {
               )
             );
           }
-          newCl.fields = tempFieldList;
+          newCl.attributes = tempAttributeList;
 
           const tempMethodList = new Array<Method>();
           for (const mthDta of clDta.methods) {
-            const tempParamList = new Array<Field>();
+            const tempParamList = new Array<Attribute>();
             for (const pDta of mthDta.parameters) {
               tempParamList.push(
-                new Field(Protection.internal, pDta.type, pDta.name)
+                new Attribute(Protection.internal, pDta.type, pDta.name)
               );
             }
             tempMethodList.push(
@@ -156,7 +158,7 @@ const structureHolder = (() => {
      */
     deepRename(oldName: string, newName: string) {
       for (const cl of this.namespace) {
-        for (const f of cl.fields) {
+        for (const f of cl.attributes) {
           for (let i = 0; i < f.type.length; i++) {
             if (f.type[i] === oldName) {
               f.type[i] = newName;

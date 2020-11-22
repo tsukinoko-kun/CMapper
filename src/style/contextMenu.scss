@@ -40,14 +40,14 @@
   }
 }
 
-#contextMenu.class.field,
+#contextMenu.class.attribute,
 #contextMenu.class.method,
 #contextMenu.class.relation {
   .newClass {
     display: none;
   }
 }
-#contextMenu:not(.field) > .newField {
+#contextMenu:not(.attribute) > .newAttribute {
   display: none;
 }
 #contextMenu:not(.method) > .newMethod {
