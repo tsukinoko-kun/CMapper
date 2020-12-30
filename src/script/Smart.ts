@@ -174,7 +174,9 @@ class Smart {
                   if (
                     r.classA === t &&
                     (r.relation === relationType.composition ||
-                      r.relation === relationType.aggregation)
+                      r.relation === relationType.aggregation ||
+                      r.relation === relationType.solidLink ||
+                      r.relation === relationType.dashedLink)
                   ) {
                     relationFound = true;
                     break;
@@ -182,7 +184,7 @@ class Smart {
                 }
                 if (!relationFound) {
                   this.errors.push(
-                    `missing relation from '${t}' to '${cl.name}' of type composition or aggregation`
+                    `missing relation from '${t}' to '${cl.name}' of type composition, aggregation or link`
                   );
                 }
               }

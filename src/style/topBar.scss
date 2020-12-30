@@ -38,7 +38,7 @@
     filter: contrast(0.75);
   }
   #rename_cm {
-    max-height: var(--topbar-content-height);
+    height: var(--topbar-height);
     img {
       max-height: var(--topbar-content-height);
       padding: 4px;
