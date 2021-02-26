@@ -1,4 +1,6 @@
-/// <reference path="../../../rocket.ts/out/reference.ts"/>
+/// <reference path="../../../rocket.ts/DataStructures/IndexedDB.ts"/>
+
+const db = new IDB<string>("pref");
 
 function remSpCh(str: string) {
   return str.replace(/[^a-zA-Z0-9\ö\ä\ü\Ö\Ä\Ü\ß\_]/g, "");

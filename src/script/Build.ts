@@ -36,7 +36,7 @@ class Build {
   }
   static updateMode(mode: string) {
     this.mode = mode;
-    IDB.set("build-lng", mode).catch((e) => {
+    db.set("build-lng", mode).catch((e) => {
       console.debug(e);
     });
   }
@@ -54,7 +54,7 @@ class Build {
   }
 }
 (async () => {
-  const mode = await IDB.get<string>("build-lng").catch((e) => {
+  const mode = await db.get("build-lng").catch((e) => {
     console.debug(e);
   });
   if (mode) {

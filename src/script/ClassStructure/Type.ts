@@ -9,6 +9,7 @@ enum Type {
   List,
   Set,
   Map,
+  Enum,
 }
 
 const CsTypes = new Map<string, string>([
@@ -22,6 +23,7 @@ const CsTypes = new Map<string, string>([
   ["List", "List"],
   ["Set", "HashSet"],
   ["Map", "Dictionary"],
+  ["Enum", "enum0"],
 ]);
 
 const CmTypes = new Map<string, string>([
@@ -35,6 +37,7 @@ const CmTypes = new Map<string, string>([
   ["List", "List"],
   ["Set", "Set"],
   ["Map", "Map"],
+  ["Enum", "enum"],
 ]);
 
 const CppTypes = new Map<string, string>([
@@ -48,6 +51,7 @@ const CppTypes = new Map<string, string>([
   ["List", "std::vector"],
   ["Set", "std::set"],
   ["Map", "std::map"],
+  ["Enum", "enum0"],
 ]);
 
 const TsTypes = new Map<string, string>([
@@ -61,6 +65,7 @@ const TsTypes = new Map<string, string>([
   ["List", "Array"],
   ["Set", "Set"],
   ["Map", "Map"],
+  ["Enum", "enum0"],
 ]);
 
 const QsTypes = new Map<string, string>([
@@ -74,6 +79,7 @@ const QsTypes = new Map<string, string>([
   ["List", "Array"],
   ["Set", "Set"],
   ["Map", "Map"],
+  ["Enum", "enum0"],
 ]);
 
 // const PyTypes = new Map<string, string>([
@@ -87,6 +93,7 @@ const QsTypes = new Map<string, string>([
 //   ["List", "Array"],
 //   ["Set", "Set"],
 //   ["Map", "Map"],
+//   ["Enum", "enum0"],
 // ]);
 
 const importCs = new Map<string, string>([

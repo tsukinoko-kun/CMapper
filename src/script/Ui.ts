@@ -47,7 +47,7 @@ const Ui = (() => {
       };
       mermaid.initialize(config);
 
-      IDB.get<string>("--zoom-ui")
+      db.get("--zoom-ui")
         .then((zui) => {
           if (zui) {
             document.documentElement.style.setProperty("--zoom-ui", zui);
@@ -802,7 +802,7 @@ const Ui = (() => {
         zoomUi = 1;
       }
       zoomUi = Math.min(2.25, Math.max(0.75, zoomUi + factor / 4));
-      IDB.set("--zoom-ui", zoomUi).catch((e) => {
+      db.set("--zoom-ui", zoomUi.toString()).catch((e) => {
         console.debug(e);
       });
       document.documentElement.style.setProperty(

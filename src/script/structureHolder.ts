@@ -1,4 +1,5 @@
 /// <reference path="ClassStructure/Class.ts"/>
+/// <reference path="../../../rocket.ts/DataStructures/StringBuilder.ts"/>
 
 const structureHolder = (() => {
   class StructureHolder {

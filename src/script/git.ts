@@ -1,3 +1,5 @@
+/// <reference path="../../../rocket.ts/ServerClientCommunication/httpGet.ts"/>
+
 async function gitChangelog(): Promise<string> {
   try {
     const master = JSON.parse(

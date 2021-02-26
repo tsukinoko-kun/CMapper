@@ -1,9 +1,11 @@
 /// <reference path="alert.ts"/>
 (async (): Promise<void> => {
   setTimeout(async (): Promise<void> => {
-    const tutorial = await IDB.get<boolean>("tutorial").catch((e) => {
-      console.debug(e);
-    });
+    const tutorial =
+      "true" ==
+      (await db.get("tutorial").catch((e) => {
+        console.debug(e);
+      }));
     if (!tutorial) {
       const wiki = new StringBuilder();
       wiki.append(
@@ -13,7 +15,7 @@
         "For more information click the book symbol in the info bar (at the bottom), you will be redirected to the wiki of the GitHub repository."
       );
       await alert(wiki.toString());
-      IDB.set("tutorial", true).catch((e) => {
+      db.set("tutorial", "true").catch((e) => {
         console.debug(e);
       });
     }

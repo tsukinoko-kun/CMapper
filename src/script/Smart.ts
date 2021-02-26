@@ -1,3 +1,5 @@
+/// <reference path="../../../rocket.ts/Timer/retriggerableDelay.ts"/>
+/// <reference path="../../../rocket.ts/DataStructures/IndexedDB.ts"/>
 class Smart {
   private static errors = new Array<string>();
   private static title = "SmartBulb";
