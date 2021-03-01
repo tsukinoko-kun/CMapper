@@ -4,12 +4,19 @@ class ContextMenu {
     if (cm) {
       Ui.copyHover();
       if (target) {
-        let ids = new Array<string>();
-        ids.push(target.id);
+        const fcn = Ui.getFocusedClassName();
+        const selectedClass = fcn ? structureHolder.findClass(fcn) : undefined;
+        const isClass: boolean = selectedClass
+          ? selectedClass.classifer == Classifer.default ||
+            selectedClass.classifer == Classifer.abstract ||
+            selectedClass.classifer == Classifer.static
+          : false;
+        let ids = new Set<string>();
+        ids.add(target.id);
         if (target.parentElement) {
-          ids.push(target.parentElement.id);
+          ids.add(target.parentElement.id);
           if (target.parentElement.parentElement) {
-            ids.push(target.parentElement.parentElement.id);
+            ids.add(target.parentElement.parentElement.id);
           }
         }
         cm.classList.remove("relation");
@@ -17,16 +24,17 @@ class ContextMenu {
         cm.classList.remove("method");
         if (Ui.hasClassInFocus()) {
           cm.classList.add("class");
-          if (ids.includes("sidebar_attributes")) {
+          if (ids.has("sidebar_attributes")) {
             cm.classList.add("attribute");
             cm.classList.remove("relation");
             cm.classList.remove("method");
-          } else if (ids.includes("sidebar_methods")) {
+          } else if (ids.has("sidebar_methods") && isClass) {
             cm.classList.add("method");
             cm.classList.remove("relation");
             cm.classList.remove("attribute");
           } else if (
-            ids.includes("sidebar_relations") &&
+            ids.has("sidebar_relations") &&
+            isClass &&
             structureHolder.namespace.length > 1
           ) {
             cm.classList.add("relation");
@@ -45,11 +53,13 @@ class ContextMenu {
                 return false;
               })()
             ) {
-              if (structureHolder.namespace.length > 1) {
-                cm.classList.add("relation");
+              if (isClass) {
+                if (structureHolder.namespace.length > 1) {
+                  cm.classList.add("relation");
+                }
+                cm.classList.add("method");
               }
               cm.classList.add("attribute");
-              cm.classList.add("method");
             }
           }
         } else {

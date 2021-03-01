@@ -2,6 +2,7 @@ enum Classifer {
   abstract = "*",
   static = "$",
   default = "",
+  enum = "enumeration",
 }
 
 function classiferFromString(str: string): Classifer {

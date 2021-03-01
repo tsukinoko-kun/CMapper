@@ -17,9 +17,7 @@
     <title>CMapper</title>
     <script
       async
-      rel="preload"
-      as="script"
-      src="https://frank-mayer.tk/cdn/jscomp.js"
+      src="https://gist.github.com/blinksmith/bf55f328758dfaada042.js"
     ></script>
     <link async rel="stylesheet" href="style.css" />
     <script async rel="preload" type="text/javascript" as="script">
@@ -33,7 +31,7 @@
       <input
         id="fileUpload"
         type="file"
-        accept=".cm"
+        accept=".cm,.txt"
         style="display: none"
         oninput="structureHolder.loadFile(this.files[0])"
       />
@@ -109,10 +107,8 @@
         >
           <optgroup label="SourceCode">
             <option value="cs">C#</option>
-            <option value="qs">Q#</option>
             <option value="ts">TypeScript</option>
-            <option value="h">C++</option>
-            <option value="py">Python3</option>
+            <option value="kt">Kotlin</option>
           </optgroup>
         </select>
       </div>
@@ -168,6 +164,9 @@
             <option value="">Default</option>
             <option value="*">Abstract</option>
             <option value="$">Static</option>
+            <optgroup label="Other">
+              <option value="enumeration">Enum</option>
+            </optgroup>
           </select>
         </li>
         <li>
@@ -202,10 +201,16 @@ Press "Delete" to delete the Member you are editing'
       </div>
     </section>
     <div id="graph" class="waterMark"></div>
-    <script defer src="https://frank-mayer.tk/cdn/mermaid.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"
+    ></script>
     <script defer src="app.js"></script>
     <script async src="jszip.min.js"></script>
     <script async src="FileSaver.min.js"></script>
-    <script async src="https://frank-mayer.tk/cdn/dom-to-image.js"></script>
+    <script
+      async
+      src="https://cdn.jsdelivr.net/npm/dom-to-image/dist/dom-to-image.min.js"
+    ></script>
   </body>
 </html>

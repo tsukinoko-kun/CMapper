@@ -221,8 +221,13 @@ const Ui = (() => {
               !isNaN(Number(Type[key])) && (!isParam || key !== "void")
           );
           const classNames = new Array<string>();
+          const enumerations = new Array<string>();
           for (const cl of structureHolder.namespace) {
-            classNames.push(cl.name);
+            if (cl.classifer == Classifer.enum) {
+              enumerations.push(cl.name);
+            } else {
+              classNames.push(cl.name);
+            }
           }
           const appendOptions = (list: Array<string>, name: string) => {
             if (list.length === 0) {
@@ -242,6 +247,7 @@ const Ui = (() => {
           };
           sel.append(appendOptions(types, "Default Types"));
           sel.append(appendOptions(classNames, "Classes"));
+          sel.append(appendOptions(enumerations, "Enumerations"));
           sel.append("</select>");
           if (!isParam) {
             sel.append("</td></tr>");
@@ -814,15 +820,21 @@ const Ui = (() => {
     private async applyStyleRules() {
       let mddSvg = document.getElementById("mddSvg");
       if (mddSvg) {
-        for await (const text of <any>mddSvg.getElementsByTagName("text")) {
+        mddSvg.removeAttribute("width");
+        mddSvg.removeAttribute("height");
+        for await (const text of <Array<SVGTextElement>>(
+          (<unknown>mddSvg.getElementsByTagName("text"))
+        )) {
           const tspans = text.getElementsByTagName("tspan");
           if (tspans.length === 2) {
-            if (text.textContent.startsWith("«abstract»")) {
-              tspans[0].style.fontStyle = "italic";
-              tspans[1].style.fontStyle = "italic";
-            } else if (text.textContent.startsWith("«static»")) {
-              tspans[0].style.textDecoration = "underline";
-              tspans[1].style.textDecoration = "underline";
+            if (text.textContent) {
+              if (text.textContent.startsWith("«abstract»")) {
+                tspans[0].style.fontStyle = "italic";
+                tspans[1].style.fontStyle = "italic";
+              } else if (text.textContent.startsWith("«static»")) {
+                tspans[0].style.textDecoration = "underline";
+                tspans[1].style.textDecoration = "underline";
+              }
             }
           }
         }
@@ -1176,6 +1188,10 @@ const Ui = (() => {
             break;
           case Classifer.abstract:
             this.focusedClass.classifer = Classifer.abstract;
+            this.render();
+            break;
+          case Classifer.enum:
+            this.focusedClass.classifer = Classifer.enum;
             this.render();
             break;
         }

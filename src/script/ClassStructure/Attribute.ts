@@ -20,9 +20,10 @@ class Attribute {
   toString(): string {
     const strb = new StringBuilder();
     strb.append(this.protection);
+    strb.append(this.name);
+    strb.append(": ");
     strb.append(displayType(this.type));
     strb.append(" ");
-    strb.append(this.name);
     strb.append(this.classifer);
     return vowel(strb.toString());
   }
@@ -45,18 +46,6 @@ class Attribute {
         //   code.append(";");
         // }
         break;
-      case "h":
-        if (this.classifer === Classifer.static) {
-          code.append("static ");
-        }
-        code.append(displayType(this.type, lng));
-        code.append(" ");
-        code.append(this.name);
-        if (this.type[0] === "vector") {
-          code.append("[3]");
-        }
-        code.append(";");
-        break;
       case "ts":
         code.append(protectionToCode(this.protection));
         code.append(" ");
@@ -68,17 +57,16 @@ class Attribute {
         code.append(displayType(this.type, lng));
         code.append(";");
         break;
-      case "qs":
-        code.append("operation ");
+      case "kt":
+        code.append(protectionToCode(this.protection));
+        code.append(" ");
+        if (this.classifer === Classifer.static) {
+          code.append("static ");
+        }
+        code.append("lateinit var ");
         code.append(this.name);
-        code.append(` () : `);
+        code.append(": ");
         code.append(displayType(this.type, lng));
-        code.appendLine(` {\n\t\treturn ${defaultQs(this.type)};\n\t}`);
-        break;
-      case "py":
-        code.append(this.name);
-        code.append(" = ");
-        code.append(defaultPy(this.type));
         break;
     }
     return code.toString();

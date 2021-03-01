@@ -9,7 +9,6 @@ enum Type {
   List,
   Set,
   Map,
-  Enum,
 }
 
 const CsTypes = new Map<string, string>([
@@ -23,7 +22,6 @@ const CsTypes = new Map<string, string>([
   ["List", "List"],
   ["Set", "HashSet"],
   ["Map", "Dictionary"],
-  ["Enum", "enum0"],
 ]);
 
 const CmTypes = new Map<string, string>([
@@ -37,21 +35,6 @@ const CmTypes = new Map<string, string>([
   ["List", "List"],
   ["Set", "Set"],
   ["Map", "Map"],
-  ["Enum", "enum"],
-]);
-
-const CppTypes = new Map<string, string>([
-  ["void", "void"],
-  ["string", "std::string"],
-  ["integer", "int"],
-  ["float", "float"],
-  ["boolean", "bool"],
-  ["datetime", "std::chrono::time_point"],
-  ["vector", "float"],
-  ["List", "std::vector"],
-  ["Set", "std::set"],
-  ["Map", "std::map"],
-  ["Enum", "enum0"],
 ]);
 
 const TsTypes = new Map<string, string>([
@@ -65,36 +48,20 @@ const TsTypes = new Map<string, string>([
   ["List", "Array"],
   ["Set", "Set"],
   ["Map", "Map"],
-  ["Enum", "enum0"],
 ]);
 
-const QsTypes = new Map<string, string>([
+const KtTypes = new Map<string, string>([
   ["void", "Unit"],
   ["string", "String"],
   ["integer", "Int"],
-  ["float", "Float"],
-  ["boolean", "Bool"],
-  ["datetime", "DateTime"],
-  ["vector", "Vector3"],
-  ["List", "Array"],
-  ["Set", "Set"],
-  ["Map", "Map"],
-  ["Enum", "enum0"],
+  ["float", "Double"],
+  ["boolean", "Boolean"],
+  ["datetime", "LocalDateTime"],
+  ["vector", "Vector"],
+  ["List", "MutableList"],
+  ["Set", "MutableSet"],
+  ["Map", "HashMap"],
 ]);
-
-// const PyTypes = new Map<string, string>([
-//   ["void", "Unit"],
-//   ["string", "String"],
-//   ["integer", "Int"],
-//   ["float", "Float"],
-//   ["boolean", "Bool"],
-//   ["datetime", "DateTime"],
-//   ["vector", "Vector3"],
-//   ["List", "Array"],
-//   ["Set", "Set"],
-//   ["Map", "Map"],
-//   ["Enum", "enum0"],
-// ]);
 
 const importCs = new Map<string, string>([
   ["boolean", "System"],
@@ -108,24 +75,9 @@ const importCs = new Map<string, string>([
   ["datetime", "System"],
 ]);
 
-const importPy = new Map<string, string>([
-  ["vector", "numpy"],
-  ["datetime", "datetime"],
-]);
-
-const importCpp = new Map<string, string>([
-  ["List", "vector"],
-  ["Set", "set"],
-  ["Map", "map"],
-  ["datetime", "System"],
-]);
-
-const importQs = new Map<string, string>([
-  ["vector", "System.Numerics"],
-  ["List", "System.Collection.Generic"],
-  ["Set", "System.Collection.Generic"],
-  ["Map", "System.Collection.Generic"],
-  ["datetime", "System"],
+const importKt = new Map<string, string>([
+  ["datetime", "java.time.LocalDateTime"],
+  ["list", "kotlin.collections"],
 ]);
 
 const typeMap = (t: string, lng: string): string => {
@@ -140,23 +92,15 @@ const typeMap = (t: string, lng: string): string => {
         return <string>CsTypes.get(t);
       }
       break;
-    case "h":
-      if (CppTypes.has(t)) {
-        return <string>CppTypes.get(t);
-      }
-      break;
     case "ts":
       if (TsTypes.has(t)) {
         return <string>TsTypes.get(t);
       }
       break;
-    case "qs":
-      if (QsTypes.has(t)) {
-        return <string>QsTypes.get(t);
+    case "kt":
+      if (KtTypes.has(t)) {
+        return <string>KtTypes.get(t);
       }
-      break;
-    case "py":
-      return defaultPy([t]);
       break;
   }
   return t;
@@ -173,83 +117,19 @@ const getTypeImport = (t: string, lng: string): string => {
         return <string>importCs.get(t);
       }
       break;
-    case "h":
-      if (importCpp.has(t)) {
-        return <string>importCpp.get(t);
-      }
-      break;
-    case "qs":
-      if (importQs.has(t)) {
-        return <string>importQs.get(t);
-      }
-      break;
-    case "py":
-      if (importPy.has(t)) {
-        return <string>importPy.get(t);
+    case "kt":
+      if (importKt.has(t)) {
+        return <string>importKt.get(t);
       }
       break;
   }
   return "";
 };
 
-function defaultQs(type: Array<string>): string {
-  switch (type[0]) {
-    case "void":
-      return "()";
-    case "string":
-      return '""';
-    case "integer":
-    case "float":
-      return "0";
-    case "boolean":
-      return "false";
-    case "List":
-    case "Map":
-    case "Set":
-      return displayType(type, "qs");
-  }
-  return "";
-}
-
-function defaultPy(type: Array<string>): string {
-  switch (type[0]) {
-    case "void":
-      return "";
-    case "string":
-      return '""';
-    case "integer":
-    case "float":
-      return "0";
-    case "boolean":
-      return "False";
-    case "List":
-    case "Map":
-    case "Set":
-      return displayType(type, "py");
-  }
-  return "";
-}
-
 const genericPlaceholder = "xxxxxxxxxx";
 function displayType(type: Array<string>, lng?: string): string {
   const strb = new StringBuilder();
   switch (lng) {
-    case "qs":
-      if (type.length > 1) {
-        if (type[0] === "List" || type[0] === "Set") {
-          strb.append(typeMap(type[1], lng));
-          strb.append("[]");
-        } else if (type[0] === "Map") {
-          strb.append("Dictionary<");
-          strb.append(typeMap(type[1], lng));
-          strb.append(",");
-          strb.append(typeMap(type[2], lng));
-          strb.append(">");
-        } else {
-          strb.append(typeMap(type[0], lng));
-        }
-      }
-      break;
     default:
       if (lng) {
         strb.append(typeMap(type[0], lng));

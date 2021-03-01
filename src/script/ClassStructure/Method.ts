@@ -88,33 +88,6 @@ class Method {
           );
         }
         break;
-      case "h":
-        if (this.classifer === Classifer.abstract) {
-          code.append("abstract ");
-          abstr = true;
-        } else if (this.classifer === Classifer.static || p1) {
-          code.append("static ");
-        }
-        if (this.name === p2) {
-          constructor = true;
-        } else {
-          code.append(displayType(this.type, lng));
-          code.append(" ");
-        }
-        code.append(this.name);
-        if (this.type[0] === "vector") {
-          code.append("[3]");
-        }
-        for (const p of this.parameters) {
-          if (p.type[0] === "vector") {
-            params.push(`${displayType(p.type, lng)} ${p.name}[3]`);
-          } else {
-            params.push(`${displayType(p.type, lng)} ${p.name}`);
-          }
-        }
-        code.append(`(${params.join(", ")})`);
-        code.append(";");
-        break;
       case "ts":
         code.append(protectionToCode(this.protection));
         code.append(" ");
@@ -157,36 +130,37 @@ class Method {
           }
         }
         break;
-      case "qs":
-        for (const p of this.parameters) {
-          params.push(`${p.name} : ${displayType(p.type, lng)}`);
-        }
-
-        code.append("operation ");
-        code.append(this.name);
-        code.append(` (${params.join(", ")}) : `);
-        code.append(displayType(this.type, lng));
-        code.appendLine(` {\n\t\treturn ${defaultQs(this.type)};\n\t}`);
-        break;
-      case "py":
-        let abstract = false;
+      case "kt":
+        code.append(protectionToCode(this.protection));
+        code.append(" ");
         if (this.classifer === Classifer.abstract) {
-          code.append("@abstractmethod\n\t");
-          abstract = true;
+          code.append("abstract ");
+          abstr = true;
         } else if (this.classifer === Classifer.static) {
-          code.append("@staticmethod\n\t");
+          code.append("static ");
         }
-        code.append("def ");
-        code.append(this.name);
-        const prm = new Array<string>();
         for (const p of this.parameters) {
-          prm.push(p.name);
+          params.push(`${p.name}: ${displayType(p.type, lng)}`);
         }
-        code.append(` (${prm.join(", ")}): \n`);
-        if (abstract) {
-          code.append("\t\tpass\n");
+        constructor = false;
+        if (this.name === p2) {
+          code.append("constructor");
+          constructor = true;
         } else {
-          code.append("\t\traise NotImplementedError\n");
+          code.append(`fun ${this.name}`);
+        }
+        code.append(`(${params.join(", ")})`);
+        if (!constructor) {
+          code.append(": ");
+          code.append(displayType(this.type, lng));
+        }
+        if (constructor) {
+          code.append(" : super(/*Parameters needed*/) ");
+        }
+        if (!abstr) {
+          code.append(
+            ' {\n\t\tthrow Exception("Method not implemented"); \n\t}'
+          );
         }
         break;
     }

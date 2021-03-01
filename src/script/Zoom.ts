@@ -26,7 +26,7 @@ const Zoom = (() => {
         if (z === 0 || z === NaN) {
           z = 1;
         }
-        z = Math.max(Math.min(z + factor / 4, 2.25), 0.25);
+        z = Math.max(Math.min(z + factor / 4, 2), 0.25);
         graph.style.setProperty("--zoom", z.toString());
       }
     }
