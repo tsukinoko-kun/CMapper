@@ -1063,17 +1063,32 @@ const Ui = (() => {
 
     newClass(): void {
       let className = "Class";
-      if (this.doesClassnameExist(className)) {
-        for (let i = 1; i < 100; i++) {
-          let newClassName = `Class${i}`;
-          if (!this.doesClassnameExist(newClassName)) {
-            className = newClassName;
-            break;
-          }
+      for (let i = 1; this.doesClassnameExist(className) && i < 100; i++) {
+        let newClassName = `Class${i}`;
+        if (!this.doesClassnameExist(newClassName)) {
+          className = newClassName;
+          break;
         }
       }
       structureHolder.addClass(new Class(className));
       if (this.focus(className)) {
+        this.render();
+      }
+    }
+
+    newEnum(): void {
+      let enumName = "Enum";
+      for (let i = 1; this.doesClassnameExist(enumName) && i < 100; i++) {
+        let newEnumName = `Enum${i}`;
+        enumName = newEnumName;
+        if (!this.doesClassnameExist(newEnumName)) {
+          break;
+        }
+      }
+      const newEnum = new Class(enumName);
+      newEnum.classifer = Classifer.enum;
+      structureHolder.addClass(newEnum);
+      if (this.focus(enumName)) {
         this.render();
       }
     }

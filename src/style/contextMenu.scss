@@ -65,7 +65,7 @@
   display: none;
 }
 #contextMenu.deleteclass > .delete:after {
-  content: " Class";
+  content: " selected Structure";
 }
 #contextMenu.deletemember > .delete:after {
   content: " Member";
