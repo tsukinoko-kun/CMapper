@@ -1,7 +1,7 @@
 {
   "name": "CMapper",
   "short_name": "CMapper",
-  "start_url": "index.html",
+  "start_url": "https://cmapper.web.app",
   "display": "standalone",
   "default_locale": "en",
   "background_color": "#3d3f41",
@@ -20,8 +20,18 @@
       "sizes": "128x128"
     },
     {
+      "src": "img/fav144.png",
+      "type": "image/png",
+      "sizes": "144x144"
+    },
+    {
       "src": "img/fav512.webp",
       "type": "image/webp",
+      "sizes": "512x512"
+    },
+    {
+      "src": "img/fav512.png",
+      "type": "image/png",
       "sizes": "512x512"
     }
   ],

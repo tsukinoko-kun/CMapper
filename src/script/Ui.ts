@@ -1,5 +1,6 @@
 /// <reference path="structureHolder.ts"/>
 /// <reference path="lib.ts"/>
+/// <reference path="../../../rocket.ts/HelperFunctions/Array/clear.ts"/>
 
 const mddSvgId = "mddSvg";
 
@@ -585,13 +586,19 @@ const Ui = (() => {
             return;
           }
           Ui.editMember = v;
-          html.append('<tr><td><label for="edit_name">Name: </label></td>');
+          if (Ui.focusedClass.classifer == Classifer.enum) {
+            html.append('<tr><td><label for="edit_name">Value: </label></td>');
+          } else {
+            html.append('<tr><td><label for="edit_name">Name: </label></td>');
+          }
           html.append('<td><input type="text" max="100" value="');
           html.append(v.name);
           html.append('" id="edit_name"/></td></tr>');
-          html.append(this.createProtectionSelector(v.protection));
-          html.append(this.createTypeSelector(v.type));
-          html.append(this.createClassiferSelector(v.classifer));
+          if (Ui.focusedClass.classifer != Classifer.enum) {
+            html.append(this.createProtectionSelector(v.protection));
+            html.append(this.createTypeSelector(v.type));
+            html.append(this.createClassiferSelector(v.classifer));
+          }
         }
         //Method
         else if (type === "method") {
@@ -1207,6 +1214,8 @@ const Ui = (() => {
             break;
           case Classifer.enum:
             this.focusedClass.classifer = Classifer.enum;
+            this.focusedClass.methods.clear();
+            this.focusedClass.relations.clear();
             this.render();
             break;
         }

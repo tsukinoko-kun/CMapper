@@ -43,7 +43,8 @@
 #contextMenu.class.attribute,
 #contextMenu.class.method,
 #contextMenu.class.relation {
-  .newClass {
+  .newClass,
+  .newEnum {
     display: none;
   }
 }

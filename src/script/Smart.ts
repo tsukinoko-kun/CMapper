@@ -168,7 +168,8 @@ class Smart {
         }
         for (const f of cl.attributes) {
           for (const t of f.type) {
-            if (t !== cl.name) {
+            const T = structureHolder.findClass(t);
+            if (t !== cl.name && T && T.classifer != Classifer.enum) {
               const typeClass = structureHolder.findClass(t);
               if (typeClass) {
                 let relationFound = false;
