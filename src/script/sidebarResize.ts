@@ -26,7 +26,7 @@
           "--sidebar-width",
           `${nw}px`
         );
-        if (ow !== NaN && ow > 0) {
+        if (ow > 0) {
           const graph = <HTMLDivElement>document.getElementById("graph");
           if (graph) {
             graph.scrollLeft = graph.scrollLeft - (ow - nw);

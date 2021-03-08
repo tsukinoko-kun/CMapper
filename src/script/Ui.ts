@@ -462,7 +462,7 @@ const Ui = (() => {
               document.getElementById(`edit_type${i}`)
             );
             if (type) {
-              if ((type.style.display = "inline-block")) {
+              if (type.style.display == "inline-block") {
                 Ui.editMember.type[i] = type.value;
               } else {
                 Ui.editMember.type[i] = "";
@@ -811,7 +811,7 @@ const Ui = (() => {
       let zoomUi = Number(
         document.documentElement.style.getPropertyValue("--zoom-ui")
       );
-      if (zoomUi === 0 || zoomUi === NaN) {
+      if (zoomUi <= 0) {
         zoomUi = 1;
       }
       zoomUi = Math.min(2.25, Math.max(0.75, zoomUi + factor / 4));

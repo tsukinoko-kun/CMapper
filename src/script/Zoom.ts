@@ -23,7 +23,7 @@ const Zoom = (() => {
       const graph = <HTMLDivElement>document.getElementById("graph");
       if (graph) {
         let z = Number(graph.style.getPropertyValue("--zoom"));
-        if (z === 0 || z === NaN) {
+        if (z === 0 || isNaN(z)) {
           z = 1;
         }
         z = Math.max(Math.min(z + factor / 4, 2), 0.25);
