@@ -1,0 +1,20 @@
+#fileUpload:not(.visible) {
+  display: none;
+}
+
+#fileUpload.visible {
+  display: block !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 100000 !important;
+  background-color: #00000080;
+  background-image: url("img/folder.svg") !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-size: 50% !important;
+}

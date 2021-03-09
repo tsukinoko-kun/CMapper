@@ -78,6 +78,31 @@ const Ui = (() => {
       };
 
       this.sidebarClass();
+
+      const fileUpload = document.getElementById("fileUpload");
+      if (fileUpload) {
+        for (const event of ["dragenter", "dragover"]) {
+          window.addEventListener(event, () => {
+            fileUpload.classList.add("visible");
+            retriggerableDelay("fileInputOn" + event, 1000, () =>
+              fileUpload.classList.remove("visible")
+            );
+          });
+        }
+
+        for (const event of [
+          "change",
+          "input",
+          "abort",
+          "dragend",
+          "dragexit",
+        ]) {
+          window.addEventListener(event, () => {
+            console.debug(event);
+            fileUpload.classList.remove("visible");
+          });
+        }
+      }
     }
 
     public hasClassInFocus(): boolean {
