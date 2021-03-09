@@ -68,7 +68,9 @@ class Method {
         } else if (this.classifer === Classifer.static || p1) {
           code.append("static ");
         }
-        if (this.name !== p2) {
+        if (this.name === p2) {
+          constructor = true;
+        } else {
           code.append(displayType(this.type, lng));
           code.append(" ");
         }

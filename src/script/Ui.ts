@@ -836,7 +836,7 @@ const Ui = (() => {
       let zoomUi = Number(
         document.documentElement.style.getPropertyValue("--zoom-ui")
       );
-      if (zoomUi <= 0) {
+      if (zoomUi <= 0 || isNaN(zoomUi)) {
         zoomUi = 1;
       }
       zoomUi = Math.min(2.25, Math.max(0.75, zoomUi + factor / 4));
