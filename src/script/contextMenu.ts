@@ -11,6 +11,12 @@ class ContextMenu {
             selectedClass.classifer == Classifer.abstract ||
             selectedClass.classifer == Classifer.static
           : false;
+        const isInterface = selectedClass
+          ? selectedClass.classifer == Classifer.interface
+          : false;
+        const isEnum = selectedClass
+          ? selectedClass.classifer == Classifer.enum
+          : false;
         let ids = new Set<string>();
         ids.add(target.id);
         if (target.parentElement) {
@@ -24,11 +30,11 @@ class ContextMenu {
         cm.classList.remove("method");
         if (Ui.hasClassInFocus()) {
           cm.classList.add("class");
-          if (ids.has("sidebar_attributes")) {
+          if (ids.has("sidebar_attributes") && (isClass || isEnum)) {
             cm.classList.add("attribute");
             cm.classList.remove("relation");
             cm.classList.remove("method");
-          } else if (ids.has("sidebar_methods") && isClass) {
+          } else if (ids.has("sidebar_methods") && (isClass || isInterface)) {
             cm.classList.add("method");
             cm.classList.remove("relation");
             cm.classList.remove("attribute");
@@ -53,13 +59,17 @@ class ContextMenu {
                 return false;
               })()
             ) {
-              if (isClass) {
+              if (isClass || isInterface) {
                 if (structureHolder.namespace.length > 1) {
                   cm.classList.add("relation");
+                } else {
+                  cm.classList.remove("class");
                 }
                 cm.classList.add("method");
               }
-              cm.classList.add("attribute");
+              if (isClass || isEnum) {
+                cm.classList.add("attribute");
+              }
             }
           }
         } else {

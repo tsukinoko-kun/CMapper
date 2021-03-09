@@ -44,7 +44,8 @@
 #contextMenu.class.method,
 #contextMenu.class.relation {
   .newClass,
-  .newEnum {
+  .newEnum,
+  .newInterface {
     display: none;
   }
 }

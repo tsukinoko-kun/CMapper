@@ -1,5 +1,6 @@
 enum Classifer {
   abstract = "*",
+  interface = "i",
   static = "$",
   default = "",
   enum = "enumeration",

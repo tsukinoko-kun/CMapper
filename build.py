@@ -47,7 +47,7 @@ if tsc:
     versionNum = str(datetime.today().strftime('%Y%m%d%H'))
     version = open("./src/script/version.ts", "w+")
     version.write("(async () => {\n  const statusBar = document.getElementById(\"statusBar\");\n  if (statusBar) {\n    const version = document.createElement(\"span\");\n    version.innerText = \"v1." +
-                  versionNum+"\";\n    version.title = await gitChangelog();\n    statusBar.appendChild(version);\n  }\n})();\n")
+                  versionNum+"\";\n    statusBar.appendChild(version);\n  }\n})();\n")
     version.close()
     os.system("tsc -p ./tsconfig.json --pretty")
     hr()

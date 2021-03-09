@@ -29,6 +29,8 @@ class Class {
       strb.appendLine(`class ${this.name}{`);
       if (this.classifer === Classifer.abstract) {
         strb.appendLine("<<abstract>>");
+      } else if (this.classifer === Classifer.interface) {
+        strb.appendLine("<<interface>>");
       } else if (this.classifer === Classifer.static) {
         strb.appendLine("<<static>>");
       } else if (this.classifer === Classifer.enum) {
@@ -202,7 +204,11 @@ class Class {
           } else if (this.classifer === Classifer.abstract) {
             code.append("abstract ");
           }
-          code.append(`class ${this.name}`);
+          if (this.classifer == Classifer.interface) {
+            code.append(`interface ${this.name}`);
+          } else {
+            code.append(`class ${this.name}`);
+          }
           inheritance = false;
           for (const rel of this.relations) {
             if (rel.relation === relationType.inheritance) {
@@ -247,7 +253,11 @@ class Class {
           if (stat) {
             code.append(`const ${this.name} = (() => {\n\t`);
           }
-          code.append(`class ${this.name} `);
+          if (this.classifer == Classifer.interface) {
+            code.append(`interface ${this.name} `);
+          } else {
+            code.append(`class ${this.name} `);
+          }
           inheritance = false;
           for (const rel of this.relations) {
             if (rel.relation === relationType.inheritance) {
@@ -306,6 +316,8 @@ class Class {
             code.append("object ");
           } else if (this.classifer === Classifer.abstract || abstr) {
             code.append("abstract class ");
+          } else if (this.classifer == Classifer.interface) {
+            code.append("interface ");
           } else {
             code.append("class ");
           }

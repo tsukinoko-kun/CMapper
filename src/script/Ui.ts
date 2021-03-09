@@ -1125,6 +1125,23 @@ const Ui = (() => {
       }
     }
 
+    newInterface(): void {
+      let interfaceName = "Interface";
+      for (let i = 1; this.doesClassnameExist(interfaceName) && i < 100; i++) {
+        let newInterfaceName = `Interface${i}`;
+        interfaceName = newInterfaceName;
+        if (!this.doesClassnameExist(newInterfaceName)) {
+          break;
+        }
+      }
+      const newInterface = new Class(interfaceName);
+      newInterface.classifer = Classifer.interface;
+      structureHolder.addClass(newInterface);
+      if (this.focus(interfaceName)) {
+        this.render();
+      }
+    }
+
     newAttribute(): void {
       if (this.focusedClass) {
         const newAttribute = new Attribute(
@@ -1235,6 +1252,11 @@ const Ui = (() => {
             break;
           case Classifer.abstract:
             this.focusedClass.classifer = Classifer.abstract;
+            this.render();
+            break;
+          case Classifer.interface:
+            this.focusedClass.classifer = Classifer.interface;
+            this.focusedClass.attributes.clear();
             this.render();
             break;
           case Classifer.enum:
