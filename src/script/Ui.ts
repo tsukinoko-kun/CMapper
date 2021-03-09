@@ -487,7 +487,7 @@ const Ui = (() => {
               document.getElementById(`edit_type${i}`)
             );
             if (type) {
-              if (type.style.display == "inline-block") {
+              if (type.parentElement!.parentElement!.style.display !== "none") {
                 Ui.editMember.type[i] = type.value;
               } else {
                 Ui.editMember.type[i] = "";
@@ -714,7 +714,7 @@ const Ui = (() => {
             html.append("</td></tr>");
           }
         } else {
-          throw new Error("Unexpectet type");
+          throw new Error(`Unexpectet type ${type}`);
         }
         const editDialogContent = document.getElementById("editDialogContent");
         if (editDialogContent) {
@@ -906,7 +906,7 @@ const Ui = (() => {
     }
 
     render(): void {
-      console.clear();
+      // console.clear();
       Smart.update();
       const md = structureHolder.collectMmd();
       const complexityIndicator = document.getElementById("complexity");
