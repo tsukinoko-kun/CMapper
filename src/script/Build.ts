@@ -46,11 +46,11 @@ class Build {
       mddSvg.classList.add("print");
 
       domtoimage
-        .toSvg(mddSvg, {
-          quality: 1,
+        .toPng(mddSvg, {
+          quality: 1.0,
         })
         .then(function (blob) {
-          saveAs(blob, `${structureHolder.name}.svg`);
+          saveAs(blob, `${structureHolder.name}.png`);
           mddSvg.classList.remove("print");
         });
     } else {

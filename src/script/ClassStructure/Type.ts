@@ -138,7 +138,7 @@ function displayType(type: Array<string>, lng?: string): string {
     strb.append(typeMap(type[0], lng));
   } else {
     const typeZero = structureHolder.findClass(type[0]);
-    if (typeZero) {
+    if (typeZero && typeZero.classifer == Classifer.enum) {
       strb.append(typeZero.displayEnum());
     } else {
       strb.append(typeMap(type[0], "cm"));

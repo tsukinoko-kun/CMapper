@@ -213,7 +213,7 @@
     --zoom: 1 !important;
     --zoom-ui: 1 !important;
     --foreground: white !important;
-    filter: grayscale(1) contrast(200) invert(1);
+    filter: grayscale(1) invert(1);
     background-color: black !important;
     text {
       fill: white !important;
