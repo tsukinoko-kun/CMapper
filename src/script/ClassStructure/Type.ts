@@ -6,6 +6,7 @@ enum Type {
   string,
   vector,
   datetime,
+  object,
   List,
   Set,
   Map,
@@ -18,6 +19,7 @@ const CsTypes = new Map<string, string>([
   ["float", "float"],
   ["boolean", "bool"],
   ["datetime", "DateTime"],
+  ["object", "object"],
   ["vector", "Vector3"],
   ["List", "List"],
   ["Set", "HashSet"],
@@ -31,6 +33,7 @@ const CmTypes = new Map<string, string>([
   ["float", "FloatingPointNumber"],
   ["boolean", "Boolean"],
   ["datetime", "DateTime"],
+  ["object", "object"],
   ["vector", "Vector3D"],
   ["List", "List"],
   ["Set", "Set"],
@@ -44,6 +47,7 @@ const TsTypes = new Map<string, string>([
   ["float", "number"],
   ["boolean", "boolean"],
   ["datetime", "Date"],
+  ["object", "object"],
   ["vector", "Array<number>"],
   ["List", "Array"],
   ["Set", "Set"],
@@ -57,6 +61,7 @@ const KtTypes = new Map<string, string>([
   ["float", "Double"],
   ["boolean", "Boolean"],
   ["datetime", "LocalDateTime"],
+  ["object", "Object"],
   ["vector", "Vector"],
   ["List", "MutableList"],
   ["Set", "MutableSet"],
@@ -129,40 +134,41 @@ const getTypeImport = (t: string, lng: string): string => {
 const genericPlaceholder = "xxxxxxxxxx";
 function displayType(type: Array<string>, lng?: string): string {
   const strb = new StringBuilder();
-  switch (lng) {
-    default:
+  if (lng) {
+    strb.append(typeMap(type[0], lng));
+  } else {
+    const typeZero = structureHolder.findClass(type[0]);
+    if (typeZero) {
+      strb.append(typeZero.displayEnum());
+    } else {
+      strb.append(typeMap(type[0], "cm"));
+    }
+  }
+  if (
+    type.length > 1 &&
+    (type[0] === "List" || type[0] === "Set" || type[0] === "Map")
+  ) {
+    if (lng) {
+      strb.append("<");
+      strb.append(typeMap(type[1], lng));
+    } else {
+      strb.append("~");
+      strb.append(type[1]);
+    }
+    if (type.length > 2 && type[0] === "Map") {
       if (lng) {
-        strb.append(typeMap(type[0], lng));
+        strb.append(", ");
+        strb.append(typeMap(type[2], lng));
       } else {
-        strb.append(typeMap(type[0], "cm"));
+        strb.append(genericPlaceholder);
+        strb.append(type[2]);
       }
-      if (
-        type.length > 1 &&
-        (type[0] === "List" || type[0] === "Set" || type[0] === "Map")
-      ) {
-        if (lng) {
-          strb.append("<");
-          strb.append(typeMap(type[1], lng));
-        } else {
-          strb.append("~");
-          strb.append(type[1]);
-        }
-        if (type.length > 2 && type[0] === "Map") {
-          if (lng) {
-            strb.append(", ");
-            strb.append(typeMap(type[2], lng));
-          } else {
-            strb.append(genericPlaceholder);
-            strb.append(type[2]);
-          }
-        }
-        if (lng) {
-          strb.append(">");
-        } else {
-          strb.append("~");
-        }
-      }
-      break;
+    }
+    if (lng) {
+      strb.append(">");
+    } else {
+      strb.append("~");
+    }
   }
 
   return strb.toString();

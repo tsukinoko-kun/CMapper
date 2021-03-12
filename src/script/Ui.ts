@@ -860,12 +860,17 @@ const Ui = (() => {
           const tspans = text.getElementsByTagName("tspan");
           if (tspans.length === 2) {
             if (text.textContent) {
-              if (text.textContent.startsWith("«abstract»")) {
+              if (
+                text.textContent.startsWith("«abstract»") ||
+                text.textContent.startsWith("«interface»")
+              ) {
                 tspans[0].style.fontStyle = "italic";
                 tspans[1].style.fontStyle = "italic";
               } else if (text.textContent.startsWith("«static»")) {
                 tspans[0].style.textDecoration = "underline";
                 tspans[1].style.textDecoration = "underline";
+              } else if (text.textContent.startsWith("«enumeration»")) {
+                text.parentElement?.classList.add("dontPrint");
               }
             }
           }

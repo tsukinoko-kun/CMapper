@@ -169,26 +169,47 @@ class Smart {
         for (const f of cl.attributes) {
           for (const t of f.type) {
             const T = structureHolder.findClass(t);
-            if (t !== cl.name && T && T.classifer != Classifer.enum) {
-              const typeClass = structureHolder.findClass(t);
-              if (typeClass) {
-                let relationFound = false;
-                for (const r of typeClass.relations) {
-                  if (
-                    r.classA === t &&
-                    (r.relation === relationType.composition ||
-                      r.relation === relationType.aggregation ||
-                      r.relation === relationType.solidLink ||
-                      r.relation === relationType.dashedLink)
-                  ) {
-                    relationFound = true;
-                    break;
+            if (t !== cl.name && T) {
+              if (T.classifer == Classifer.enum) {
+                const typeClass = structureHolder.findClass(t);
+                if (typeClass) {
+                  let relationFound = false;
+                  for (const r of typeClass.relations) {
+                    if (
+                      r.classA === t &&
+                      r.relation === relationType.dependency
+                    ) {
+                      relationFound = true;
+                      break;
+                    }
+                  }
+                  if (!relationFound) {
+                    this.errors.push(
+                      `missing relation from '${t}' to '${cl.name}' of type dependency`
+                    );
                   }
                 }
-                if (!relationFound) {
-                  this.errors.push(
-                    `missing relation from '${t}' to '${cl.name}' of type composition, aggregation or link`
-                  );
+              } else {
+                const typeClass = structureHolder.findClass(t);
+                if (typeClass) {
+                  let relationFound = false;
+                  for (const r of typeClass.relations) {
+                    if (
+                      r.classA === t &&
+                      (r.relation === relationType.composition ||
+                        r.relation === relationType.aggregation ||
+                        r.relation === relationType.solidLink ||
+                        r.relation === relationType.dashedLink)
+                    ) {
+                      relationFound = true;
+                      break;
+                    }
+                  }
+                  if (!relationFound) {
+                    this.errors.push(
+                      `missing relation from '${t}' to '${cl.name}' of type composition, aggregation or link`
+                    );
+                  }
                 }
               }
             }

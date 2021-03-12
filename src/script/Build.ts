@@ -44,10 +44,15 @@ class Build {
     const mddSvg = document.getElementById(mddSvgId);
     if (mddSvg) {
       mddSvg.classList.add("print");
-      domtoimage.toJpeg(mddSvg, { quality: 1.0 }).then(function (blob) {
-        saveAs(blob, `${structureHolder.name}.jpeg`);
-        mddSvg.classList.remove("print");
-      });
+
+      domtoimage
+        .toSvg(mddSvg, {
+          quality: 1,
+        })
+        .then(function (blob) {
+          saveAs(blob, `${structureHolder.name}.svg`);
+          mddSvg.classList.remove("print");
+        });
     } else {
       alert("Could not find data to export");
     }

@@ -180,7 +180,6 @@
       stroke-width: 1;
     }
     #extensionEnd {
-      fill: var(--foreground) !important;
       stroke: var(--foreground) !important;
       stroke-width: 1;
     }
@@ -213,12 +212,19 @@
   #mddSvg.print {
     --zoom: 1 !important;
     --zoom-ui: 1 !important;
-    --accent: black !important;
-    --blue: black !important;
-    --foreground: var(--sidebar) !important;
-    background-color: white !important;
+    --foreground: white !important;
+    filter: grayscale(1) contrast(200) invert(1);
+    background-color: black !important;
     text {
-      fill: black !important;
+      fill: white !important;
+    }
+    .dontPrint {
+      display: none !important;
+      visibility: collapse !important;
+      opacity: 0 !important;
+      * {
+        display: none !important;
+      }
     }
   }
 }

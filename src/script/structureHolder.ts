@@ -26,7 +26,7 @@ const structureHolder = (() => {
         mmd.appendLine(cl.toString());
       });
       mmd.append("\n");
-      return mmd.toString().replace(/<style>.+<\/style>/, "");
+      return mmd.toString().replace(/<style>.+<\/style>/s, "");
     }
 
     addClass(cl: Class): number {
@@ -38,9 +38,42 @@ const structureHolder = (() => {
       return id;
     }
 
+    forceDeleteClass(name: string): boolean {
+      const cached = this.findClassCache.get(name);
+      if (
+        typeof cached == "number" &&
+        this.namespace.length < cached &&
+        this.namespace[cached].name == name
+      ) {
+        this.namespace.splice(cached, 1);
+        this.findClassCache.delete(name);
+        return true;
+      }
+
+      for (let i = 0; i < this.namespace.length; i++) {
+        if (this.namespace[i].name === name) {
+          this.namespace.splice(i, 1);
+          return true;
+        }
+      }
+      return false;
+    }
+
+    findClassCache = new Map<string, number>();
     findClass(name: string): Class | undefined {
-      for (const cl of this.namespace) {
+      const cached = this.findClassCache.get(name);
+      if (
+        typeof cached == "number" &&
+        this.namespace.length < cached &&
+        this.namespace[cached].name == name
+      ) {
+        return this.namespace[cached];
+      }
+
+      for (let i = 0; i < this.namespace.length; i++) {
+        const cl = this.namespace[i];
         if (cl.name === name) {
+          this.findClassCache.set(name, i);
           return cl;
         }
       }

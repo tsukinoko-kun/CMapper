@@ -62,6 +62,20 @@ class Class {
     return strb.toString();
   }
 
+  displayEnum(): string {
+    const str = new StringBuilder("[");
+    let first = true;
+    for (const type of this.attributes) {
+      if (!first) {
+        str.append("; ");
+      }
+      first = false;
+      str.append(type.name);
+    }
+    str.append("]");
+    return str.toString();
+  }
+
   addAttribute(f: Attribute): void {
     this.attributes.push(f);
   }

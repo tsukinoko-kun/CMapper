@@ -6,6 +6,7 @@ function alert(
   title: string = "Message"
 ): Promise<boolean> {
   return new Promise(function (resolve: (value: boolean) => void) {
+    console.log(message);
     const alert = document.createElement("div");
     alert.className = "alert";
     const window = document.createElement("div");
