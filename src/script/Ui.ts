@@ -856,7 +856,8 @@ const Ui = (() => {
         mddSvg.removeAttribute("height");
         mddSvg.innerHTML = mddSvg.innerHTML
           .replace(/: \[/g, ": {")
-          .replace(/\]<\/tspan>/g, "}</tspan>");
+          .replace(/\]\s*<\/tspan>/g, "}</tspan>")
+          .replace(/\],/g, "},");
         for await (const text of <Array<SVGTextElement>>(
           (<unknown>mddSvg.getElementsByTagName("text"))
         )) {
